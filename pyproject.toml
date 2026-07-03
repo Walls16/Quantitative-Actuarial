@@ -29,6 +29,7 @@ docs = [
     "furo",
     "myst-parser",
     "sphinx-copybutton",
+    "sphinx-autobuild",
 ]
 
 [tool.setuptools.packages.find]
