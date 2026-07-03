@@ -281,3 +281,4 @@ with tab_multiplos:
             st.latex(rf"{cfg['var_nombre']} = {val_metrica:,.2f} \times {val_multiplo:,.2f}")
             themed_success(f"<div style='{css_paso}'>{var_display} = ${resultado_mul:,.4f}</div>")
 
+

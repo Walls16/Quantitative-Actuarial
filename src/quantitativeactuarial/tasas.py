@@ -1061,35 +1061,43 @@ class FinancialMathEngine:
             payoff = np.zeros_like(S_T)
         return posicion * payoff - (posicion * prima)
 
-    def graficar_estrategia(self, nombre_estrategia, S_spot, patas):
-        """Gráfica interactiva del perfil riesgo/rendimiento de una estrategia."""
-        from plotly import graph_objects as _go
-        S_T = np.linspace(S_spot * 0.5, S_spot * 1.5, 500)
+    def perfil_estrategia(self, S_spot, patas, puntos=500):
+        """Calcula el perfil de payoff de una estrategia de opciones.
+
+        Para una malla de precios terminales ``S_T``, suma los payoffs de cada
+        pata:
+
+        ``payoff_call = max(S_T - K, 0)``
+        ``payoff_put = max(K - S_T, 0)``
+
+        La prima se resta para posiciones largas y se suma para posiciones
+        cortas mediante ``posicion * payoff - posicion * prima``.
+
+        Parameters
+        ----------
+        S_spot : float
+            Precio spot usado como centro de la malla.
+        patas : list[dict]
+            Patas con claves ``tipo`` ("call" o "put"), ``posicion`` (+1/-1),
+            ``K`` y ``prima``.
+        puntos : int
+            Número de observaciones en la malla.
+
+        Returns
+        -------
+        pandas.DataFrame
+            Columnas ``S_T``, una columna por pata y ``Payoff Neto``.
+        """
+        S_T = np.linspace(S_spot * 0.5, S_spot * 1.5, puntos)
         payoff_total = np.zeros_like(S_T)
-        fig = _go.Figure()
+        data = {"S_T": S_T}
         for pata in patas:
             pp = self.calcular_payoff_leg(pata['tipo'], pata['posicion'], S_T, pata['K'], pata['prima'])
             payoff_total += pp
             lbl = f"{'Long' if pata['posicion'] == 1 else 'Short'} {pata['tipo'].capitalize()} K={pata['K']}"
-            fig.add_trace(_go.Scatter(x=S_T, y=pp, mode='lines',
-                                      line=dict(dash='dot', width=1.5), opacity=0.6, name=lbl))
-        fig.add_trace(_go.Scatter(x=S_T, y=payoff_total, mode='lines',
-                                  line=dict(color='black', width=3),
-                                  name=f'Payoff Neto ({nombre_estrategia})'))
-        fig.add_trace(_go.Scatter(x=S_T, y=np.where(payoff_total >= 0, payoff_total, 0),
-                                  fill='tozeroy', fillcolor='rgba(40,167,69,0.2)', mode='none', showlegend=False))
-        fig.add_trace(_go.Scatter(x=S_T, y=np.where(payoff_total < 0, payoff_total, 0),
-                                  fill='tozeroy', fillcolor='rgba(220,53,69,0.2)', mode='none', showlegend=False))
-        fig.update_layout(
-            title=f'Perfil Riesgo/Rendimiento: {nombre_estrategia}',
-            xaxis_title='Precio del Activo al Vencimiento ($)',
-            yaxis_title='Utilidad / Pérdida ($)',
-            hovermode='x unified', template='plotly_white',
-            legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1)
-        )
-        fig.add_hline(y=0, line_dash='dash', line_color='black')
-        fig.add_vline(x=S_spot, line_dash='dot', line_color='blue', annotation_text='Spot Actual')
-        return fig
+            data[lbl] = pp
+        data["Payoff Neto"] = payoff_total
+        return pd.DataFrame(data)
 
     # ==========================================================
     # HELPERS INTERNOS

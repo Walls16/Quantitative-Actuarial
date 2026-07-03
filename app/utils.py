@@ -5,8 +5,17 @@ Utilidades compartidas para toda la app.
 Centraliza: temas de color, CSS, instancia del engine y helpers de UI.
 """
 
+from pathlib import Path
+import sys
+
 import streamlit as st
-from financial_engine import FinancialMathEngine
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+SRC_DIR = ROOT_DIR / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+from quantitativeactuarial.tasas import FinancialMathEngine
 
 # =============================================================================
 # INSTANCIA GLOBAL DEL MOTOR

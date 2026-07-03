@@ -1645,7 +1645,52 @@ with tab_est:
     separador()
 
     # ── Gráfica de perfil ──────────────────────────────────────────────────────
-    fig_est = engine.graficar_estrategia(estrategia_sel, S_est, patas)
+    df_perfil = engine.perfil_estrategia(S_est, patas)
+    fig_est = go.Figure()
+    for col in df_perfil.columns:
+        if col in ("S_T", "Payoff Neto"):
+            continue
+        fig_est.add_trace(go.Scatter(
+            x=df_perfil["S_T"],
+            y=df_perfil[col],
+            mode="lines",
+            line=dict(dash="dot", width=1.5),
+            opacity=0.6,
+            name=col,
+        ))
+    fig_est.add_trace(go.Scatter(
+        x=df_perfil["S_T"],
+        y=df_perfil["Payoff Neto"],
+        mode="lines",
+        line=dict(color="black", width=3),
+        name=f"Payoff Neto ({estrategia_sel})",
+    ))
+    fig_est.add_trace(go.Scatter(
+        x=df_perfil["S_T"],
+        y=np.where(df_perfil["Payoff Neto"] >= 0, df_perfil["Payoff Neto"], 0),
+        fill="tozeroy",
+        fillcolor="rgba(40,167,69,0.2)",
+        mode="none",
+        showlegend=False,
+    ))
+    fig_est.add_trace(go.Scatter(
+        x=df_perfil["S_T"],
+        y=np.where(df_perfil["Payoff Neto"] < 0, df_perfil["Payoff Neto"], 0),
+        fill="tozeroy",
+        fillcolor="rgba(220,53,69,0.2)",
+        mode="none",
+        showlegend=False,
+    ))
+    fig_est.update_layout(
+        title=f"Perfil Riesgo/Rendimiento: {estrategia_sel}",
+        xaxis_title="Precio del Activo al Vencimiento ($)",
+        yaxis_title="Utilidad / Pérdida ($)",
+        hovermode="x unified",
+        template="plotly_white",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+    )
+    fig_est.add_hline(y=0, line_dash="dash", line_color="black")
+    fig_est.add_vline(x=S_est, line_dash="dot", line_color="blue", annotation_text="Spot Actual")
     fig_est = apply_plotly_theme(fig_est)
     fig_est.update_layout(**plotly_theme())
     st.plotly_chart(fig_est, use_container_width=True)

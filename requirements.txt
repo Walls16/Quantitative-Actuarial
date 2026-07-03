@@ -1,3 +1,4 @@
+-e .
 streamlit
 numpy
 pandas

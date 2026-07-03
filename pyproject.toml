@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "quantitativeactuarial"
+version = "0.1.0"
+description = "Pure actuarial and quantitative finance routines used by the Quantitative Actuarial Streamlit app."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scipy",
+    "yfinance",
+    "PyPortfolioOpt",
+]
+
+[project.optional-dependencies]
+app = [
+    "streamlit",
+    "plotly",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

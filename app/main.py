@@ -7,6 +7,14 @@ La navegación se maneja con st.navigation() para mostrar
 secciones colapsables en el sidebar.
 """
 
+from pathlib import Path
+import sys
+
+ROOT_DIR = Path(__file__).resolve().parents[1]
+SRC_DIR = ROOT_DIR / "src"
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
 import streamlit as st
 from utils import (
     inject_global_css, render_theme_selector,
@@ -231,3 +239,4 @@ pg.run()
 # Agradezco a mis padres por su apoyo incondicional durante el desarrollo de este proyecto, y a mis amigos por su paciencia y comprensión mientras me sumergía en el código y los cálculos financieros.
 # Agradezco a mi novia por su apoyo durante el desarrollo de esta calculadora, por su comprensión y ánimo mientras me dedicaba a este proyecto académico. Su apoyo ha sido fundamental para mantenerme motivado y enfocado en la creación de esta herramienta que espero sea de gran ayuda para los estudiantes.
 # Si alguien llega a ver esto, gracias por tu interés en el proyecto. Espero que la calculadora sea útil para tu aprendizaje y te ayude a entender mejor las matemáticas financieras y la valuación de activos. Si tienes alguna pregunta o sugerencia, no dudes en contactarme. ¡Mucho éxito en tus estudios!
+
