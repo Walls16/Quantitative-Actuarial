@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use Quantitative Actuarial, please cite the software using this metadata."
+title: "Quantitative Actuarial"
+type: software
+version: "0.1.0"
+abstract: "Quantitative Actuarial is a Python package providing actuarial and quantitative-finance routines, with an accompanying Streamlit application."
+url: "https://github.com/Walls16/Quantitative-Actuarial"
+repository-code: "https://github.com/Walls16/Quantitative-Actuarial"
+date-released: "2026-07-03"
+license: "MIT"
+
+authors:
+  - family-names: "Paredes-Conde"
+    given-names: "Owen"
+    affiliation: "Universidad Autónoma de la Ciudad de México, Mexico"
+
+  - family-names: "Espino-Montelongo"
+    given-names: "Heriberto"
+    affiliation: "Universidad Autónoma de la Ciudad de México, Mexico"
+    orcid: "0009-0009-1230-2931"
+
+keywords:
+  - "actuarial science"
+  - "quantitative finance"
+  - "financial mathematics"
+  - "portfolio optimization"
+  - "actuarial modeling"
+  - "risk management"
