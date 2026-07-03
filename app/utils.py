@@ -2,7 +2,7 @@
 utils.py
 --------
 Utilidades compartidas para toda la app.
-Centraliza: temas de color, CSS, instancia del engine y helpers de UI.
+Centraliza: temas de color, CSS y helpers de UI.
 """
 
 from pathlib import Path
@@ -12,19 +12,10 @@ import streamlit as st
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 SRC_DIR = ROOT_DIR / "src"
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
 if str(SRC_DIR) not in sys.path:
     sys.path.insert(0, str(SRC_DIR))
-
-from quantitativeactuarial.tasas import FinancialMathEngine
-
-# =============================================================================
-# INSTANCIA GLOBAL DEL MOTOR
-# =============================================================================
-@st.cache_resource
-def get_engine() -> FinancialMathEngine:
-    """Devuelve una instancia cacheada del motor financiero."""
-    return FinancialMathEngine()
-
 
 # =============================================================================
 # DEFINICION DE TEMAS

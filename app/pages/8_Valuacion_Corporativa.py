@@ -18,6 +18,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from numpy.linalg import lstsq
+import app.domain as quact
 
 
 try:
@@ -27,7 +28,7 @@ except ImportError:
     YFINANCE_OK = False
 
 from utils import (
-    get_engine, page_header, paso_a_paso, separador,
+    page_header, paso_a_paso, separador,
     themed_info, themed_success, themed_warning, themed_error,
     plotly_theme, plotly_colors, get_current_theme,
 )
@@ -40,9 +41,6 @@ st.set_page_config(
     page_icon="🏢",
     layout="wide",
 )
-
-engine = get_engine()
-
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"

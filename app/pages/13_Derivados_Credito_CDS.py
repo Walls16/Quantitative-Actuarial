@@ -19,11 +19,12 @@ import streamlit as st
 import plotly.graph_objects as go
 
 from utils import (
-    get_engine, page_header, paso_a_paso, separador,
+    page_header, paso_a_paso, separador,
     themed_info, themed_success, themed_warning, themed_error,
     apply_plotly_theme, plotly_theme, plotly_colors, plotly_color,
     get_current_theme,
 )
+import app.domain as quact
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -33,9 +34,6 @@ st.set_page_config(
     page_icon="🛡️",
     layout="wide",
 )
-
-engine = get_engine()
-
 # --- Estilos globales ---
 math_style     = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo     = "font-size: 20px; opacity: 0.85; font-weight: 500;"

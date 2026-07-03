@@ -12,9 +12,10 @@ Cubre:
 import streamlit as st
 import plotly.express as px
 import numpy as np
+import app.domain as quact
 
 # Asegúrate de que todas estas funciones existan en tu utils.py
-from utils import get_engine, page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error, apply_plotly_theme
+from utils import page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error, apply_plotly_theme
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -24,9 +25,6 @@ st.set_page_config(
     page_icon="🏦",
     layout="wide",
 )
-
-engine = get_engine()
-
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"
@@ -267,7 +265,7 @@ separador()
 st.markdown("### Resultados Detallados")
 
 # Asumimos que tu engine devuelve un DataFrame de pandas
-df_amort = engine.tabla_amortizacion(vp_final, tasa_periodo, nm_am)
+df_amort = quact.tabla_amortizacion(vp_final, tasa_periodo, nm_am)
 
 tab_tabla, tab_grafica = st.tabs(["Tabla de Amortización", "Composición del Pago"])
 

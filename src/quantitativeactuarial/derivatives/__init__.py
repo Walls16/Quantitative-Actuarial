@@ -1,0 +1,63 @@
+"""Flat derivatives-pricing API."""
+
+from .exotics import (
+    barrera_down_and_out,
+    opcion_chooser_simple,
+    opcion_perpetua,
+    opciones_asset_or_nothing,
+    opciones_asiaticas_aritmeticas,
+    opciones_asiaticas_geometricas,
+    opciones_cash_or_nothing,
+    opciones_compuestas,
+    opciones_gap,
+    opciones_intercambio_uxv,
+    opciones_lookback_flotante,
+)
+from .forwards import (
+    forward_calculo,
+    forward_price,
+    fra,
+    precio_forward,
+    precio_forward_commodity,
+    precio_forward_dividendo_continuo,
+    precio_forward_dividendos_discretos,
+    precio_forward_divisa,
+    valor_forward_calculo,
+    valor_forward_en_vida,
+)
+from .strategies import calcular_payoff_leg, perfil_estrategia
+from .trees import arbol_binomial_crr, binomial_tree
+from .vanilla import black_76, black_scholes, calcular_griegas, griegas_bsm, opciones_bsm
+
+__all__ = [
+    "forward_price",
+    "forward_calculo",
+    "valor_forward_calculo",
+    "precio_forward",
+    "precio_forward_dividendo_continuo",
+    "precio_forward_dividendos_discretos",
+    "precio_forward_commodity",
+    "precio_forward_divisa",
+    "valor_forward_en_vida",
+    "fra",
+    "opciones_bsm",
+    "griegas_bsm",
+    "black_scholes",
+    "black_76",
+    "calcular_griegas",
+    "binomial_tree",
+    "arbol_binomial_crr",
+    "opciones_gap",
+    "opciones_cash_or_nothing",
+    "opciones_asset_or_nothing",
+    "barrera_down_and_out",
+    "opciones_asiaticas_aritmeticas",
+    "opciones_asiaticas_geometricas",
+    "opciones_lookback_flotante",
+    "opciones_compuestas",
+    "opciones_intercambio_uxv",
+    "opcion_chooser_simple",
+    "opcion_perpetua",
+    "calcular_payoff_leg",
+    "perfil_estrategia",
+]

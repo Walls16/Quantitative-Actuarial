@@ -18,10 +18,11 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from utils import (
-    get_engine, page_header, separador,
+    page_header, separador,
     themed_info, themed_success, themed_warning, themed_error,
     apply_plotly_theme, get_current_theme,
 )
+import app.domain as quact
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -31,9 +32,6 @@ st.set_page_config(
     page_icon="📦",
     layout="wide",
 )
-
-engine = get_engine()
-
 page_header(
     titulo="7. Teoría de Portafolios — Comparativa de Estrategias",
     subtitulo="5 métodos de ponderación · pypfopt · SciPy · Datos reales de Yahoo Finance"
@@ -99,7 +97,7 @@ if ejecutar:
     else:
         with st.spinner(f"Descargando datos y resolviendo 5 optimizaciones para {len(tickers)} activos..."):
             try:
-                resultado = engine.optimizacion_portafolios(
+                resultado = quact.optimizacion_portafolios(
                     tickers, fecha_inicio, fecha_fin, tasa_libre
                 )
                 st.session_state["datos_portafolio"]  = resultado
@@ -388,8 +386,8 @@ if "datos_portafolio" in st.session_state:
         def _tabla_var(rend, vol, capital, conf):
             filas = []
             for h, nom in zip(horizontes, nombres_hor):
-                var_p, _, _, _  = engine.calcular_var_parametrico(rend, vol, capital, conf, h)
-                var_mc, cvar_mc = engine.calcular_var_cvar_montecarlo(rend, vol, capital, conf, h)
+                var_p, _, _, _  = quact.calcular_var_parametrico(rend, vol, capital, conf, h)
+                var_mc, cvar_mc = quact.calcular_var_cvar_montecarlo(rend, vol, capital, conf, h)
                 filas.append({
                     "Horizonte":        nom,
                     "VaR Paramétrico":  f"${var_p:,.2f}",

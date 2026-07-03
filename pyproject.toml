@@ -21,9 +21,19 @@ app = [
     "streamlit",
     "plotly",
 ]
+dev = [
+    "pytest",
+]
+docs = [
+    "sphinx",
+    "furo",
+    "myst-parser",
+    "sphinx-copybutton",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
+testpaths = ["tests"]

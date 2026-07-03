@@ -12,7 +12,8 @@ Cubre:
 import numpy as np
 import streamlit as st
 
-from utils import get_engine, page_header, paso_a_paso, separador, alerta_metodo_numerico, themed_info, themed_success, themed_warning, themed_error
+from utils import page_header, paso_a_paso, separador, alerta_metodo_numerico, themed_info, themed_success, themed_warning, themed_error
+import app.domain as quact
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -22,9 +23,6 @@ st.set_page_config(
     page_icon="📄",
     layout="wide",
 )
-
-engine = get_engine()
-
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"
@@ -136,7 +134,7 @@ if modo_bono.startswith("Precio"):
         i_periodo_bono    = i_nom_mercado / m_bono
         str_val_i_mercado = f"{i_periodo_bono:.6f}"
 
-    precio_P, _, vp_cup, vp_red = engine.precio_bono(
+    precio_P, _, vp_cup, vp_red = quact.precio_bono(
         F_bono, r_periodo, C_bono, i_periodo_bono, n_periodos_bono
     )
     i_final = i_periodo_bono
@@ -190,7 +188,7 @@ if modo_bono.startswith("Precio"):
 # ─────────────────────────────────────────────────────────────────────────────
 else:
 
-    i_periodo_res = engine.tasa_rendimiento_bono(
+    i_periodo_res = quact.tasa_rendimiento_bono(
         precio_mercado, F_bono, r_periodo, C_bono, n_periodos_bono
     )
 
@@ -251,7 +249,7 @@ if i_final is not None and p_final is not None:
         "corrige ese error para darnos una estimación casi perfecta."
     )
 
-    mac_d, mod_d, conv = engine.riesgo_bono(
+    mac_d, mod_d, conv = quact.riesgo_bono(
         F_bono, r_periodo, C_bono, i_final, n_periodos_bono, m_bono
     )
 

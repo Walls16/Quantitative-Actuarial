@@ -9,7 +9,8 @@ Cubre:
 
 import streamlit as st
 
-from utils import get_engine, page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error
+from utils import page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error
+import app.domain as quact
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -19,9 +20,6 @@ st.set_page_config(
     page_icon="📈",
     layout="wide",
 )
-
-engine = get_engine()
-
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"
@@ -76,7 +74,7 @@ with tab_gordon:
                 "La tasa de rendimiento debe superar obligatoriamente a la de crecimiento."
             )
         else:
-            precio_gs = engine.valuacion_gordon_shapiro(d1_gs, k_gs, g_gs)
+            precio_gs = quact.valuacion_gordon_shapiro(d1_gs, k_gs, g_gs)
             
             themed_success(
                 f"<div style='{css_contenedor}'>"
@@ -136,7 +134,7 @@ with tab_rendimiento:
         ) / 100
 
     with c2:
-        k_calc = engine.rendimiento_requerido_accion(d1_rr, p0_rr, g_rr)
+        k_calc = quact.rendimiento_requerido_accion(d1_rr, p0_rr, g_rr)
         
         themed_info(
             f"<div style='{css_contenedor}'>"
@@ -252,7 +250,7 @@ with tab_multiplos:
         )
 
     with c2:
-        resultado_mul = engine.valuacion_multiplos(val_metrica, val_multiplo)
+        resultado_mul = quact.valuacion_multiplos(val_metrica, val_multiplo)
 
         titulo_res = (
             f"Valor de la Empresa (<span style='{math_style}'>EV</span>)"

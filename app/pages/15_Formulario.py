@@ -9,7 +9,8 @@ Tres pestañas descargables en HTML con MathJax:
 """
 
 import streamlit as st
-from utils import get_engine, page_header, separador, themed_info, themed_success, themed_warning, themed_error
+from utils import page_header, separador, themed_info, themed_success, themed_warning, themed_error
+import app.domain as quact
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -20,7 +21,6 @@ st.set_page_config(
     layout="wide",
 )
 
-get_engine()   # Mantiene la caché activa aunque no se use el motor aquí
 
 page_header(
     titulo="12. Formulario Oficial",

@@ -12,7 +12,8 @@ Cubre:
 import numpy as np
 import streamlit as st
 
-from utils import get_engine, page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error, apply_plotly_theme
+from utils import page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error, apply_plotly_theme
+import app.domain as quact
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -22,9 +23,6 @@ st.set_page_config(
     page_icon="📃",
     layout="wide",
 )
-
-engine = get_engine()
-
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"
@@ -105,14 +103,14 @@ with tab_precio:
 
     with c1:
         if tipo_subyacente.startswith("Activo sin"):
-            F0_res  = engine.precio_forward(S0_fwd, r_calc, T_fwd)
+            F0_res  = quact.precio_forward(S0_fwd, r_calc, T_fwd)
             formula = r"F_0 = S_0 e^{rT}" if es_cont else r"F_0 = S_0 (1+r)^T"
 
         elif tipo_subyacente.startswith("Activo con dividendo continuo"):
             q_fwd   = st.number_input("Dividendo / tasa extranjera ($q$) %",
                                        value=2.0, step=0.1, key="fwd_q") / 100
             q_calc  = q_fwd if es_cont else np.log(1 + q_fwd)
-            F0_res  = engine.precio_forward_dividendo_continuo(S0_fwd, r_calc, q_calc, T_fwd)
+            F0_res  = quact.precio_forward_dividendo_continuo(S0_fwd, r_calc, q_calc, T_fwd)
             formula = r"F_0 = S_0 e^{(r-q)T}" if es_cont else r"F_0 = S_0 \frac{(1+r)^T}{(1+q)^T}"
             extra_val["q"] = q_fwd
 
@@ -138,7 +136,7 @@ with tab_precio:
             else:
                 I_fwd = sum(d * (1 + r_fwd)**(-t) for d, t in divs)
 
-            F0_res  = engine.precio_forward_dividendos_discretos(S0_fwd, r_calc, T_fwd, I_fwd)
+            F0_res  = quact.precio_forward_dividendos_discretos(S0_fwd, r_calc, T_fwd, I_fwd)
             formula = r"F_0 = (S_0 - I) e^{rT}" if es_cont else r"F_0 = (S_0 - I)(1+r)^T"
             extra_val["I"] = I_fwd
             extra_val["divs"] = divs
@@ -147,7 +145,7 @@ with tab_precio:
             u_fwd   = st.number_input("Costo de almacenamiento continuo ($u$) %",
                                        value=1.5, step=0.1, key="fwd_u") / 100
             u_calc  = u_fwd if es_cont else np.log(1 + u_fwd)
-            F0_res  = engine.precio_forward_commodity(S0_fwd, r_calc, u_calc, T_fwd)
+            F0_res  = quact.precio_forward_commodity(S0_fwd, r_calc, u_calc, T_fwd)
             formula = r"F_0 = S_0 e^{(r+u)T}" if es_cont else r"F_0 = S_0 (1+r)^T (1+u)^T"
             extra_val["u"] = u_fwd
 
@@ -174,7 +172,7 @@ with tab_precio:
                 VP_C = sum(c * (1 + r_fwd)**(-t) for c, t in costos)
 
             # Enviamos al motor como dividendo negativo para que se SUME a S0
-            F0_res  = engine.precio_forward_dividendos_discretos(S0_fwd, r_calc, T_fwd, -VP_C)
+            F0_res  = quact.precio_forward_dividendos_discretos(S0_fwd, r_calc, T_fwd, -VP_C)
             formula = r"F_0 = (S_0 + C) e^{rT}" if es_cont else r"F_0 = (S_0 + C)(1+r)^T"
             extra_val["C"] = VP_C
             extra_val["costos"] = costos
@@ -324,7 +322,7 @@ with tab_valor:
         q_calc_val = q_val if es_cont_val else np.log(1 + q_val)
 
     with c2:
-        ft_res = engine.valor_forward_en_vida(St_val, F0_val, r_calc_val, q_calc_val, tau_val)
+        ft_res = quact.valor_forward_en_vida(St_val, F0_val, r_calc_val, q_calc_val, tau_val)
 
         themed_info(
             f"<div style='{css_contenedor}'>"
@@ -402,7 +400,7 @@ with tab_divisa:
         r_f_calc = r_f_fx if es_cont_div else np.log(1 + r_f_fx)
 
     with c2:
-        F0_fx = engine.precio_forward_divisa(S0_fx, r_d_calc, r_f_calc, T_fx)
+        F0_fx = quact.precio_forward_divisa(S0_fx, r_d_calc, r_f_calc, T_fx)
 
         prima_pct   = (F0_fx / S0_fx - 1) * 100
 
@@ -501,7 +499,7 @@ with tab_fra:
     else:
         with c2:
             tau_fra = t2_fra - t1_fra
-            R_F_cont, val_fra = engine.fra(r1_calc_fra, r2_calc_fra, t1_fra, t2_fra, Nf_fra, rk_calc_fra)
+            R_F_cont, val_fra = quact.fra(r1_calc_fra, r2_calc_fra, t1_fra, t2_fra, Nf_fra, rk_calc_fra)
             
             # Reconvertir al formato de visualización si es discreta
             R_F_disp = R_F_cont if es_cont_fra else (np.exp(R_F_cont) - 1)

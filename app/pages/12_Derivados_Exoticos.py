@@ -19,11 +19,12 @@ import plotly.graph_objects as go
 from scipy.stats import norm as _norm
 
 from utils import (
-    get_engine, page_header, paso_a_paso,
+    page_header, paso_a_paso,
     separador, alerta_metodo_numerico,
     result_call, result_put,
     themed_info, themed_success, themed_warning, themed_error,
     apply_plotly_theme, plotly_theme, plotly_colors, get_current_theme)
+import app.domain as quact
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -32,9 +33,6 @@ st.set_page_config(
     page_title="Derivados Exóticos · Calculadora Financiera",
     page_icon="🧪",
     layout="wide")
-
-engine = get_engine()
-
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"
@@ -227,7 +225,7 @@ with tab_gap:
 
     with c2:
         tipo_gap = "call" if es_call_g else "put"
-        prima_gap = engine.opciones_gap(S_g, K2_g, K1_g, T_g, r_g, sig_g, q_g, tipo_gap)
+        prima_gap = quact.opciones_gap(S_g, K2_g, K1_g, T_g, r_g, sig_g, q_g, tipo_gap)
         tipo_txt  = "Call" if es_call_g else "Put"
 
         if es_call_g:
@@ -349,12 +347,12 @@ with tab_bin:
         tipo_b = "call" if es_call_b else "put"
 
         if subtipo_bin == "Cash-or-Nothing":
-            prima_bin = engine.opciones_cash_or_nothing(S_b, K_b, Q_b, T_b, r_b, sig_b, q_b, tipo_b)
+            prima_bin = quact.opciones_cash_or_nothing(S_b, K_b, Q_b, T_b, r_b, sig_b, q_b, tipo_b)
             lbl = "Cash-or-Nothing Call" if es_call_b else "Cash-or-Nothing Put"
             formula_b = r"c_{CoN} = Q e^{-rT} N(d_2)" if es_call_b else r"p_{CoN} = Q e^{-rT} N(-d_2)"
             var_b = "c_{CoN}" if es_call_b else "p_{CoN}"
         else:
-            prima_bin = engine.opciones_asset_or_nothing(S_b, K_b, T_b, r_b, sig_b, q_b, tipo_b)
+            prima_bin = quact.opciones_asset_or_nothing(S_b, K_b, T_b, r_b, sig_b, q_b, tipo_b)
             lbl = "Asset-or-Nothing Call" if es_call_b else "Asset-or-Nothing Put"
             formula_b = r"c_{AoN} = S_0 e^{-qT} N(d_1)" if es_call_b else r"p_{AoN} = S_0 e^{-qT} N(-d_1)"
             var_b = "c_{AoN}" if es_call_b else "p_{AoN}"
@@ -464,8 +462,8 @@ with tab_bar:
     with c2:
         tipo_b_str = "call" if es_call_ba else "put"
 
-        prima_ko = engine.barrera_down_and_out(S_ba, K_ba, H_ba, T_ba, r_ba, sig_ba, q_ba, tipo_b_str)
-        prima_vanilla = engine.black_scholes(S_ba, K_ba, r_ba, sig_ba, T_ba, es_call_ba, q_ba)
+        prima_ko = quact.barrera_down_and_out(S_ba, K_ba, H_ba, T_ba, r_ba, sig_ba, q_ba, tipo_b_str)
+        prima_vanilla = quact.black_scholes(S_ba, K_ba, r_ba, sig_ba, T_ba, es_call_ba, q_ba)
         prima_ki = max(0.0, prima_vanilla - prima_ko)
 
         if es_out:
@@ -587,12 +585,12 @@ with tab_asi:
         tipo_as = "call" if es_call_as else "put"
 
         if subtipo_asi.startswith("Media Geometrica"):
-            prima_asi = engine.opciones_asiaticas_geometricas(
+            prima_asi = quact.opciones_asiaticas_geometricas(
                 S_as, K_as, T_as, r_as, sig_as, q_as, tipo_as
             )
             lbl_as = "Asiatica Geometrica Call" if es_call_as else "Asiatica Geometrica Put"
         else:
-            prima_asi = engine.opciones_asiaticas_aritmeticas(
+            prima_asi = quact.opciones_asiaticas_aritmeticas(
                 S_as, K_as, T_as, r_as, sig_as, q_as, tipo_as
             )
             lbl_as = "Asiatica Aritmetica Call" if es_call_as else "Asiatica Aritmetica Put"
@@ -613,7 +611,7 @@ with tab_asi:
             )
 
         # Comparativa con vanilla
-        prima_van_as = engine.black_scholes(S_as, K_as, r_as, sig_as, T_as, es_call_as, q_as)
+        prima_van_as = quact.black_scholes(S_as, K_as, r_as, sig_as, T_as, es_call_as, q_as)
         st.metric("Vanilla BSM (referencia)",  f"${prima_van_as:,.4f}")
         descuento_as = (1 - prima_asi / prima_van_as) * 100 if prima_van_as > 0 else 0
         st.metric("Descuento vs Vanilla", f"{descuento_as:.2f}%")
@@ -726,7 +724,7 @@ with tab_look:
 
     with c2:
         tipo_lk = "call" if es_call_lk else "put"
-        prima_lk = engine.opciones_lookback_flotante(
+        prima_lk = quact.opciones_lookback_flotante(
             S_lk, S_min_max, T_lk, r_lk, sig_lk, q_lk, tipo_lk
         )
         lbl_lk = "Lookback Call (Mínimo Flotante)" if es_call_lk else "Lookback Put (Máximo Flotante)"
@@ -746,7 +744,7 @@ with tab_look:
                 f"</div>"
             )
 
-        prima_van_lk = engine.black_scholes(S_lk, S_min_max, r_lk, sig_lk, T_lk,
+        prima_van_lk = quact.black_scholes(S_lk, S_min_max, r_lk, sig_lk, T_lk,
                                              es_call_lk, q_lk)
         st.metric("Vanilla BSM (referencia, K = extremo)", f"${prima_van_lk:,.4f}")
 
@@ -878,7 +876,7 @@ with tab_comp:
 
     with c2:
         try:
-            prima_comp = engine.opciones_compuestas(
+            prima_comp = quact.opciones_compuestas(
                 S_cp2, K_out, K_in, T_out, T_in, r_cp2, sig_cp2, q_cp2, tipo_comp_str
             )
             if es_call_outer:
@@ -896,7 +894,7 @@ with tab_comp:
                     f"</div>"
                 )
 
-            prima_inner = engine.black_scholes(S_cp2, K_in, r_cp2, sig_cp2, T_in,
+            prima_inner = quact.black_scholes(S_cp2, K_in, r_cp2, sig_cp2, T_in,
                                                 es_call_inner, q_cp2)
             st.metric("Prima de la opción interior aislada (BSM)", f"${prima_inner:,.4f}")
         except Exception as e:
@@ -939,7 +937,7 @@ with tab_comp:
     )
     _ST_cp = np.linspace(S_cp2 * 0.4, S_cp2 * 1.6, 300)
     _inner_vals = np.array([
-        engine.black_scholes(s, K_in, r_cp2, sig_cp2, T_in - T_out, es_call_inner, q_cp2)
+        quact.black_scholes(s, K_in, r_cp2, sig_cp2, T_in - T_out, es_call_inner, q_cp2)
         for s in _ST_cp
     ])
     _outer_pf = (np.maximum(_inner_vals - K_out, 0.0) if es_call_outer
@@ -1135,8 +1133,8 @@ with tab_est_ex:
             K1_cd = _pe1.number_input("K1 — Strike Put (piso)",   min_value=0.01, value=90.0,  step=1.0, key="cd_K1")
             K2_cd = _pe2.number_input("K2 — Strike Call (techo)", min_value=0.01, value=110.0, step=1.0, key="cd_K2")
             Q_cd  = _pe3.number_input("Pago binario (Q)",          min_value=0.01, value=10.0,  step=1.0, key="cd_Q")
-            pc    = engine.opciones_cash_or_nothing(S_est, K2_cd, Q_cd, T_est, r_est, sig_est, q_est, "call")
-            pp    = engine.opciones_cash_or_nothing(S_est, K1_cd, Q_cd, T_est, r_est, sig_est, q_est, "put")
+            pc    = quact.opciones_cash_or_nothing(S_est, K2_cd, Q_cd, T_est, r_est, sig_est, q_est, "call")
+            pp    = quact.opciones_cash_or_nothing(S_est, K1_cd, Q_cd, T_est, r_est, sig_est, q_est, "put")
             costo_neto = pc - pp
             _ST = np.linspace(S_est * 0.4, S_est * 1.6, 900)
             y1  =  np.where(_ST > K2_cd, Q_cd, 0.0) - pc
@@ -1149,8 +1147,8 @@ with tab_est_ex:
             K_sc = _pe1.number_input("K Call (barrera superior)", min_value=0.01, value=110.0, step=1.0, key="sc_Kc")
             K_sp = _pe2.number_input("K Put (barrera inferior)",  min_value=0.01, value=90.0,  step=1.0, key="sc_Kp")
             Q_sc = _pe3.number_input("Pago binario (Q)",          min_value=0.01, value=15.0,  step=1.0, key="sc_Q")
-            pc   = engine.opciones_cash_or_nothing(S_est, K_sc, Q_sc, T_est, r_est, sig_est, q_est, "call")
-            pp   = engine.opciones_cash_or_nothing(S_est, K_sp, Q_sc, T_est, r_est, sig_est, q_est, "put")
+            pc   = quact.opciones_cash_or_nothing(S_est, K_sc, Q_sc, T_est, r_est, sig_est, q_est, "call")
+            pp   = quact.opciones_cash_or_nothing(S_est, K_sp, Q_sc, T_est, r_est, sig_est, q_est, "put")
             costo_neto = pc + pp
             _ST = np.linspace(S_est * 0.4, S_est * 1.6, 900)
             y1   = np.where(_ST > K_sc, Q_sc, 0.0) - pc
@@ -1162,8 +1160,8 @@ with tab_est_ex:
         elif nombre_est == "Gap Risk Reversal":
             K1_gr = _pe1.number_input("K1 (activación)", min_value=0.01, value=100.0, step=1.0, key="gr_K1")
             K2_gr = _pe2.number_input("K2 (pago)",       min_value=0.01, value=105.0, step=1.0, key="gr_K2")
-            pgc   = engine.opciones_gap(S_est, K1_gr, K2_gr, T_est, r_est, sig_est, q_est, "call")
-            pgp   = engine.opciones_gap(S_est, K1_gr, K2_gr, T_est, r_est, sig_est, q_est, "put")
+            pgc   = quact.opciones_gap(S_est, K1_gr, K2_gr, T_est, r_est, sig_est, q_est, "call")
+            pgp   = quact.opciones_gap(S_est, K1_gr, K2_gr, T_est, r_est, sig_est, q_est, "put")
             costo_neto = pgc - pgp
             _ST = np.linspace(S_est * 0.4, S_est * 1.6, 900)
             y1   =  np.where(_ST > K1_gr, _ST - K2_gr, 0.0) - pgc
@@ -1175,8 +1173,8 @@ with tab_est_ex:
         elif nombre_est == "Spread de Barrera (Bull)":
             K_sb  = _pe1.number_input("Strike ($K$)",    min_value=0.01, value=100.0, step=1.0, key="sb_K")
             H_sb  = _pe2.number_input("Barrera ($H$)",   min_value=0.01, value=85.0,  step=1.0, key="sb_H")
-            pvan  = engine.black_scholes(S_est, K_sb, r_est, sig_est, T_est, True, q_est)
-            pdno  = engine.barrera_down_and_out(S_est, K_sb, H_sb, T_est, r_est, sig_est, q_est, "call")
+            pvan  = quact.black_scholes(S_est, K_sb, r_est, sig_est, T_est, True, q_est)
+            pdno  = quact.barrera_down_and_out(S_est, K_sb, H_sb, T_est, r_est, sig_est, q_est, "call")
             costo_neto = pvan - pdno
             _ST = np.linspace(S_est * 0.4, S_est * 1.6, 900)
             y1   =  np.maximum(_ST - K_sb, 0.0) - pvan
@@ -1187,8 +1185,8 @@ with tab_est_ex:
 
         else:  # Straddle Asiatico
             K_av = _pe1.number_input("Strike ($K$)", min_value=0.01, value=100.0, step=1.0, key="av_K")
-            pac  = engine.opciones_asiaticas_geometricas(S_est, K_av, T_est, r_est, sig_est, q_est, "call")
-            pap  = engine.opciones_asiaticas_geometricas(S_est, K_av, T_est, r_est, sig_est, q_est, "put")
+            pac  = quact.opciones_asiaticas_geometricas(S_est, K_av, T_est, r_est, sig_est, q_est, "call")
+            pap  = quact.opciones_asiaticas_geometricas(S_est, K_av, T_est, r_est, sig_est, q_est, "put")
             costo_neto = pac + pap
             _ST  = np.linspace(S_est * 0.4, S_est * 1.6, 900)
             y1   = np.maximum(_ST - K_av, 0.0) - pac
@@ -1277,11 +1275,11 @@ with tab_est_ex:
 
             try:
                 _es_c = "Call" in _tipo_p
-                if   "Vanilla"          in _tipo_p: _prima_p = engine.black_scholes(S_est, _K_p, r_est, sig_est, T_est, _es_c, q_est)
-                elif "Gap"              in _tipo_p: _prima_p = engine.opciones_gap(S_est, _K_p, _K2_p, T_est, r_est, sig_est, q_est, "call" if _es_c else "put")
-                elif "Cash-or-Nothing"  in _tipo_p: _prima_p = engine.opciones_cash_or_nothing(S_est, _K_p, _Q_p, T_est, r_est, sig_est, q_est, "call" if _es_c else "put")
-                elif "Asset-or-Nothing" in _tipo_p: _prima_p = engine.opciones_asset_or_nothing(S_est, _K_p, T_est, r_est, sig_est, q_est, "call" if _es_c else "put")
-                elif "Down-and-Out"     in _tipo_p: _prima_p = engine.barrera_down_and_out(S_est, _K_p, _H_p, T_est, r_est, sig_est, q_est, "call" if _es_c else "put")
+                if   "Vanilla"          in _tipo_p: _prima_p = quact.black_scholes(S_est, _K_p, r_est, sig_est, T_est, _es_c, q_est)
+                elif "Gap"              in _tipo_p: _prima_p = quact.opciones_gap(S_est, _K_p, _K2_p, T_est, r_est, sig_est, q_est, "call" if _es_c else "put")
+                elif "Cash-or-Nothing"  in _tipo_p: _prima_p = quact.opciones_cash_or_nothing(S_est, _K_p, _Q_p, T_est, r_est, sig_est, q_est, "call" if _es_c else "put")
+                elif "Asset-or-Nothing" in _tipo_p: _prima_p = quact.opciones_asset_or_nothing(S_est, _K_p, T_est, r_est, sig_est, q_est, "call" if _es_c else "put")
+                elif "Down-and-Out"     in _tipo_p: _prima_p = quact.barrera_down_and_out(S_est, _K_p, _H_p, T_est, r_est, sig_est, q_est, "call" if _es_c else "put")
                 else: _prima_p = 0.0
                 _pc5.metric("Prima calculada", f"${_prima_p:,.4f}")
             except Exception as _e:
@@ -1380,7 +1378,7 @@ with tab_real:
 
     if btn_ex:
         with st.spinner(f"Extrayendo y procesando serie de tiempo para {ticker_ex}..."):
-            spot_ex, vol_ex = engine.obtener_datos_subyacente(ticker_ex)
+            spot_ex, vol_ex = quact.obtener_datos_subyacente(ticker_ex)
             if spot_ex is not None:
                 st.session_state["ex_spot"] = float(spot_ex)
                 st.session_state["ex_vol"]  = float(vol_ex * 100)
@@ -1421,7 +1419,7 @@ with tab_real:
         q_ex   = st.number_input("Dividendo continuo ($q$) %", value=0.0, step=0.1, key="ex_q") / 100
         T_ex   = st.number_input("Vencimiento ($T$) años", min_value=0.01, value=0.5, step=0.25, key="ex_T")
     with col_b3:
-        prima_van_ex = engine.black_scholes(S_ex, K_ex, r_ex, sig_ex, T_ex, es_call_ex, q_ex)
+        prima_van_ex = quact.black_scholes(S_ex, K_ex, r_ex, sig_ex, T_ex, es_call_ex, q_ex)
         ticker_lbl   = st.session_state.get("ex_ticker_ok", "ACTIVO")
         st.markdown(f"**Referencia — {ticker_lbl} Vanilla BSM**")
         if es_call_ex:
@@ -1478,7 +1476,7 @@ with tab_real:
             K1_ex = st.number_input("Strike activación ($K_1$)", min_value=0.01, value=K_ex, step=1.0, key="ex_K1_gap")
             K2_ex = st.number_input("Strike de pago ($K_2$)", min_value=0.01, value=K_ex * 0.9, step=1.0, key="ex_K2_gap")
         with col_g2:
-            prima_gap_ex = engine.opciones_gap(S_ex, K2_ex, K1_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
+            prima_gap_ex = quact.opciones_gap(S_ex, K2_ex, K1_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
             if es_call_ex:
                 themed_success(
                     f"<div style='{css_contenedor}'>"
@@ -1509,7 +1507,7 @@ with tab_real:
         with col_c1:
             Q_ex = st.number_input("Monto fijo a pagar ($Q$)", min_value=0.01, value=100.0, step=10.0, key="ex_Q_bin")
         with col_c2:
-            prima_bin_ex = engine.opciones_cash_or_nothing(S_ex, K_ex, Q_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
+            prima_bin_ex = quact.opciones_cash_or_nothing(S_ex, K_ex, Q_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
             if es_call_ex:
                 themed_success(
                     f"<div style='{css_contenedor}'>"
@@ -1534,7 +1532,7 @@ with tab_real:
 
     # ── BINARIA ASSET REAL ──────────────────────────────────────────────
     elif tipo_exotico.startswith("Binaria Asset"):
-        prima_aon_ex = engine.opciones_asset_or_nothing(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
+        prima_aon_ex = quact.opciones_asset_or_nothing(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
         if es_call_ex:
             themed_success(
                 f"<div style='{css_contenedor}'>"
@@ -1564,7 +1562,7 @@ with tab_real:
             H_ex = st.number_input("Barrera ($H$)", min_value=0.01, step=1.0, value=round(S_ex * 0.85, 2), key="ex_H")
             tipo_bar_ex = st.radio("Tipo:", ["Down-and-Out", "Down-and-In"], horizontal=True, key="ex_bar_tipo")
         with col_bar2:
-            prima_ko_ex = engine.barrera_down_and_out(S_ex, K_ex, H_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
+            prima_ko_ex = quact.barrera_down_and_out(S_ex, K_ex, H_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
             prima_ki_ex = max(0.0, prima_van_ex - prima_ko_ex)
             es_out = tipo_bar_ex.startswith("Down-and-Out")
             prima_bar_ex = prima_ko_ex if es_out else prima_ki_ex
@@ -1593,7 +1591,7 @@ with tab_real:
 
     # ── ASIÁTICA GEOMÉTRICA REAL ───────────────────────────────────────────────────
     elif tipo_exotico.startswith("Asiática Geométrica"):
-        prima_asi_g = engine.opciones_asiaticas_geometricas(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
+        prima_asi_g = quact.opciones_asiaticas_geometricas(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
         if es_call_ex:
             themed_success(
                 f"<div style='{css_contenedor}'>"
@@ -1617,7 +1615,7 @@ with tab_real:
 
     # ── ASIÁTICA ARITMÉTICA REAL ───────────────────────────────────────────────────
     elif tipo_exotico.startswith("Asiática Aritmética"):
-        prima_asi_a = engine.opciones_asiaticas_aritmeticas(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
+        prima_asi_a = quact.opciones_asiaticas_aritmeticas(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
         if es_call_ex:
             themed_success(
                 f"<div style='{css_contenedor}'>"
@@ -1651,7 +1649,7 @@ with tab_real:
     elif tipo_exotico.startswith("Lookback"):
         S_ext_ex = st.number_input("Mínimo observado (Call) / Máximo (Put)", min_value=0.01, step=1.0,
                                    value=round(S_ex * 0.95, 2) if es_call_ex else round(S_ex * 1.05, 2), key="ex_Sext")
-        prima_lk_ex = engine.opciones_lookback_flotante(S_ex, S_ext_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
+        prima_lk_ex = quact.opciones_lookback_flotante(S_ex, S_ext_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)
         if es_call_ex:
             themed_success(
                 f"<div style='{css_contenedor}'>"
@@ -1690,7 +1688,7 @@ with tab_real:
             T_out_ex = st.number_input("Vencimiento exterior ($T_1$)", min_value=0.01, value=T_ex / 2, step=0.25, key="ex_T1")
             T_in_ex  = st.number_input("Vencimiento interior ($T_2 > T_1$)", min_value=T_out_ex + 0.01, value=T_ex, step=0.25, key="ex_T2")
         with col_cp2:
-            prima_comp_ex = engine.opciones_compuestas(S_ex, K_out_ex, K_ex, T_out_ex, T_in_ex, r_ex, sig_ex, q_ex, tipo_comp_str_ex)
+            prima_comp_ex = quact.opciones_compuestas(S_ex, K_out_ex, K_ex, T_out_ex, T_in_ex, r_ex, sig_ex, q_ex, tipo_comp_str_ex)
             if es_call_outer_ex:
                 themed_success(
                     f"<div style='{css_contenedor}'>"
@@ -1737,7 +1735,7 @@ with tab_real:
                         _ini = _hoy - _dtt.timedelta(days=365)
                         _h1 = _yf.download(ticker_lbl, start=_ini, end=_hoy, progress=False, auto_adjust=True)["Close"].squeeze().dropna()
                         _h2 = _yf.download(ticker_ex2, start=_ini, end=_hoy, progress=False, auto_adjust=True)["Close"].squeeze().dropna()
-                        _s2v, _v2v = engine.obtener_datos_subyacente(ticker_ex2)
+                        _s2v, _v2v = quact.obtener_datos_subyacente(ticker_ex2)
 
                         if _s2v is None or len(_h1) < 20 or len(_h2) < 20:
                             themed_error(f"Fallo en la sincronización del ticker {ticker_ex2} o liquidez insuficiente.")
@@ -1825,13 +1823,13 @@ with tab_real:
 
     comparativa = [
         ("Vanilla BSM",             prima_van_ex),
-        ("Gap (K2=0.9·K)",          engine.opciones_gap(S_ex, K_ex*0.9, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
-        ("Cash-or-Nothing (Q=100)", engine.opciones_cash_or_nothing(S_ex, K_ex, 100, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
-        ("Asset-or-Nothing",        engine.opciones_asset_or_nothing(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
-        ("Barrera Down-and-Out",    engine.barrera_down_and_out(S_ex, K_ex, H_comp, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
-        ("Asiática Geométrica",     engine.opciones_asiaticas_geometricas(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
-        ("Asiática Aritmética",     engine.opciones_asiaticas_aritmeticas(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
-        ("Lookback Flotante",       engine.opciones_lookback_flotante(S_ex, S_ext_comp, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
+        ("Gap (K2=0.9·K)",          quact.opciones_gap(S_ex, K_ex*0.9, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
+        ("Cash-or-Nothing (Q=100)", quact.opciones_cash_or_nothing(S_ex, K_ex, 100, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
+        ("Asset-or-Nothing",        quact.opciones_asset_or_nothing(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
+        ("Barrera Down-and-Out",    quact.barrera_down_and_out(S_ex, K_ex, H_comp, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
+        ("Asiática Geométrica",     quact.opciones_asiaticas_geometricas(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
+        ("Asiática Aritmética",     quact.opciones_asiaticas_aritmeticas(S_ex, K_ex, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
+        ("Lookback Flotante",       quact.opciones_lookback_flotante(S_ex, S_ext_comp, T_ex, r_ex, sig_ex, q_ex, tipo_str_ex)),
     ]
 
     nombres_comp = [r[0] for r in comparativa]

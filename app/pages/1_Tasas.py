@@ -12,9 +12,10 @@ import numpy as np
 import streamlit as st
 import plotly.express as px
 import plotly.graph_objects as go
+import app.domain as quact
 
 # --- Imports locales ---
-from utils import get_engine, page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error, apply_plotly_theme
+from utils import page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error, apply_plotly_theme
 
 # =============================================================================
 # CONFIGURACIÓN DE PÁGINA
@@ -26,8 +27,6 @@ st.set_page_config(
 )
 
 # Instancia cacheada del motor
-engine = get_engine()
-
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"
@@ -111,8 +110,8 @@ with tabs[1]:
         m    = st.number_input("Frecuencia de pagos por año (m)", min_value=0.0001, value=12.0, step=0.5, format="%.2f", key="t1_m")
 
     with c2:
-        i_eff = engine.tasa_nominal_a_efectiva(j, m)
-        delta = engine.tasa_nominal_a_instantanea(j, m)
+        i_eff = quact.tasa_nominal_a_efectiva(j, m)
+        delta = quact.tasa_nominal_a_instantanea(j, m)
         
         themed_success(
             f"<div style='{css_contenedor}'>"
@@ -161,7 +160,7 @@ with tabs[2]:
         d2 = st.number_input("Tasa Instantánea δ %", value=18.0, step=0.1, key="t2_d") / 100
 
     with c2:
-        i2 = engine.tasa_instantanea_a_efectiva(d2)
+        i2 = quact.tasa_instantanea_a_efectiva(d2)
         
         themed_success(
             f"<div style='{css_contenedor}'>"
@@ -197,7 +196,7 @@ with tabs[3]:
         m3 = st.number_input("Frecuencia de pagos deseada (m)", min_value=0.0001, value=12.0, step=0.5, format="%.4f", key="t3_m")
 
     with c2:
-        i3 = engine.tasa_instantanea_a_nominal(d3, m3)
+        i3 = quact.tasa_instantanea_a_nominal(d3, m3)
         
         themed_success(
             f"<div style='{css_contenedor}'>"
@@ -236,7 +235,7 @@ with tabs[4]:
         p_dest = st.number_input("Frecuencia Destino (p)", min_value=0.0001, value=3.0,  step=0.5, key="t4_p")
 
     with c2:
-        i_p = engine.tasa_nominal_m_a_nominal_p(i_orig, m_orig, p_dest)
+        i_p = quact.tasa_nominal_m_a_nominal_p(i_orig, m_orig, p_dest)
         
         themed_success(
             f"<div style='{css_contenedor}'>"
@@ -281,7 +280,7 @@ with tabs[5]:
 
     col_t, col_g = st.columns([1, 2])
     
-    df_reinv = engine.generar_tabla_reinversion(C0, tasa_ref, n_anios)
+    df_reinv = quact.generar_tabla_reinversion(C0, tasa_ref, n_anios)
 
     with col_t:
         st.markdown("##### Tabla de Acumulación")

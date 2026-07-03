@@ -37,10 +37,11 @@ from quantitativeactuarial.credito import (
     TRADING_DAYS,
 )
 from utils import (
-    get_engine, page_header, paso_a_paso, separador,
+    page_header, paso_a_paso, separador,
     themed_info, themed_success, themed_warning, themed_error,
     plotly_theme, plotly_colors, get_current_theme, plotly_color,
 )
+import app.domain as quact
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -50,9 +51,6 @@ st.set_page_config(
     page_icon="📉",
     layout="wide",
 )
-
-engine = get_engine()
-
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"
@@ -176,7 +174,7 @@ with tab_port:
         ))
         with st.spinner("Descargando precios y simulando Monte Carlo..."):
             try:
-                data, rend_p, vol_p, pesos_reales, cols_reales = engine.evaluar_portafolio_personalizado(
+                data, rend_p, vol_p, pesos_reales, cols_reales = quact.evaluar_portafolio_personalizado(
                     tickers_list, dict_pesos, fecha_inicio, hoy
                 )
                 st.session_state.update({
@@ -210,8 +208,8 @@ with tab_port:
         c_m3.metric("Ratio de Sharpe", f"{sharpe_ref:.4f}", help="Tasa libre de riesgo asumiendo 5% anual")
         separador()
 
-        var_p,  _, _, _ = engine.calcular_var_parametrico(rend_p, vol_p, capital, conf, dias)
-        var_mc, cvar_mc = engine.calcular_var_cvar_montecarlo(rend_p, vol_p, capital, conf, dias)
+        var_p,  _, _, _ = quact.calcular_var_parametrico(rend_p, vol_p, capital, conf, dias)
+        var_mc, cvar_mc = quact.calcular_var_cvar_montecarlo(rend_p, vol_p, capital, conf, dias)
 
         st.markdown(f"### VaR — Horizonte: **{h_str}** | Confianza: **{conf*100:.0f}%**")
         col_res1, col_res2, col_res3 = st.columns(3)

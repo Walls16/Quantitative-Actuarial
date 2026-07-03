@@ -9,7 +9,8 @@ Soporta tasas efectivas, nominales e instantáneas (continuas).
 import numpy as np
 import streamlit as st
 
-from utils import get_engine, page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error
+from utils import page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error
+import app.domain as quact
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -19,9 +20,6 @@ st.set_page_config(
     page_icon="⏳",
     layout="wide",
 )
-
-engine = get_engine()
-
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;" # ¡Actualizado a 20px!
@@ -71,7 +69,7 @@ with t1:
             i_vf  = st.number_input("Tasa efectiva anual ($i$) %", value=6.8, step=0.1, key="vf_i") / 100
             n_vf  = st.number_input("Años ($n$)", min_value=0.0, value=6.0, step=1.0, key="vf_n")
         
-        vf_res     = engine.valor_futuro(C0_vf, i_vf, n_vf)
+        vf_res     = quact.valor_futuro(C0_vf, i_vf, n_vf)
         formula_vf = r"VF = C_0 (1+i)^n"
 
         with c2:
@@ -99,7 +97,7 @@ with t1:
 
         im_vf      = i_nom_vf / m_vf
         nm_vf      = n_vf2 * m_vf
-        vf_res     = engine.valor_futuro(C0_vf, im_vf, nm_vf)
+        vf_res     = quact.valor_futuro(C0_vf, im_vf, nm_vf)
         formula_vf = r"VF = C_0 \left(1+\frac{i^{(m)}}{m}\right)^{nm}"
 
         with c2:
@@ -125,7 +123,7 @@ with t1:
             d_vf  = st.number_input("Tasa instantánea ($\\delta$) %", value=5.0, step=0.1, key="vf_d") / 100
             n_vf3 = st.number_input("Años ($n$)", min_value=0.0, value=10.0, step=1.0, key="vf_n3")
 
-        vf_res     = engine.valor_futuro_continuo(C0_vf, d_vf, n_vf3)
+        vf_res     = quact.valor_futuro_continuo(C0_vf, d_vf, n_vf3)
         formula_vf = r"VF = C_0 e^{\delta n}"
 
         with c2:
@@ -173,7 +171,7 @@ with t2:
             i_vp  = st.number_input("Tasa efectiva anual ($i$) %", value=11.2, step=0.1, key="vp_i") / 100
             n_vp  = st.number_input("Años ($n$)", min_value=0.0, value=9.0, step=1.0, key="vp_n")
 
-        vp_res     = engine.valor_presente(Cn_vp, i_vp, n_vp)
+        vp_res     = quact.valor_presente(Cn_vp, i_vp, n_vp)
         formula_vp = r"VP = C_n (1+i)^{-n}"
 
         with c2:
@@ -201,7 +199,7 @@ with t2:
 
         im_vp      = i_nom_vp / m_vp
         nm_vp      = n_vp2 * m_vp
-        vp_res     = engine.valor_presente(Cn_vp, im_vp, nm_vp)
+        vp_res     = quact.valor_presente(Cn_vp, im_vp, nm_vp)
         formula_vp = r"VP = C_n \left(1+\frac{i^{(m)}}{m}\right)^{-nm}"
 
         with c2:
@@ -227,7 +225,7 @@ with t2:
             d_vp  = st.number_input("Tasa instantánea ($\\delta$) %", value=5.0, step=0.1, key="vp_d") / 100
             n_vp3 = st.number_input("Años ($n$)", min_value=0.0, value=10.0, step=1.0, key="vp_n3")
 
-        vp_res     = engine.valor_presente_continuo(Cn_vp, d_vp, n_vp3)
+        vp_res     = quact.valor_presente_continuo(Cn_vp, d_vp, n_vp3)
         formula_vp = r"VP = C_n e^{-\delta n}"
 
         with c2:
@@ -265,7 +263,7 @@ with t3:
         i_nper  = st.number_input("Tasa Efectiva ($i$) %", min_value=0.0001, value=4.3, step=0.1, key="nper_i") / 100
 
     with c2:
-        n_res = engine.numero_periodos(va_nper, vf_nper, i_nper)
+        n_res = quact.numero_periodos(va_nper, vf_nper, i_nper)
         themed_info(
             f"<div style='{css_contenedor}'>"
             f"<span style='{css_titulo}'>Número de Periodos (<span style='{math_style}'>n</span>)</span>"
@@ -293,7 +291,7 @@ with t3:
     # Desglose del tiempo exacto
     separador()
     st.markdown("#### Desglose temporal exacto")
-    df_desglose = engine.desglosar_periodos(n_res)
+    df_desglose = quact.desglosar_periodos(n_res)
     st.dataframe(
         df_desglose.style.set_properties(**{
             "background-color": "#F3F4F6",
@@ -324,7 +322,7 @@ with t4:
         n_rate  = st.number_input("Periodos ($n$)",        min_value=0.1, value=10.0, step=1.0, key="rate_n")
 
     with c2:
-        i_res = engine.tasa_rendimiento(va_rate, vf_rate, n_rate)
+        i_res = quact.tasa_rendimiento(va_rate, vf_rate, n_rate)
         themed_success(
             f"<div style='{css_contenedor}'>"
             f"<span style='{css_titulo}'>Tasa de Rendimiento (<span style='{math_style}'>i</span>)</span>"

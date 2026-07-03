@@ -18,7 +18,8 @@ import streamlit as st
 import plotly.graph_objects as go
 from scipy.stats import norm as norm
 
-from utils import get_engine, page_header, paso_a_paso, separador, alerta_metodo_numerico, themed_info, themed_success, themed_warning, themed_error, apply_plotly_theme, plotly_theme, plotly_colors, plotly_color, get_current_theme
+from utils import page_header, paso_a_paso, separador, alerta_metodo_numerico, themed_info, themed_success, themed_warning, themed_error, apply_plotly_theme, plotly_theme, plotly_colors, plotly_color, get_current_theme
+import app.domain as quact
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -28,9 +29,6 @@ st.set_page_config(
     page_icon="⚙️",
     layout="wide",
 )
-
-engine = get_engine()
-
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
 css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"
@@ -113,7 +111,7 @@ with tab_crr:
     a_crr  = np.exp((r_crr - q_crr) * dt_crr)
     p_crr  = (a_crr - d_crr) / (u_crr - d_crr)
 
-    precio_crr, arbol_precios, arbol_opcion = engine.arbol_binomial_crr(
+    precio_crr, arbol_precios, arbol_opcion = quact.arbol_binomial_crr(
         S_crr, K_crr, r_crr, sig_crr, T_crr,
         int(N_crr), es_call_crr, es_amer_crr, q_crr
     )
@@ -256,14 +254,14 @@ with tab_crr:
             pasos_conv = [1, 2, 5, 10, 20, 50, 100, 200]
             precios_conv = []
             for n_c in pasos_conv:
-                p_c, _, _ = engine.arbol_binomial_crr(
+                p_c, _, _ = quact.arbol_binomial_crr(
                     S_crr, K_crr, r_crr, sig_crr, T_crr,
                     n_c, es_call_crr, False, q_crr
                 )
                 precios_conv.append(p_c)
 
             # Precio BSM de referencia
-            bsm_ref = engine.black_scholes(
+            bsm_ref = quact.black_scholes(
                 S_crr, K_crr, r_crr, sig_crr, T_crr, es_call_crr, q_crr
             )
 
@@ -361,7 +359,7 @@ with tab_bsm:
         d1_v = d2_v = None   # para el paso a paso
 
         if variante_bsm == "BSM Estándar (sin dividendos)":
-            prima_bsm = engine.black_scholes(S_bsm, K_bsm, r_bsm, sig_bsm, T_bsm, es_call_bsm)
+            prima_bsm = quact.black_scholes(S_bsm, K_bsm, r_bsm, sig_bsm, T_bsm, es_call_bsm)
             formula_c = (r"c = S_0 N(d_1) - K e^{-rT} N(d_2)")
             formula_p = (r"p = K e^{-rT} N(-d_2) - S_0 N(-d_1)")
             formula_d = (
@@ -374,7 +372,7 @@ with tab_bsm:
         elif variante_bsm == "BSM con dividendo continuo (Merton, 1973)":
             q_bsm     = st.number_input("Dividendo continuo ($q$) %",
                                          value=2.0, step=0.1, key="bsm_q") / 100
-            prima_bsm = engine.black_scholes(S_bsm, K_bsm, r_bsm, sig_bsm, T_bsm,
+            prima_bsm = quact.black_scholes(S_bsm, K_bsm, r_bsm, sig_bsm, T_bsm,
                                               es_call_bsm, q_bsm)
             formula_c = r"c = S_0 e^{-qT} N(d_1) - K e^{-rT} N(d_2)"
             formula_p = r"p = K e^{-rT} N(-d_2) - S_0 e^{-qT} N(-d_1)"
@@ -387,7 +385,7 @@ with tab_bsm:
         elif variante_bsm == "BSM para Futuros (Black, 1976)":
             F_bsm     = st.number_input("Precio del Futuro ($F_0$)", min_value=0.01,
                                          value=100.0, step=1.0, key="bsm_F")
-            prima_bsm = engine.black_76(F_bsm, K_bsm, r_bsm, sig_bsm, T_bsm, es_call_bsm)
+            prima_bsm = quact.black_76(F_bsm, K_bsm, r_bsm, sig_bsm, T_bsm, es_call_bsm)
             formula_c = r"c = e^{-rT}[F_0 N(d_1) - K N(d_2)]"
             formula_p = r"p = e^{-rT}[K N(-d_2) - F_0 N(-d_1)]"
             formula_d = (
@@ -399,7 +397,7 @@ with tab_bsm:
         elif variante_bsm == "BSM para Divisas (Garman-Kohlhagen, 1983)":
             rf_bsm    = st.number_input("Tasa extranjera ($r_f$) %",
                                          value=3.0, step=0.1, key="bsm_rf") / 100
-            prima_bsm = engine.black_scholes(S_bsm, K_bsm, r_bsm, sig_bsm, T_bsm,
+            prima_bsm = quact.black_scholes(S_bsm, K_bsm, r_bsm, sig_bsm, T_bsm,
                                               es_call_bsm, rf_bsm)
             formula_c = r"c = S_0 e^{-r_f T} N(d_1) - K e^{-r_d T} N(d_2)"
             formula_p = r"p = K e^{-r_d T} N(-d_2) - S_0 e^{-r_f T} N(-d_1)"
@@ -428,7 +426,7 @@ with tab_bsm:
 
             I_bsm     = sum(d * np.exp(-r_bsm * t) for d, t in divs_bsm)
             S_adj     = S_bsm - I_bsm
-            prima_bsm = engine.black_scholes(S_adj, K_bsm, r_bsm, sig_bsm, T_bsm, es_call_bsm)
+            prima_bsm = quact.black_scholes(S_adj, K_bsm, r_bsm, sig_bsm, T_bsm, es_call_bsm)
             formula_c = r"c_{disc} = BSM(S_0 - I, K, r, \sigma, T)"
             formula_p = r"p_{disc} = BSM(S_0 - I, K, r, \sigma, T)"
             formula_d = r"I = \sum_i D_i e^{-r t_i}"
@@ -436,7 +434,7 @@ with tab_bsm:
             d2_v = d1_v - sig_bsm * np.sqrt(T_bsm)
 
         else:  # Perpetua
-            prima_bsm = engine.opcion_perpetua(S_bsm, K_bsm, r_bsm, sig_bsm, es_call_bsm)
+            prima_bsm = quact.opcion_perpetua(S_bsm, K_bsm, r_bsm, sig_bsm, es_call_bsm)
             formula_c = r"C^* = \frac{K}{h-1}\left(\frac{(h-1)S_0}{hK}\right)^h"
             formula_p = r"P^* = \frac{K}{1-h^*}\left(\frac{(1-h^*)S_0}{h^* K}\right)^{h^*}"
             formula_d = r"h = \frac{1}{2} + \sqrt{\frac{1}{4} + \frac{2r}{\sigma^2}}"
@@ -476,7 +474,7 @@ with tab_bsm:
                 with st.expander("Griegas (BSM) — Sensibilidades del contrato actual", expanded=False):
                     _q_gr_bsm = locals().get("q_bsm", locals().get("rf_bsm", 0.0))
                     _S_gr_bsm = locals().get("F_bsm", S_bsm)
-                    _gr = engine.calcular_griegas(
+                    _gr = quact.calcular_griegas(
                         _S_gr_bsm, K_bsm, r_bsm, sig_bsm, T_bsm, es_call_bsm, _q_gr_bsm
                     )
                     gcol1, gcol2, gcol3, gcol4, gcol5 = st.columns(5)
@@ -645,7 +643,7 @@ with tab_griegas:
         tipo_gr    = st.radio("Opción:", ["Call", "Put"], horizontal=True, key="gr_tipo")
         es_call_gr = (tipo_gr == "Call")
  
-        griegas = engine.calcular_griegas(S_gr, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
+        griegas = quact.calcular_griegas(S_gr, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
         st.markdown("**Valores puntuales en S₀**")
         col_m1, col_m2 = st.columns(2)
         col_m1.metric("Δ Delta",      f"{griegas['delta']:+.5f}", help="+$1 en subyacente → cambio en prima")
@@ -682,8 +680,8 @@ with tab_griegas:
     prices, payoffs = [], []
  
     for s in spots:
-        g  = engine.calcular_griegas(s, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
-        pv = engine.black_scholes(s, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
+        g  = quact.calcular_griegas(s, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
+        pv = quact.black_scholes(s, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
         deltas.append(g["delta"])
         gammas.append(g["gamma"])
         thetas.append(g["theta"])
@@ -902,8 +900,8 @@ with tab_griegas:
  
     for i, t in enumerate(_T_surf):
         for j, s in enumerate(_S_surf):
-            _Z_price[i, j] = engine.black_scholes(s, K_gr, r_gr, sig_gr, t, es_call_gr, q_gr)
-            gij = engine.calcular_griegas(s, K_gr, r_gr, sig_gr, t, es_call_gr, q_gr)
+            _Z_price[i, j] = quact.black_scholes(s, K_gr, r_gr, sig_gr, t, es_call_gr, q_gr)
+            gij = quact.calcular_griegas(s, K_gr, r_gr, sig_gr, t, es_call_gr, q_gr)
             _Z_delta[i, j] = gij["delta"]
             _Z_gamma[i, j] = gij["gamma"]
  
@@ -929,7 +927,7 @@ with tab_griegas:
             mode="lines", name="Payoff (T≈0)",
             line=dict(color=c["danger"], width=4),
         ))
-        p_actual = engine.black_scholes(S_gr, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
+        p_actual = quact.black_scholes(S_gr, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
         fig3.add_scatter3d(
             x=[S_gr], y=[T_gr], z=[p_actual],
             mode="markers", name="Punto actual",
@@ -1009,7 +1007,7 @@ with tab_griegas:
         fig = go.Figure()
         for (label, s_val), dash, col_line in zip(
                 _moneyness.items(), _dash_styles, _colors_mon):
-            vals = [engine.calcular_griegas(s_val, K_gr, r_gr, sig_gr, t,
+            vals = [quact.calcular_griegas(s_val, K_gr, r_gr, sig_gr, t,
                                              es_call_gr, q_gr)[greek_key]
                     for t in _T_range]
             fig.add_trace(go.Scatter(x=_T_range, y=vals, mode="lines", name=label,
@@ -1267,7 +1265,7 @@ with tab_griegas:
             fig = go.Figure()
             for (label, s_val), dash, col_line in zip(
                     _moneyness.items(), _dash_styles, _colors_mon):
-                vals = [engine.calcular_griegas(s_val, K_gr, r_gr, sig_v,
+                vals = [quact.calcular_griegas(s_val, K_gr, r_gr, sig_v,
                                                  T_gr, es_call_gr, q_gr)[greek_key]
                         for sig_v in _sig_range]
                 fig.add_trace(go.Scatter(
@@ -1409,13 +1407,13 @@ with tab_comp:
     separador()
 
     # Precio BSM
-    bsm_comp = engine.black_scholes(S_cp, K_cp, r_cp, sig_cp, T_cp, es_call_cp, q_cp)
+    bsm_comp = quact.black_scholes(S_cp, K_cp, r_cp, sig_cp, T_cp, es_call_cp, q_cp)
 
     # Precios CRR para distintos N
     pasos_lista = [1, 2, 5, 10, 25, 50, 100, 200, 500]
     precios_crr_comp = []
     for n_c in pasos_lista:
-        p_c, _, _ = engine.arbol_binomial_crr(
+        p_c, _, _ = quact.arbol_binomial_crr(
             S_cp, K_cp, r_cp, sig_cp, T_cp,
             n_c, es_call_cp, False, q_cp
         )
@@ -1519,7 +1517,7 @@ with tab_est:
 
         # Calcular prima BSM para los strikes comunes
         def _prima(K, es_call):
-            return engine.black_scholes(S_est, K, r_est, sig_est, T_est, es_call, q_est)
+            return quact.black_scholes(S_est, K, r_est, sig_est, T_est, es_call, q_est)
 
         if estrategia_sel == "Manual (configura tú mismo)":
             n_patas = st.number_input("Número de contratos paralelos", min_value=1,
@@ -1645,7 +1643,7 @@ with tab_est:
     separador()
 
     # ── Gráfica de perfil ──────────────────────────────────────────────────────
-    df_perfil = engine.perfil_estrategia(S_est, patas)
+    df_perfil = quact.perfil_estrategia(S_est, patas)
     fig_est = go.Figure()
     for col in df_perfil.columns:
         if col in ("S_T", "Payoff Neto"):
@@ -1702,7 +1700,7 @@ with tab_est:
         S_T_rng = np.linspace(S_est * 0.5, S_est * 1.5, 5000)
         payoff_tot = np.zeros_like(S_T_rng)
         for p in patas:
-            pp = engine.calcular_payoff_leg(p["tipo"], p["posicion"], S_T_rng, p["K"], p["prima"])
+            pp = quact.calcular_payoff_leg(p["tipo"], p["posicion"], S_T_rng, p["K"], p["prima"])
             payoff_tot += pp
 
         ganancia_max = payoff_tot.max()
@@ -1758,7 +1756,7 @@ with tab_real:
 
     if btn_buscar_real:
         with st.spinner(f"Extrayendo y procesando serie de tiempo para {ticker_real}..."):
-            spot_yf, vol_yf = engine.obtener_datos_subyacente(ticker_real)
+            spot_yf, vol_yf = quact.obtener_datos_subyacente(ticker_real)
             if spot_yf is not None:
                 st.session_state["real_spot"] = float(spot_yf)
                 st.session_state["real_vol"]  = float(vol_yf * 100)
@@ -1867,11 +1865,11 @@ with tab_real:
     st.markdown("#### Paso 3 — Reporte Integral de Valuación")
 
     # Precios BSM y CRR
-    prima_bsm_real  = engine.black_scholes(S_real, K_real, r_real, sig_real, T_real, es_call_real, q_real)
-    prima_crr_real, _, _ = engine.arbol_binomial_crr(
+    prima_bsm_real  = quact.black_scholes(S_real, K_real, r_real, sig_real, T_real, es_call_real, q_real)
+    prima_crr_real, _, _ = quact.arbol_binomial_crr(
         S_real, K_real, r_real, sig_real, T_real, int(N_real), es_call_real, es_amer_real, q_real
     )
-    griegas_real = engine.calcular_griegas(S_real, K_real, r_real, sig_real, T_real, es_call_real, q_real)
+    griegas_real = quact.calcular_griegas(S_real, K_real, r_real, sig_real, T_real, es_call_real, q_real)
 
     ticker_label = st.session_state.get("real_ticker_ok", "ACTIVO")
 
@@ -1965,9 +1963,9 @@ with tab_real:
 
     filas_tabla = []
     for K_i in strikes_vals:
-        prima_c = engine.black_scholes(S_real, K_i, r_real, sig_real, T_real, True,  q_real)
-        prima_p = engine.black_scholes(S_real, K_i, r_real, sig_real, T_real, False, q_real)
-        gr_i    = engine.calcular_griegas(S_real, K_i, r_real, sig_real, T_real, es_call_real, q_real)
+        prima_c = quact.black_scholes(S_real, K_i, r_real, sig_real, T_real, True,  q_real)
+        prima_p = quact.black_scholes(S_real, K_i, r_real, sig_real, T_real, False, q_real)
+        gr_i    = quact.calcular_griegas(S_real, K_i, r_real, sig_real, T_real, es_call_real, q_real)
         mon_i   = ((S_real - K_i) / K_i) * 100
         filas_tabla.append({
             "Strike Teórico ($K$)":   f"${K_i:,.2f}",
@@ -1996,7 +1994,7 @@ with tab_real:
     with tab_sens_vol:
         vol_range = np.linspace(max(sig_real * 0.3, 0.01), sig_real * 2.5, 40)
         primas_vol = [
-            engine.black_scholes(S_real, K_real, r_real, v, T_real, es_call_real, q_real)
+            quact.black_scholes(S_real, K_real, r_real, v, T_real, es_call_real, q_real)
             for v in vol_range
         ]
         fig_vol = go.Figure()
@@ -2023,7 +2021,7 @@ with tab_real:
     with tab_sens_t:
         T_range = np.linspace(0.02, 2.0, 40)
         primas_t = [
-            engine.black_scholes(S_real, K_real, r_real, sig_real, t, es_call_real, q_real)
+            quact.black_scholes(S_real, K_real, r_real, sig_real, t, es_call_real, q_real)
             for t in T_range
         ]
         fig_t = go.Figure()
@@ -2092,14 +2090,14 @@ with tab_vol:
         btn_vol_yf = st.button("Sincronizar Datos Teóricos", key="btn_vol_yf")
         if btn_vol_yf:
             with st.spinner("Estableciendo enlace de red y calculando factor de prima de riesgo..."):
-                sv, vv = engine.obtener_datos_subyacente(ticker_vol)
+                sv, vv = quact.obtener_datos_subyacente(ticker_vol)
                 if sv is not None:
                     # Configurar variables en memoria
                     st.session_state["vol_S_key"] = float(sv)
                     st.session_state["vol_K_key"] = float(sv) # Strike ATM
                     
                     # MAGIA: Simulamos el precio de mercado inyectando una prima de riesgo del +5% de volatilidad
-                    precio_mercado_simulado = engine.black_scholes(sv, sv, r_vol, vv + 0.05, T_vol, es_call_vol, q_vol)
+                    precio_mercado_simulado = quact.black_scholes(sv, sv, r_vol, vv + 0.05, T_vol, es_call_vol, q_vol)
                     st.session_state["vol_precio_key"] = float(precio_mercado_simulado)
                     
                     themed_success(
@@ -2115,7 +2113,7 @@ with tab_vol:
     
     # Calcular vol implícita
     def _bsm_price(sigma):
-        return engine.black_scholes(S_vol, K_vol, r_vol, sigma, T_vol,
+        return quact.black_scholes(S_vol, K_vol, r_vol, sigma, T_vol,
                                         es_call_vol, q_vol) - precio_mkt
     try:
         sig_impl = _brentq(_bsm_price, 1e-6, 10.0, xtol=1e-8, maxiter=200)
