@@ -12,6 +12,7 @@ from .exotics import (
     opciones_gap,
     opciones_intercambio_uxv,
     opciones_lookback_flotante,
+    payoff_leg_exotica,
 )
 from .forwards import (
     forward_calculo,
@@ -27,7 +28,16 @@ from .forwards import (
 )
 from .strategies import calcular_payoff_leg, perfil_estrategia
 from .trees import arbol_binomial_crr, binomial_tree
-from .vanilla import black_76, black_scholes, calcular_griegas, griegas_bsm, opciones_bsm
+from .vanilla import (
+    black_76,
+    black_scholes,
+    bsm_d1_d2,
+    calcular_griegas,
+    griegas_bsm,
+    griegas_segundo_orden,
+    implied_volatility_bsm,
+    opciones_bsm,
+)
 
 __all__ = [
     "forward_price",
@@ -44,7 +54,10 @@ __all__ = [
     "griegas_bsm",
     "black_scholes",
     "black_76",
+    "bsm_d1_d2",
     "calcular_griegas",
+    "griegas_segundo_orden",
+    "implied_volatility_bsm",
     "binomial_tree",
     "arbol_binomial_crr",
     "opciones_gap",
@@ -56,6 +69,7 @@ __all__ = [
     "opciones_lookback_flotante",
     "opciones_compuestas",
     "opciones_intercambio_uxv",
+    "payoff_leg_exotica",
     "opcion_chooser_simple",
     "opcion_perpetua",
     "calcular_payoff_leg",

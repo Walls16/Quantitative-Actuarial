@@ -23,7 +23,6 @@ import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
 from scipy.stats import norm
-from scipy.special import gammaln
 
 from utils import (
     page_header, paso_a_paso, separador,
@@ -31,7 +30,14 @@ from utils import (
     apply_plotly_theme, plotly_theme, plotly_colors, plotly_color,
     get_current_theme,
 )
-import app.domain as quact
+from quantitativeactuarial.creditrisk import (
+    binomial_probabilities_log as _binom_probs_log,
+    conditional_default_probability as _Q_condicional,
+    expected_tranche_survival_given_factor as _E_tranche_dado_F,
+    gauss_hermite_normal as _gauss_hermite_normal,
+    log_binomial_coefficient as _log_binom_coef,
+    valuar_tranche,
+)
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -57,116 +63,6 @@ page_header(
     titulo="14. Derivados de Crédito — CDO",
     subtitulo="Modelo de un Factor Gaussiano · Gauss-Hermite · Hull (9ª ed.)",
 )
-
-# =============================================================================
-# MOTOR MATEMÁTICO (autocontenido, sin depender de engine)
-# =============================================================================
-
-@st.cache_data
-def _gauss_hermite_normal(M: int):
-    """Nodos F_k y pesos w_k para integrar sobre N(0,1) (Hull ec. 25.12)."""
-    x_nodes, w_hat = np.polynomial.hermite.hermgauss(M)
-    F_nodes = x_nodes * np.sqrt(2)
-    w_nodes = w_hat / np.sqrt(np.pi)
-    return F_nodes, w_nodes
-
-
-def _log_binom_coef(n: int, k: int) -> float:
-    """log C(n,k) vía gammaln — evita overflow con n grande."""
-    return gammaln(n + 1) - gammaln(k + 1) - gammaln(n - k + 1)
-
-
-def _Q_condicional(t: float, h: float, rho: float, F: np.ndarray) -> np.ndarray:
-    """
-    Probabilidad condicional de default al tiempo t dado el factor F.
-        Q(t) = 1 − exp(−h·t)
-        Q(t|F) = N([N⁻¹(Q(t)) − √ρ·F] / √(1−ρ))
-    """
-    Qt     = 1.0 - np.exp(-h * t)
-    inv_Qt = norm.ppf(Qt)
-    arg    = (inv_Qt - np.sqrt(rho) * F) / np.sqrt(1.0 - rho)
-    return norm.cdf(arg)
-
-
-def _binom_probs_log(n: int, q: np.ndarray, k_max: int) -> np.ndarray:
-    """
-    P(k, t|F) para k = 0 … k_max−1.
-    Usa log-probabilidades para estabilidad numérica con n grande.
-    Retorna array shape (k_max, M).
-    """
-    eps    = 1e-300
-    log_q  = np.log(np.clip(q,       eps, 1 - eps))
-    log_1q = np.log(np.clip(1.0 - q, eps, 1 - eps))
-    probs  = np.zeros((k_max, len(q)))
-    for k in range(k_max):
-        log_p    = _log_binom_coef(n, k) + k * log_q + (n - k) * log_1q
-        probs[k] = np.exp(log_p)
-    return probs
-
-
-def _E_tranche_dado_F(t, h, rho, n, R, alpha_L, alpha_H, F_nodes):
-    """
-    Pérdida esperada del tranche [α_L, α_H] dado cada F_k al tiempo t.
-    Retorna array (M,).
-    """
-    q   = _Q_condicional(t, h, rho, F_nodes)
-    LGD = 1.0 - R
-    n_L = alpha_L * n / LGD
-    n_H = alpha_H * n / LGD
-    m_L = int(np.ceil(n_L))
-    m_H = int(np.ceil(n_H))
-    k_max = m_H
-    P   = _binom_probs_log(n, q, k_max)
-    E   = P[:m_L].sum(axis=0)
-    for k in range(m_L, m_H):
-        frac = np.clip((alpha_H - k * LGD / n) / (alpha_H - alpha_L), 0.0, 1.0)
-        E   += P[k] * frac
-    return E
-
-
-def valuar_tranche(h, rho, n, R, alpha_L, alpha_H, tasa_rf, periodos, F_nodes, w_nodes):
-    """
-    Motor completo: calcula A, B, C y spread del tranche.
-    Retorna dict con todos los resultados.
-    """
-    taus  = [0.0] + list(periodos)
-    M     = len(F_nodes)
-    E_all = np.zeros((len(taus), M))
-    E_all[0] = 1.0  # sin pérdidas al inicio
-
-    for j, t in enumerate(periodos):
-        E_all[j + 1] = _E_tranche_dado_F(t, h, rho, n, R, alpha_L, alpha_H, F_nodes)
-
-    A_F = np.zeros(M)
-    B_F = np.zeros(M)
-    C_F = np.zeros(M)
-
-    for j in range(1, len(taus)):
-        tau_j   = taus[j]
-        tau_j1  = taus[j - 1]
-        delta   = tau_j - tau_j1
-        tau_mid = 0.5 * (tau_j + tau_j1)
-        v_j     = np.exp(-tasa_rf * tau_j)
-        v_mid   = np.exp(-tasa_rf * tau_mid)
-        E_j     = E_all[j]
-        E_j1    = E_all[j - 1]
-        dE      = E_j1 - E_j
-        A_F    += delta * E_j  * v_j
-        B_F    += 0.5 * delta  * dE * v_mid
-        C_F    += dE * v_mid
-
-    A      = (w_nodes * A_F).sum()
-    B      = (w_nodes * B_F).sum()
-    C      = (w_nodes * C_F).sum()
-    spread = C / (A + B) if (A + B) > 1e-15 else np.nan
-    E_T    = (w_nodes * E_all[-1]).sum()
-
-    return dict(A=A, B=B, C=C,
-                spread=spread,
-                spread_bps=spread * 10_000,
-                E_T=E_T,
-                E_all=E_all)
-
 
 # Tranches predefinidos del ejemplo de Hull
 TRANCHES_DEFAULT = [

@@ -17,8 +17,13 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-from numpy.linalg import lstsq
-import app.domain as quact
+from quantitativeactuarial.financial_math import (
+    beta_alpha_from_returns,
+    capm_cost_of_equity,
+    dcf_sensitivity_matrix,
+    dcf_valuation,
+    weighted_average_cost_of_capital,
+)
 
 
 try:
@@ -119,7 +124,7 @@ with tab_dcf:
                                         step=0.05, key="dcf_beta")
             rm_dcf   = st.number_input("Rendimiento del mercado (%):",
                                         value=10.0, step=0.5, key="dcf_rm") / 100
-            Ke = rf_dcf + beta_dcf * (rm_dcf - rf_dcf)
+            Ke = capm_cost_of_equity(rf_dcf, beta_dcf, rm_dcf)
             st.metric("Ke (CAPM)", f"{Ke*100:.2f}%")
 
         Kd    = st.number_input("Kd — Costo de la deuda bancaria (%):",
@@ -130,7 +135,7 @@ with tab_dcf:
                                   min_value=1.0, max_value=99.0,
                                   value=60.0, step=5.0, key="dcf_E") / 100
         D_pct = 1 - E_pct
-        WACC  = Ke * E_pct + Kd * (1 - T_imp) * D_pct
+        WACC  = weighted_average_cost_of_capital(Ke, E_pct, Kd, T_imp)
         st.metric("WACC calculado", f"{WACC*100:.2f}%")
 
     with c3:
@@ -150,20 +155,16 @@ with tab_dcf:
     if WACC <= g_term:
         themed_error("El WACC debe ser obligatoriamente mayor que la tasa de crecimiento terminal a largo plazo. De lo contrario, la empresa tendría un valor infinito.")
     else:
-        # FCF proyectados
-        fcfs     = [fcf_base * (1 + g_proy) ** t for t in range(1, int(n_proy) + 1)]
-        pv_fcfs  = [f / (1 + WACC) ** t for t, f in enumerate(fcfs, 1)]
-
-        # Valor terminal (perpetuidad creciente)
-        fcf_n1   = fcfs[-1] * (1 + g_term)
-        vt       = fcf_n1 / (WACC - g_term)
-        pv_vt    = vt / (1 + WACC) ** int(n_proy)
-
-        # Valor empresa y del capital
-        vp_fcf_total = sum(pv_fcfs)
-        v_empresa    = vp_fcf_total + pv_vt
-        v_capital    = v_empresa - deuda_neta
-        precio_acc   = v_capital / acciones if acciones > 0 else 0
+        dcf = dcf_valuation(fcf_base, g_proy, g_term, WACC, int(n_proy), deuda_neta, acciones)
+        fcfs = dcf["fcfs"]
+        pv_fcfs = dcf["pv_fcfs"]
+        fcf_n1 = dcf["terminal_fcf"]
+        vt = dcf["terminal_value"]
+        pv_vt = dcf["pv_terminal_value"]
+        vp_fcf_total = dcf["pv_fcf_total"]
+        v_empresa = dcf["enterprise_value"]
+        v_capital = dcf["equity_value"]
+        precio_acc = dcf["price_per_share"]
 
         # Resultados
         col_r1, col_r2, col_r3, col_r4 = st.columns(4)
@@ -250,18 +251,7 @@ with tab_dcf:
         wacc_vals = np.linspace(WACC - wacc_rng/100, WACC + wacc_rng/100, 7)
         g_vals    = np.linspace(g_term - g_rng/100, max(g_term + g_rng/100, g_term + 0.005), 7)
 
-        sens_matrix = np.zeros((len(g_vals), len(wacc_vals)))
-        for i, g_v in enumerate(g_vals):
-            for j, w_v in enumerate(wacc_vals):
-                if w_v <= g_v or w_v <= 0:
-                    sens_matrix[i, j] = np.nan
-                    continue
-                fcf_n1_s = fcfs[-1] * (1 + g_v)
-                vt_s     = fcf_n1_s / (w_v - g_v)
-                pv_vt_s  = vt_s / (1 + w_v) ** int(n_proy)
-                pv_f_s   = sum(fcfs[t-1] / (1+w_v)**t for t in range(1, int(n_proy)+1))
-                vc_s     = (pv_f_s + pv_vt_s) - deuda_neta
-                sens_matrix[i, j] = vc_s / acciones if acciones > 0 else 0
+        sens_matrix = dcf_sensitivity_matrix(fcfs, g_vals, wacc_vals, deuda_neta, acciones)
 
         df_sens = pd.DataFrame(
             np.round(sens_matrix, 2),
@@ -343,34 +333,16 @@ with tab_capm:
                     else:
                         ret_a = data_a.pct_change().dropna()
                         ret_m = data_m.pct_change().dropna()
-                        df_r  = pd.concat([ret_a, ret_m], axis=1, join="inner")
-                        df_r.columns = ["Accion", "Mercado"]
-
-                        # Exceso de rendimiento diario
-                        rf_daily = (1 + rf_capm) ** (1/252) - 1
-                        df_r["Exc_A"] = df_r["Accion"]  - rf_daily
-                        df_r["Exc_M"] = df_r["Mercado"] - rf_daily
-
-                        # Regresión OLS: Exc_A = alpha + beta * Exc_M
-                        X = np.column_stack([np.ones(len(df_r)), df_r["Exc_M"].values])
-                        y = df_r["Exc_A"].values
-                        coeffs, _, _, _ = lstsq(X, y, rcond=None)
-                        alpha_capm, beta_capm = coeffs
-
-                        # Métricas anualizadas
-                        ret_anual_a = ((1 + df_r["Accion"].mean()) ** 252 - 1)
-                        ret_anual_m = ((1 + df_r["Mercado"].mean()) ** 252 - 1)
-                        vol_anual_a = df_r["Accion"].std() * np.sqrt(252)
-                        vol_anual_m = df_r["Mercado"].std() * np.sqrt(252)
-                        corr_am     = df_r["Accion"].corr(df_r["Mercado"])
-                        ke_capm_est = rf_capm + beta_capm * (ret_anual_m - rf_capm)
+                        capm = beta_alpha_from_returns(ret_a, ret_m, rf_capm)
+                        df_r = capm["returns"]
+                        corr_am = df_r["Accion"].corr(df_r["Mercado"])
 
                         st.session_state["capm_result"] = {
-                            "ticker": ticker_capm, "beta": beta_capm,
-                            "alpha": alpha_capm, "ret_a": ret_anual_a,
-                            "ret_m": ret_anual_m, "vol_a": vol_anual_a,
-                            "vol_m": vol_anual_m, "corr": corr_am,
-                            "ke": ke_capm_est, "df_r": df_r,
+                            "ticker": ticker_capm, "beta": capm["beta"],
+                            "alpha": capm["alpha"], "ret_a": capm["ret_a"],
+                            "ret_m": capm["ret_m"], "vol_a": capm["vol_a"],
+                            "vol_m": capm["vol_m"], "corr": corr_am,
+                            "ke": capm["ke"], "df_r": df_r,
                             "rf": rf_capm,
                         }
                 except Exception as e:

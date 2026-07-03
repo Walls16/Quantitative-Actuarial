@@ -21,8 +21,27 @@ from .annuities import (
 )
 from .bonds import precio_bono, riesgo_bono, tasa_rendimiento_bono
 from .cashflows import calcular_vp_dividendos, calcular_vp_flujos_irregulares
+from .corporate import (
+    beta_alpha_from_returns,
+    capm_cost_of_equity,
+    dcf_sensitivity_matrix,
+    dcf_valuation,
+    weighted_average_cost_of_capital,
+)
 from .equity import rendimiento_requerido_accion, valuacion_gordon_shapiro, valuacion_multiplos
 from .loans import tabla_amortizacion
+from .portfolio import (
+    equal_weight_portfolio,
+    evaluate_custom_portfolio,
+    monte_carlo_portfolio_cloud,
+    mvsk_neg_utility,
+    mvsk_portfolio,
+    portfolio_return,
+    portfolio_sharpe,
+    portfolio_volatility,
+    risk_parity_objective,
+    risk_parity_portfolio,
+)
 from .rates import (
     generar_tabla_reinversion,
     tasa_efectiva_a_nominal,
@@ -86,4 +105,19 @@ __all__ = [
     "calcular_vp_flujos_irregulares",
     "calcular_var_parametrico",
     "calcular_var_cvar_montecarlo",
+    "capm_cost_of_equity",
+    "weighted_average_cost_of_capital",
+    "dcf_valuation",
+    "dcf_sensitivity_matrix",
+    "beta_alpha_from_returns",
+    "portfolio_return",
+    "portfolio_volatility",
+    "portfolio_sharpe",
+    "equal_weight_portfolio",
+    "risk_parity_objective",
+    "risk_parity_portfolio",
+    "mvsk_neg_utility",
+    "mvsk_portfolio",
+    "monte_carlo_portfolio_cloud",
+    "evaluate_custom_portfolio",
 ]

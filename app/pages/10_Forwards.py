@@ -13,7 +13,16 @@ import numpy as np
 import streamlit as st
 
 from utils import page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error, apply_plotly_theme
-import app.domain as quact
+from quantitativeactuarial.financial_math import calcular_vp_flujos_irregulares
+from quantitativeactuarial.derivatives import (
+    fra,
+    precio_forward,
+    precio_forward_commodity,
+    precio_forward_dividendo_continuo,
+    precio_forward_dividendos_discretos,
+    precio_forward_divisa,
+    valor_forward_en_vida,
+)
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -93,9 +102,6 @@ with tab_precio:
                                   min_value=0.01, value=1.0,
                                   step=0.25, key="fwd_T")
 
-        # Tasa equivalente para el motor si es discreta (truco matemático)
-        r_calc = r_fwd if es_cont else np.log(1 + r_fwd)
-
     # ── Inputs específicos por tipo ───────────────────────────────────────────
     F0_res    = None
     formula   = ""
@@ -103,14 +109,15 @@ with tab_precio:
 
     with c1:
         if tipo_subyacente.startswith("Activo sin"):
-            F0_res  = quact.precio_forward(S0_fwd, r_calc, T_fwd)
+            F0_res  = precio_forward(S0_fwd, r_fwd, T_fwd, capitalizacion=tipo_capitalizacion)
             formula = r"F_0 = S_0 e^{rT}" if es_cont else r"F_0 = S_0 (1+r)^T"
 
         elif tipo_subyacente.startswith("Activo con dividendo continuo"):
             q_fwd   = st.number_input("Dividendo / tasa extranjera ($q$) %",
                                        value=2.0, step=0.1, key="fwd_q") / 100
-            q_calc  = q_fwd if es_cont else np.log(1 + q_fwd)
-            F0_res  = quact.precio_forward_dividendo_continuo(S0_fwd, r_calc, q_calc, T_fwd)
+            F0_res  = precio_forward_dividendo_continuo(
+                S0_fwd, r_fwd, q_fwd, T_fwd, capitalizacion=tipo_capitalizacion
+            )
             formula = r"F_0 = S_0 e^{(r-q)T}" if es_cont else r"F_0 = S_0 \frac{(1+r)^T}{(1+q)^T}"
             extra_val["q"] = q_fwd
 
@@ -132,11 +139,17 @@ with tab_precio:
             
             # Valor presente de los dividendos (según capitalización)
             if es_cont:
-                I_fwd = sum(d * np.exp(-r_fwd * t) for d, t in divs)
+                I_fwd = calcular_vp_flujos_irregulares(
+                    [d for d, _ in divs], [t for _, t in divs], r_fwd, "Continua"
+                )
             else:
-                I_fwd = sum(d * (1 + r_fwd)**(-t) for d, t in divs)
+                I_fwd = calcular_vp_flujos_irregulares(
+                    [d for d, _ in divs], [t for _, t in divs], r_fwd, "Discreta"
+                )
 
-            F0_res  = quact.precio_forward_dividendos_discretos(S0_fwd, r_calc, T_fwd, I_fwd)
+            F0_res  = precio_forward_dividendos_discretos(
+                S0_fwd, r_fwd, T_fwd, I_fwd, capitalizacion=tipo_capitalizacion
+            )
             formula = r"F_0 = (S_0 - I) e^{rT}" if es_cont else r"F_0 = (S_0 - I)(1+r)^T"
             extra_val["I"] = I_fwd
             extra_val["divs"] = divs
@@ -144,8 +157,9 @@ with tab_precio:
         elif tipo_subyacente.startswith("Commodity con costo almacenamiento continuo"):
             u_fwd   = st.number_input("Costo de almacenamiento continuo ($u$) %",
                                        value=1.5, step=0.1, key="fwd_u") / 100
-            u_calc  = u_fwd if es_cont else np.log(1 + u_fwd)
-            F0_res  = quact.precio_forward_commodity(S0_fwd, r_calc, u_calc, T_fwd)
+            F0_res  = precio_forward_commodity(
+                S0_fwd, r_fwd, u_fwd, T_fwd, capitalizacion=tipo_capitalizacion
+            )
             formula = r"F_0 = S_0 e^{(r+u)T}" if es_cont else r"F_0 = S_0 (1+r)^T (1+u)^T"
             extra_val["u"] = u_fwd
 
@@ -167,12 +181,18 @@ with tab_precio:
             
             # Valor presente de los costos (según capitalización)
             if es_cont:
-                VP_C = sum(c * np.exp(-r_fwd * t) for c, t in costos)
+                VP_C = calcular_vp_flujos_irregulares(
+                    [c for c, _ in costos], [t for _, t in costos], r_fwd, "Continua"
+                )
             else:
-                VP_C = sum(c * (1 + r_fwd)**(-t) for c, t in costos)
+                VP_C = calcular_vp_flujos_irregulares(
+                    [c for c, _ in costos], [t for _, t in costos], r_fwd, "Discreta"
+                )
 
             # Enviamos al motor como dividendo negativo para que se SUME a S0
-            F0_res  = quact.precio_forward_dividendos_discretos(S0_fwd, r_calc, T_fwd, -VP_C)
+            F0_res  = precio_forward_dividendos_discretos(
+                S0_fwd, r_fwd, T_fwd, -VP_C, capitalizacion=tipo_capitalizacion
+            )
             formula = r"F_0 = (S_0 + C) e^{rT}" if es_cont else r"F_0 = (S_0 + C)(1+r)^T"
             extra_val["C"] = VP_C
             extra_val["costos"] = costos
@@ -317,12 +337,10 @@ with tab_valor:
                                    "(0 si no aplica)",
                                    value=0.0, step=0.1, key="val_q") / 100
         
-        # Truco del motor
-        r_calc_val = r_val if es_cont_val else np.log(1 + r_val)
-        q_calc_val = q_val if es_cont_val else np.log(1 + q_val)
-
     with c2:
-        ft_res = quact.valor_forward_en_vida(St_val, F0_val, r_calc_val, q_calc_val, tau_val)
+        ft_res = valor_forward_en_vida(
+            St_val, F0_val, r_val, q_val, tau_val, capitalizacion=tipo_cap_val
+        )
 
         themed_info(
             f"<div style='{css_contenedor}'>"
@@ -395,12 +413,10 @@ with tab_divisa:
                                    min_value=0.01, value=1.0,
                                    step=0.25, key="fx_T")
         
-        # Truco del motor
-        r_d_calc = r_d if es_cont_div else np.log(1 + r_d)
-        r_f_calc = r_f_fx if es_cont_div else np.log(1 + r_f_fx)
-
     with c2:
-        F0_fx = quact.precio_forward_divisa(S0_fx, r_d_calc, r_f_calc, T_fx)
+        F0_fx = precio_forward_divisa(
+            S0_fx, r_d, r_f_fx, T_fx, capitalizacion=tipo_cap_div
+        )
 
         prima_pct   = (F0_fx / S0_fx - 1) * 100
 
@@ -489,20 +505,14 @@ with tab_fra:
         R_K      = st.number_input("Tasa pactada en el FRA ($R_K$) % anual",
                                     value=5.5, step=0.1, key="fra_rk") / 100
 
-        # Mapeos al motor
-        r1_calc_fra = r1_fra if es_cont_fra else np.log(1 + r1_fra)
-        r2_calc_fra = r2_fra if es_cont_fra else np.log(1 + r2_fra)
-        rk_calc_fra = R_K if es_cont_fra else np.log(1 + R_K)
-
     if t2_fra <= t1_fra:
         themed_error("$t_2$ debe ser mayor que $t_1$.")
     else:
         with c2:
             tau_fra = t2_fra - t1_fra
-            R_F_cont, val_fra = quact.fra(r1_calc_fra, r2_calc_fra, t1_fra, t2_fra, Nf_fra, rk_calc_fra)
-            
-            # Reconvertir al formato de visualización si es discreta
-            R_F_disp = R_F_cont if es_cont_fra else (np.exp(R_F_cont) - 1)
+            R_F_disp, val_fra = fra(
+                r1_fra, r2_fra, t1_fra, t2_fra, Nf_fra, R_K, capitalizacion=tipo_cap_fra
+            )
 
             themed_info(
                 f"<div style='{css_contenedor}'>"

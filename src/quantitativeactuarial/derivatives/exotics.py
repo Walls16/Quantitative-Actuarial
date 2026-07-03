@@ -246,6 +246,32 @@ def opciones_intercambio_uxv(U: float, V: float, q_u: float, q_v: float, sigma_u
     return max(0.0, precio)
 
 
+def payoff_leg_exotica(tipo: str, posicion: int, S_T: np.ndarray, params: dict, prima: float) -> np.ndarray:
+    """Compute a single exotic payoff leg net of premium."""
+    tipo_norm = tipo.lower()
+    is_call = "call" in tipo_norm
+    if "gap" in tipo_norm:
+        K1 = params.get("K", 100.0)
+        K1 = params.get("K1", K1)
+        K2 = params.get("K2", K1)
+        payoff = np.where(S_T > K1, S_T - K2, 0.0) if is_call else np.where(S_T < K1, K2 - S_T, 0.0)
+    elif "cash-or-nothing" in tipo_norm or "con_" in tipo_norm:
+        K = params.get("K", 100.0)
+        Q = params.get("Q", 100.0)
+        payoff = np.where(S_T > K, Q, 0.0) if is_call else np.where(S_T < K, Q, 0.0)
+    elif "asset-or-nothing" in tipo_norm or "aon_" in tipo_norm:
+        K = params.get("K", 100.0)
+        payoff = np.where(S_T > K, S_T, 0.0) if is_call else np.where(S_T < K, S_T, 0.0)
+    elif "down-and-out" in tipo_norm or "dno_" in tipo_norm:
+        K = params.get("K", 100.0)
+        H = params.get("H", 80.0)
+        vanilla = np.maximum(S_T - K, 0.0) if is_call else np.maximum(K - S_T, 0.0)
+        payoff = np.where(S_T > H, vanilla, 0.0)
+    else:
+        payoff = np.zeros_like(S_T)
+    return posicion * payoff - posicion * prima
+
+
 def opcion_chooser_simple(S: float, K: float, T1: float, T2: float, r: float, sigma: float, q: float = 0.0) -> float:
     """Valuación de Opción Chooser Simple (As You Like It)."""
     c = opciones_bsm("Yield", S, K, T2, r, sigma, extra=q)[0]
@@ -276,6 +302,7 @@ __all__ = [
     "opciones_lookback_flotante",
     "opciones_compuestas",
     "opciones_intercambio_uxv",
+    "payoff_leg_exotica",
     "opcion_chooser_simple",
     "opcion_perpetua",
 ]

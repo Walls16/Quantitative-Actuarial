@@ -12,10 +12,16 @@ from typing import Any
 
 import numpy as np
 import pandas as pd
-import scipy.optimize as opt
 import yfinance as yf
 from pypfopt import expected_returns, risk_models
 from pypfopt.efficient_frontier import EfficientFrontier
+from quantitativeactuarial.financial_math import (
+    equal_weight_portfolio,
+    evaluate_custom_portfolio,
+    monte_carlo_portfolio_cloud,
+    mvsk_portfolio,
+    risk_parity_portfolio,
+)
 
 def optimizacion_portafolios(tickers_list: Any, start_date: Any, end_date: Any, r_f: Any = 0.05) -> Any:
     """
@@ -32,7 +38,6 @@ def optimizacion_portafolios(tickers_list: Any, start_date: Any, end_date: Any, 
     S    = risk_models.sample_cov(data)
 
     retornos_diarios = data.pct_change().dropna()
-    n_activos = len(data.columns)
 
     # ── 1. Máximo Sharpe ─────────────────────────────────────────────────
     ef_s = EfficientFrontier(mu, S)
@@ -47,77 +52,22 @@ def optimizacion_portafolios(tickers_list: Any, start_date: Any, end_date: Any, 
     ret_m, vol_m, sharpe_m = ef_m.portfolio_performance(verbose=False, risk_free_rate=r_f)
 
     # ── 3. 1/N Equiponderación ────────────────────────────────────────────
-    w_eq = np.ones(n_activos) / n_activos
-    ret_eq  = float(w_eq @ mu.values)
-    vol_eq  = float(np.sqrt(w_eq @ S.values @ w_eq))
-    sharpe_eq = (ret_eq - r_f) / vol_eq
-    pesos_eq = {t: float(w) for t, w in zip(data.columns, w_eq)}
+    ret_eq, vol_eq, sharpe_eq, pesos_eq = equal_weight_portfolio(
+        list(data.columns), mu.values, S.values, r_f
+    )
 
     # ── 4. Paridad de Riesgo ──────────────────────────────────────────────
-    def _risk_parity_objective(w, cov):
-        w = np.array(w)
-        sigma_p = np.sqrt(w @ cov @ w)
-        mrc = cov @ w / sigma_p          # contribución marginal al riesgo
-        rc  = w * mrc                    # contribución absoluta
-        target = sigma_p / n_activos     # contribución objetivo (igual)
-        return np.sum((rc - target) ** 2)
-
-    w0 = np.ones(n_activos) / n_activos
-    bounds_rp = [(1e-4, 1.0)] * n_activos
-    cons_rp   = {"type": "eq", "fun": lambda w: np.sum(w) - 1}
-    res_rp = opt.minimize(
-        _risk_parity_objective, w0,
-        args=(S.values,),
-        method="SLSQP",
-        bounds=bounds_rp,
-        constraints=cons_rp,
-        options={"ftol": 1e-12, "maxiter": 1000},
+    ret_rp, vol_rp, sharpe_rp, pesos_rp = risk_parity_portfolio(
+        list(data.columns), mu.values, S.values, r_f
     )
-    w_rp    = np.abs(res_rp.x) / np.sum(np.abs(res_rp.x))
-    ret_rp  = float(w_rp @ mu.values)
-    vol_rp  = float(np.sqrt(w_rp @ S.values @ w_rp))
-    sharpe_rp = (ret_rp - r_f) / vol_rp
-    pesos_rp = {t: float(w) for t, w in zip(data.columns, w_rp)}
 
     # ── 5. MVSK (Media-Varianza-Asimetría-Curtosis) ───────────────────────
-    # Incorpora momentos de orden 3 y 4 para capturar colas y asimetrías.
-    # Función objetivo: maximizar E[R] - λ₂σ² + λ₃skew - λ₄kurt
-    # Pesos λ estándar usados en literatura (Harvey et al. 2010).
-    lambda2, lambda3, lambda4 = 1.0, 0.5, 0.5
-
-    daily_ret = retornos_diarios.values  # shape (T, N)
-    mu_d = daily_ret.mean(axis=0)
-
-    def _mvsk_neg_utility(w):
-        w = np.array(w)
-        p_ret   = daily_ret @ w
-        mean_p  = float(np.mean(p_ret))
-        var_p   = float(np.var(p_ret))
-        std_p   = float(np.std(p_ret)) + 1e-10
-        skew_p  = float(np.mean(((p_ret - mean_p) / std_p) ** 3))
-        kurt_p  = float(np.mean(((p_ret - mean_p) / std_p) ** 4))
-        utility = mean_p - lambda2 * var_p + lambda3 * skew_p - lambda4 * kurt_p
-        return -utility  # negativo para minimizar
-
-    res_mvsk = opt.minimize(
-        _mvsk_neg_utility, w0,
-        method="SLSQP",
-        bounds=[(0.0, 1.0)] * n_activos,
-        constraints={"type": "eq", "fun": lambda w: np.sum(w) - 1},
-        options={"ftol": 1e-12, "maxiter": 2000},
+    ret_mv, vol_mv, sharpe_mv, pesos_mvsk = mvsk_portfolio(
+        list(data.columns), mu.values, S.values, retornos_diarios.values, r_f
     )
-    w_mv    = np.abs(res_mvsk.x) / np.sum(np.abs(res_mvsk.x))
-    ret_mv  = float(w_mv @ mu.values)
-    vol_mv  = float(np.sqrt(w_mv @ S.values @ w_mv))
-    sharpe_mv = (ret_mv - r_f) / vol_mv
-    pesos_mvsk = {t: float(w) for t, w in zip(data.columns, w_mv)}
 
     # ── Nube Monte Carlo ──────────────────────────────────────────────────
-    n_sim   = 2500
-    pesos_rand = np.random.dirichlet(np.ones(n_activos), size=n_sim)
-    ret_sim    = pesos_rand @ mu.values
-    vol_sim    = np.sqrt(np.einsum('ij,jk,ik->i', pesos_rand, S.values, pesos_rand))
-    sharpe_sim = (ret_sim - r_f) / vol_sim
+    _, ret_sim, vol_sim, sharpe_sim = monte_carlo_portfolio_cloud(mu.values, S.values, r_f, n_simulations=2500)
     nube_grafica = (ret_sim, vol_sim, sharpe_sim)
 
     # ── Empaquetar resultados ─────────────────────────────────────────────
@@ -167,18 +117,11 @@ def obtener_datos_subyacente(ticker_symbol: Any) -> Any:
 def evaluar_portafolio_personalizado(tickers_list: Any, dict_pesos: Any, start_date: Any, end_date: Any) -> Any:
     data = _descargar_y_limpiar(tickers_list, start_date, end_date)
 
-    mu = expected_returns.mean_historical_return(data)
-    S = risk_models.sample_cov(data)
+    rend_p, vol_p, pesos_array, columns = evaluate_custom_portfolio(
+        data, dict_pesos, expected_returns.mean_historical_return, risk_models.sample_cov
+    )
 
-    pesos_array = np.array([dict_pesos.get(c, 0) for c in data.columns])
-    suma = pesos_array.sum()
-    if suma > 0:
-        pesos_array = pesos_array / suma
-
-    rend_p = np.dot(pesos_array, mu)
-    vol_p = np.sqrt(np.dot(pesos_array.T, np.dot(S, pesos_array)))
-
-    return data, rend_p, vol_p, pesos_array, data.columns
+    return data, rend_p, vol_p, pesos_array, columns
 
 
 

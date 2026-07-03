@@ -24,7 +24,13 @@ from utils import (
     apply_plotly_theme, plotly_theme, plotly_colors, plotly_color,
     get_current_theme,
 )
-import app.domain as quact
+from quantitativeactuarial.creditrisk import (
+    prima_cds,
+    tabla_probabilidades_cds as tabla_probabilidades,
+    tabla_vpc_cds,
+    tabla_vppp_cds,
+    tabla_vpv_cds,
+)
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -59,121 +65,6 @@ tab_prima, tab_mtm, tab_sens = st.tabs([
     "Valuación a Mercado (MTM)",
     "Análisis de Sensibilidad",
 ])
-
-
-# ─────────────────────────────────────────────────────────────────────────────
-# FUNCIONES AUXILIARES DE CÁLCULO
-# ─────────────────────────────────────────────────────────────────────────────
-
-def tabla_probabilidades(hazard_rate: float, T: int) -> pd.DataFrame:
-    """
-    Genera tabla de probabilidades anuales.
-    Columnas: t, S(t) Sobrevivencia, F(t) Incump. Acumulada, q(t) Incump. Marginal
-    """
-    rows = []
-    for t in range(1, T + 1):
-        ps_t    = np.exp(-hazard_rate * t)
-        ps_prev = np.exp(-hazard_rate * (t - 1))
-        pd_acu  = 1.0 - ps_t          # F(t) acumulada
-        pd_marg = ps_prev - ps_t      # q(t) marginal individual
-        rows.append({
-            "t (años)":               t,
-            "S(t) Sobrevivencia":     ps_t,
-            "F(t) Incump. Acumulada": pd_acu,
-            "q(t) Incump. Marginal":  pd_marg,
-        })
-    return pd.DataFrame(rows)
-
-
-def tabla_vpc_cds(hazard_rate: float, r: float, T: int) -> pd.DataFrame:
-    """
-    VPC_CDS — Valor Presente de Pagos del Comprador SIN incumplimiento.
-    Pago esperado en t = S(t) * s  →  VP = S(t) * s * e^{-r*t}
-    (el spread s se factoriza fuera, se trabaja con 1 unidad de s)
-    """
-    rows = []
-    for t in range(1, T + 1):
-        ps_t  = np.exp(-hazard_rate * t)
-        fvp_t = np.exp(-r * t)
-        vp_t  = ps_t * fvp_t
-        rows.append({
-            "Tiempo (años)":           t,
-            "Prob. Sobrevivencia S(t)": ps_t,
-            "Pago Esperado (×s)":      ps_t,
-            "Factor VP  e^{-rt}":      fvp_t,
-            "VP Pago Esperado (×s)":   vp_t,
-        })
-    df = pd.DataFrame(rows)
-    df.loc["Total"] = df[["VP Pago Esperado (×s)"]].sum()
-    return df
-
-
-def tabla_vpv_cds(hazard_rate: float, r: float, T: int, rr: float) -> pd.DataFrame:
-    """
-    VPV_CDS — Valor Presente de Pagos del Vendedor (pata contingente).
-    Pagos en los puntos medios t - 0.5; LGD = 1 - RR.
-    """
-    lgd = 1.0 - rr
-    rows = []
-    for t in range(1, T + 1):
-        t_mid   = t - 0.5
-        ps_prev = np.exp(-hazard_rate * (t - 1))
-        ps_t    = np.exp(-hazard_rate * t)
-        pd_cond = ps_prev - ps_t
-        pago_p  = lgd * pd_cond
-        fvp     = np.exp(-r * t_mid)
-        vp_pago = pago_p * fvp
-        rows.append({
-            "Tiempo (años)":                      t_mid,
-            "Prob. Incumplimiento Marginal q(t)": pd_cond,
-            "Tasa Recuperación (RR)":             rr,
-            "LGD (1-RR)":                         lgd,
-            "Pago Parcial Esperado":              pago_p,
-            "Factor VP  e^{-rt_mid}":             fvp,
-            "VP Pago Parcial Esperado":           vp_pago,
-        })
-    df = pd.DataFrame(rows)
-    df.loc["Total"] = df[["VP Pago Parcial Esperado"]].sum()
-    return df
-
-
-def tabla_vppp_cds(hazard_rate: float, r: float, T: int) -> pd.DataFrame:
-    """
-    VPPP_CDS — Valor Presente de la Prima Prorrateada.
-    En caso de incumplimiento en el año t, el comprador paga
-    la prima acumulada hasta el punto medio (0.5 × s).
-    """
-    rows = []
-    for t in range(1, T + 1):
-        t_mid   = t - 0.5
-        ps_prev = np.exp(-hazard_rate * (t - 1))
-        ps_t    = np.exp(-hazard_rate * t)
-        pd_cond = ps_prev - ps_t
-        pago_p  = 0.5 * pd_cond
-        fvp     = np.exp(-r * t_mid)
-        vp_pago = pago_p * fvp
-        rows.append({
-            "Tiempo (años)":                          t_mid,
-            "Prob. Incumplimiento Marginal q(t)":     pd_cond,
-            "Pago Prorrateado (×s)":                  0.5,
-            "Pago Prorrateado Esperado (×s)":         pago_p,
-            "Factor VP  e^{-rt_mid}":                 fvp,
-            "VP Pago Prorrateado Esperado (×s)":      vp_pago,
-        })
-    df = pd.DataFrame(rows)
-    df.loc["Total"] = df[["VP Pago Prorrateado Esperado (×s)"]].sum()
-    return df
-
-
-def prima_cds(vpc_total: float, vppp_total: float, vpv_total: float) -> float:
-    """
-    s = VPV_CDS / (VPC_CDS + VPPP_CDS)
-    Condición de no-arbitraje: Pata fija = Pata contingente.
-    """
-    denominador = vpc_total + vppp_total
-    if denominador == 0:
-        return 0.0
-    return vpv_total / denominador
 
 
 def format_pct(v, decimales=4):

@@ -43,6 +43,64 @@
     ]
   ],
   "barrera_down_and_out": 12.447188496210245,
+  "beta_alpha_from_returns": {
+    "alpha": -0.033646881171565744,
+    "beta": 1.2768496420047737,
+    "ke": 2.4298551225876652,
+    "ret_a": 2.7416969273006813,
+    "ret_m": 1.91168092778361,
+    "returns": {
+      "columns": [
+        "Accion",
+        "Mercado",
+        "Exc_A",
+        "Exc_M"
+      ],
+      "records": [
+        {
+          "Accion": 0.01,
+          "Exc_A": 0.009844350137208737,
+          "Exc_M": 0.007844350137208737,
+          "Mercado": 0.008
+        },
+        {
+          "Accion": -0.005,
+          "Exc_A": -0.005155649862791263,
+          "Exc_M": -0.003155649862791263,
+          "Mercado": -0.003
+        },
+        {
+          "Accion": 0.012,
+          "Exc_A": 0.011844350137208737,
+          "Exc_M": 0.009844350137208737,
+          "Mercado": 0.01
+        },
+        {
+          "Accion": 0.004,
+          "Exc_A": 0.0038443501372087373,
+          "Exc_M": 0.0018443501372087372,
+          "Mercado": 0.002
+        }
+      ]
+    },
+    "rf": 0.04,
+    "vol_a": 0.12115692303785204,
+    "vol_m": 0.09380298502713012
+  },
+  "binomial_probabilities_log": [
+    [
+      0.7290000000000001,
+      0.5120000000000001
+    ],
+    [
+      0.243,
+      0.384
+    ],
+    [
+      0.027000000000000007,
+      0.09600000000000002
+    ]
+  ],
   "binomial_tree": [
     11.043871091951113,
     [
@@ -109,6 +167,10 @@
     886.6160258082485,
     810.2717429466034,
     400.0
+  ],
+  "bsm_d1_d2": [
+    0.3,
+    0.09999999999999998
   ],
   "build_transition_matrix": [
     [
@@ -496,19 +558,82 @@
   ],
   "calcular_vp_dividendos": 38.05868992429963,
   "calcular_vp_flujos_irregulares": 536.3453498824229,
+  "capm_cost_of_equity": 0.11200000000000002,
+  "conditional_default_probability": [
+    0.035539614757417626,
+    0.006954120277064886,
+    0.0009219774261780947
+  ],
+  "dcf_sensitivity_matrix": [
+    [
+      186.58664837677182,
+      158.92319068861448
+    ],
+    [
+      221.16598079561035,
+      183.17159049462728
+    ]
+  ],
+  "dcf_valuation": {
+    "enterprise_value": 2487.8257887517148,
+    "equity_value": 2437.8257887517148,
+    "fcfs": [
+      110.00000000000001,
+      121.00000000000001,
+      133.10000000000005
+    ],
+    "price_per_share": 243.78257887517148,
+    "projection_table": {
+      "columns": [
+        "Año",
+        "FCF Proyectado",
+        "Factor Descuento",
+        "Valor Presente"
+      ],
+      "records": [
+        {
+          "Año": 1,
+          "FCF Proyectado": 110.00000000000001,
+          "Factor Descuento": 0.9259259259259258,
+          "Valor Presente": 101.85185185185186
+        },
+        {
+          "Año": 2,
+          "FCF Proyectado": 121.00000000000001,
+          "Factor Descuento": 0.8573388203017832,
+          "Valor Presente": 103.73799725651578
+        },
+        {
+          "Año": 3,
+          "FCF Proyectado": 133.10000000000005,
+          "Factor Descuento": 0.7938322410201696,
+          "Valor Presente": 105.65907127978461
+        }
+      ]
+    },
+    "pv_fcf_total": 311.24892038815227,
+    "pv_fcfs": [
+      101.85185185185186,
+      103.73799725651578,
+      105.65907127978461
+    ],
+    "pv_terminal_value": 2176.5768683635624,
+    "terminal_fcf": 137.09300000000005,
+    "terminal_value": 2741.8600000000006
+  },
   "desglosar_periodos": {
     "columns": [
-      "A\u00f1os",
+      "Años",
       "Meses",
-      "D\u00edas",
+      "Días",
       "Horas",
       "Minutos",
       "Segundos"
     ],
     "records": [
       {
-        "A\u00f1os": 2,
-        "D\u00edas": 4,
+        "Años": 2,
+        "Días": 4,
         "Horas": 6,
         "Meses": 4,
         "Minutos": 12,
@@ -516,6 +641,32 @@
       }
     ]
   },
+  "equal_weight_portfolio": [
+    0.1,
+    0.19364916731037085,
+    0.3614784456460256,
+    {
+      "A": 0.5,
+      "B": 0.5
+    }
+  ],
+  "evaluate_custom_portfolio": [
+    0.096,
+    0.1833030277982336,
+    [
+      0.6,
+      0.4
+    ],
+    [
+      "A",
+      "B"
+    ]
+  ],
+  "expected_tranche_survival_given_factor": [
+    0.6963762307804837,
+    0.9325951187978458,
+    0.9908183837502533
+  ],
   "expected_value_and_sigma": [
     [
       {
@@ -540,6 +691,18 @@
     0.060000000000000005,
     4524.187090179802
   ],
+  "gauss_hermite_normal": [
+    [
+      -1.7320508075688772,
+      0.0,
+      1.7320508075688772
+    ],
+    [
+      0.1666666666666667,
+      0.6666666666666666,
+      0.1666666666666667
+    ]
+  ],
   "gaussian_copula_simulation": [
     0.0,
     1.0,
@@ -549,83 +712,83 @@
   ],
   "generar_tabla_reinversion": {
     "columns": [
-      "Periodo de reinversi\u00f3n",
-      "m = Veces al a\u00f1o",
+      "Periodo de reinversión",
+      "m = Veces al año",
       "Monto acumulado",
       "Rendimiento Acumulado"
     ],
     "records": [
       {
         "Monto acumulado": 1216.5525060596437,
-        "Periodo de reinversi\u00f3n": "Cada 4 a\u00f1os",
+        "Periodo de reinversión": "Cada 4 años",
         "Rendimiento Acumulado": 0.21655250605964382,
-        "m = Veces al a\u00f1o": "0.25"
+        "m = Veces al año": "0.25"
       },
       {
         "Monto acumulado": 1240.0,
-        "Periodo de reinversi\u00f3n": "Cada 2 a\u00f1os",
+        "Periodo de reinversión": "Cada 2 años",
         "Rendimiento Acumulado": 0.24,
-        "m = Veces al a\u00f1o": "0.5"
+        "m = Veces al año": "0.5"
       },
       {
         "Monto acumulado": 1254.4,
-        "Periodo de reinversi\u00f3n": "Anual",
+        "Periodo de reinversión": "Anual",
         "Rendimiento Acumulado": 0.2544000000000002,
-        "m = Veces al a\u00f1o": "1"
+        "m = Veces al año": "1"
       },
       {
         "Monto acumulado": 1262.4769600000004,
-        "Periodo de reinversi\u00f3n": "Semestral",
+        "Periodo de reinversión": "Semestral",
         "Rendimiento Acumulado": 0.2624769600000003,
-        "m = Veces al a\u00f1o": "2"
+        "m = Veces al año": "2"
       },
       {
         "Monto acumulado": 1266.7700813876163,
-        "Periodo de reinversi\u00f3n": "Trimestral",
+        "Periodo de reinversión": "Trimestral",
         "Rendimiento Acumulado": 0.2667700813876164,
-        "m = Veces al a\u00f1o": "4"
+        "m = Veces al año": "4"
       },
       {
         "Monto acumulado": 1269.7346485319147,
-        "Periodo de reinversi\u00f3n": "Mensual",
+        "Periodo de reinversión": "Mensual",
         "Rendimiento Acumulado": 0.26973464853191476,
-        "m = Veces al a\u00f1o": "12"
+        "m = Veces al año": "12"
       },
       {
         "Monto acumulado": 1270.8977013464544,
-        "Periodo de reinversi\u00f3n": "Semanal",
+        "Periodo de reinversión": "Semanal",
         "Rendimiento Acumulado": 0.2708977013464544,
-        "m = Veces al a\u00f1o": "52"
+        "m = Veces al año": "52"
       },
       {
         "Monto acumulado": 1271.1990089089581,
-        "Periodo de reinversi\u00f3n": "Diaria",
+        "Periodo de reinversión": "Diaria",
         "Rendimiento Acumulado": 0.2711990089089582,
-        "m = Veces al a\u00f1o": "365"
+        "m = Veces al año": "365"
       },
       {
         "Monto acumulado": 1271.2470606155098,
-        "Periodo de reinversi\u00f3n": "Cada hora",
+        "Periodo de reinversión": "Cada hora",
         "Rendimiento Acumulado": 0.27124706061550974,
-        "m = Veces al a\u00f1o": "8760"
+        "m = Veces al año": "8760"
       },
       {
         "Monto acumulado": 1271.2491154906006,
-        "Periodo de reinversi\u00f3n": "Cada minuto",
+        "Periodo de reinversión": "Cada minuto",
         "Rendimiento Acumulado": 0.2712491154906007,
-        "m = Veces al a\u00f1o": "525600"
+        "m = Veces al año": "525600"
       },
       {
         "Monto acumulado": 1271.2491518159447,
-        "Periodo de reinversi\u00f3n": "Cada segundo",
+        "Periodo de reinversión": "Cada segundo",
         "Rendimiento Acumulado": 0.2712491518159448,
-        "m = Veces al a\u00f1o": "31536000"
+        "m = Veces al año": "31536000"
       },
       {
         "Monto acumulado": 1271.2491503214048,
-        "Periodo de reinversi\u00f3n": "Instant\u00e1nea",
+        "Periodo de reinversión": "Instantánea",
         "Rendimiento Acumulado": 0.27124915032140473,
-        "m = Veces al a\u00f1o": "\u221e"
+        "m = Veces al año": "∞"
       }
     ]
   },
@@ -639,6 +802,14 @@
     0.5135001229824934,
     -0.43772930151822065
   ],
+  "griegas_segundo_orden": {
+    "charm": -0.00013841454927533892,
+    "color_val": -2.870740870223438e-05,
+    "speed": -0.000471991179113313,
+    "vanna": -0.18879647164532512,
+    "vomma": 0.05663894149359752
+  },
+  "implied_volatility_bsm": 0.20000000000007673,
   "independent_distribution": [
     [
       131.18,
@@ -949,6 +1120,62 @@
       9.53795617008512e-05
     ]
   ],
+  "log_binomial_coefficient": 4.787491742782047,
+  "monte_carlo_portfolio_cloud": [
+    [
+      [
+        0.2989876272974813,
+        0.7010123727025187
+      ],
+      [
+        0.9607970768936964,
+        0.03920292310630359
+      ],
+      [
+        0.029836465903462145,
+        0.9701635340965379
+      ],
+      [
+        0.2745351089085429,
+        0.725464891091457
+      ],
+      [
+        0.2931850266822681,
+        0.7068149733177319
+      ]
+    ],
+    [
+      0.10804049490810075,
+      0.08156811692425214,
+      0.11880654136386151,
+      0.10901859564365826,
+      0.10827259893270928
+    ],
+    [
+      0.22802472623132455,
+      0.19446562735720277,
+      0.29210287412516667,
+      0.23316309836080393,
+      0.22922852422116266
+    ],
+    [
+      0.3422457564050791,
+      0.2651785697301129,
+      0.30402488037761566,
+      0.33889837714106197,
+      0.34146099050566175
+    ]
+  ],
+  "mvsk_neg_utility": 0.9501701435930674,
+  "mvsk_portfolio": [
+    0.11964020468034961,
+    0.29760665078690934,
+    0.30120363386816007,
+    {
+      "A": 0.00899488299125938,
+      "B": 0.9910051170087406
+    }
+  ],
   "nper_anualidad_vf": 11.999999999999993,
   "nper_anualidad_vp": 12.000000000000004,
   "nper_gradiente_arit_vf": 5.765362112634052,
@@ -972,6 +1199,11 @@
   "opciones_gap": 12.39379839765158,
   "opciones_intercambio_uxv": 12.387633040517485,
   "opciones_lookback_flotante": 18.69009790506791,
+  "payoff_leg_exotica": [
+    -2.0,
+    -2.0,
+    13.0
+  ],
   "perfil_estrategia": {
     "columns": [
       "S_T",
@@ -1006,6 +1238,9 @@
       }
     ]
   },
+  "portfolio_return": 0.096,
+  "portfolio_sharpe": 0.35000000000000003,
+  "portfolio_volatility": 0.1833030277982336,
   "precio_bono": [
     530.3090483685486,
     80.0,
@@ -1017,11 +1252,22 @@
   "precio_forward_dividendo_continuo": 103.0454533953517,
   "precio_forward_dividendos_discretos": 101.97329634847434,
   "precio_forward_divisa": 20.816215483847763,
+  "prima_cds": 0.08333333333333333,
   "rendimiento_requerido_accion": 0.08,
   "riesgo_bono": [
     2.4817593083123017,
     2.2768434021213775,
     8.023531677232961
+  ],
+  "risk_parity_objective": 0.002083333333333332,
+  "risk_parity_portfolio": [
+    0.09599999977793343,
+    0.18330302737421825,
+    0.36005951851080226,
+    {
+      "A": 0.6000000055516647,
+      "B": 0.39999999444833545
+    }
   ],
   "scale_var_cvar": {
     "0.95": {
@@ -1042,31 +1288,191 @@
     "columns": [
       "Periodo",
       "Saldo Inicial",
-      "Inter\u00e9s",
-      "Amortizaci\u00f3n",
+      "Interés",
+      "Amortización",
       "Saldo Insoluto"
     ],
     "records": [
       {
-        "Amortizaci\u00f3n": 330.022111481469,
-        "Inter\u00e9s": 10.0,
+        "Amortización": 330.022111481469,
+        "Interés": 10.0,
         "Periodo": 1,
         "Saldo Inicial": 1000.0,
         "Saldo Insoluto": 669.977888518531
       },
       {
-        "Amortizaci\u00f3n": 333.3223325962837,
-        "Inter\u00e9s": 6.69977888518531,
+        "Amortización": 333.3223325962837,
+        "Interés": 6.69977888518531,
         "Periodo": 2,
         "Saldo Inicial": 669.977888518531,
         "Saldo Insoluto": 336.65555592224734
       },
       {
-        "Amortizaci\u00f3n": 336.65555592224734,
-        "Inter\u00e9s": 3.3665555592224736,
+        "Amortización": 336.65555592224734,
+        "Interés": 3.3665555592224736,
         "Periodo": 3,
         "Saldo Inicial": 336.65555592224734,
         "Saldo Insoluto": 0.0
+      }
+    ]
+  },
+  "tabla_probabilidades_cds": {
+    "columns": [
+      "t (años)",
+      "S(t) Sobrevivencia",
+      "F(t) Incump. Acumulada",
+      "q(t) Incump. Marginal"
+    ],
+    "records": [
+      {
+        "F(t) Incump. Acumulada": 0.019801326693244747,
+        "S(t) Sobrevivencia": 0.9801986733067553,
+        "q(t) Incump. Marginal": 0.019801326693244747,
+        "t (años)": 1
+      },
+      {
+        "F(t) Incump. Acumulada": 0.03921056084767682,
+        "S(t) Sobrevivencia": 0.9607894391523232,
+        "q(t) Incump. Marginal": 0.019409234154432076,
+        "t (años)": 2
+      },
+      {
+        "F(t) Incump. Acumulada": 0.05823546641575128,
+        "S(t) Sobrevivencia": 0.9417645335842487,
+        "q(t) Incump. Marginal": 0.019024905568074457,
+        "t (años)": 3
+      }
+    ]
+  },
+  "tabla_vpc_cds": {
+    "columns": [
+      "Tiempo (años)",
+      "Prob. Sobrevivencia S(t)",
+      "Pago Esperado (×s)",
+      "Factor VP  e^{-rt}",
+      "VP Pago Esperado (×s)"
+    ],
+    "records": [
+      {
+        "Factor VP  e^{-rt}": 0.951229424500714,
+        "Pago Esperado (×s)": 0.9801986733067553,
+        "Prob. Sobrevivencia S(t)": 0.9801986733067553,
+        "Tiempo (años)": 1.0,
+        "VP Pago Esperado (×s)": 0.9323938199059482
+      },
+      {
+        "Factor VP  e^{-rt}": 0.9048374180359595,
+        "Pago Esperado (×s)": 0.9607894391523232,
+        "Prob. Sobrevivencia S(t)": 0.9607894391523232,
+        "Tiempo (años)": 2.0,
+        "VP Pago Esperado (×s)": 0.8693582353988057
+      },
+      {
+        "Factor VP  e^{-rt}": 0.8607079764250578,
+        "Pago Esperado (×s)": 0.9417645335842487,
+        "Prob. Sobrevivencia S(t)": 0.9417645335842487,
+        "Tiempo (años)": 3.0,
+        "VP Pago Esperado (×s)": 0.8105842459701871
+      },
+      {
+        "Factor VP  e^{-rt}": "NaN",
+        "Pago Esperado (×s)": "NaN",
+        "Prob. Sobrevivencia S(t)": "NaN",
+        "Tiempo (años)": "NaN",
+        "VP Pago Esperado (×s)": 2.612336301274941
+      }
+    ]
+  },
+  "tabla_vppp_cds": {
+    "columns": [
+      "Tiempo (años)",
+      "Prob. Incumplimiento Marginal q(t)",
+      "Pago Prorrateado (×s)",
+      "Pago Prorrateado Esperado (×s)",
+      "Factor VP  e^{-rt_mid}",
+      "VP Pago Prorrateado Esperado (×s)"
+    ],
+    "records": [
+      {
+        "Factor VP  e^{-rt_mid}": 0.9753099120283326,
+        "Pago Prorrateado (×s)": 0.5,
+        "Pago Prorrateado Esperado (×s)": 0.009900663346622374,
+        "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
+        "Tiempo (años)": 0.5,
+        "VP Pago Prorrateado Esperado (×s)": 0.009656215097616404
+      },
+      {
+        "Factor VP  e^{-rt_mid}": 0.9277434863285529,
+        "Pago Prorrateado (×s)": 0.5,
+        "Pago Prorrateado Esperado (×s)": 0.009704617077216038,
+        "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
+        "Tiempo (años)": 1.5,
+        "VP Pago Prorrateado Esperado (×s)": 0.009003395280700018
+      },
+      {
+        "Factor VP  e^{-rt_mid}": 0.8824969025845955,
+        "Pago Prorrateado (×s)": 0.5,
+        "Pago Prorrateado Esperado (×s)": 0.009512452784037229,
+        "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
+        "Tiempo (años)": 2.5,
+        "VP Pago Prorrateado Esperado (×s)": 0.008394710117895067
+      },
+      {
+        "Factor VP  e^{-rt_mid}": "NaN",
+        "Pago Prorrateado (×s)": "NaN",
+        "Pago Prorrateado Esperado (×s)": "NaN",
+        "Prob. Incumplimiento Marginal q(t)": "NaN",
+        "Tiempo (años)": "NaN",
+        "VP Pago Prorrateado Esperado (×s)": 0.02705432049621149
+      }
+    ]
+  },
+  "tabla_vpv_cds": {
+    "columns": [
+      "Tiempo (años)",
+      "Prob. Incumplimiento Marginal q(t)",
+      "Tasa Recuperación (RR)",
+      "LGD (1-RR)",
+      "Pago Parcial Esperado",
+      "Factor VP  e^{-rt_mid}",
+      "VP Pago Parcial Esperado"
+    ],
+    "records": [
+      {
+        "Factor VP  e^{-rt_mid}": 0.9753099120283326,
+        "LGD (1-RR)": 0.6,
+        "Pago Parcial Esperado": 0.011880796015946849,
+        "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
+        "Tasa Recuperación (RR)": 0.4,
+        "Tiempo (años)": 0.5,
+        "VP Pago Parcial Esperado": 0.011587458117139685
+      },
+      {
+        "Factor VP  e^{-rt_mid}": 0.9277434863285529,
+        "LGD (1-RR)": 0.6,
+        "Pago Parcial Esperado": 0.011645540492659244,
+        "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
+        "Tasa Recuperación (RR)": 0.4,
+        "Tiempo (años)": 1.5,
+        "VP Pago Parcial Esperado": 0.01080407433684002
+      },
+      {
+        "Factor VP  e^{-rt_mid}": 0.8824969025845955,
+        "LGD (1-RR)": 0.6,
+        "Pago Parcial Esperado": 0.011414943340844674,
+        "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
+        "Tasa Recuperación (RR)": 0.4,
+        "Tiempo (años)": 2.5,
+        "VP Pago Parcial Esperado": 0.01007365214147408
+      },
+      {
+        "Factor VP  e^{-rt_mid}": "NaN",
+        "LGD (1-RR)": "NaN",
+        "Pago Parcial Esperado": "NaN",
+        "Prob. Incumplimiento Marginal q(t)": "NaN",
+        "Tasa Recuperación (RR)": "NaN",
+        "Tiempo (años)": "NaN",
+        "VP Pago Parcial Esperado": 0.032465184595453785
       }
     ]
   },
@@ -1106,6 +1512,203 @@
   "valor_presente_continuo": 1005.480069053459,
   "valuacion_gordon_shapiro": 55.55555555555556,
   "valuacion_multiplos": 96,
+  "valuar_cds": {
+    "probabilidades": {
+      "columns": [
+        "t (años)",
+        "S(t) Sobrevivencia",
+        "F(t) Incump. Acumulada",
+        "q(t) Incump. Marginal"
+      ],
+      "records": [
+        {
+          "F(t) Incump. Acumulada": 0.019801326693244747,
+          "S(t) Sobrevivencia": 0.9801986733067553,
+          "q(t) Incump. Marginal": 0.019801326693244747,
+          "t (años)": 1
+        },
+        {
+          "F(t) Incump. Acumulada": 0.03921056084767682,
+          "S(t) Sobrevivencia": 0.9607894391523232,
+          "q(t) Incump. Marginal": 0.019409234154432076,
+          "t (años)": 2
+        },
+        {
+          "F(t) Incump. Acumulada": 0.05823546641575128,
+          "S(t) Sobrevivencia": 0.9417645335842487,
+          "q(t) Incump. Marginal": 0.019024905568074457,
+          "t (años)": 3
+        }
+      ]
+    },
+    "spread": 0.012300257615399176,
+    "vpc": {
+      "columns": [
+        "Tiempo (años)",
+        "Prob. Sobrevivencia S(t)",
+        "Pago Esperado (×s)",
+        "Factor VP  e^{-rt}",
+        "VP Pago Esperado (×s)"
+      ],
+      "records": [
+        {
+          "Factor VP  e^{-rt}": 0.951229424500714,
+          "Pago Esperado (×s)": 0.9801986733067553,
+          "Prob. Sobrevivencia S(t)": 0.9801986733067553,
+          "Tiempo (años)": 1.0,
+          "VP Pago Esperado (×s)": 0.9323938199059482
+        },
+        {
+          "Factor VP  e^{-rt}": 0.9048374180359595,
+          "Pago Esperado (×s)": 0.9607894391523232,
+          "Prob. Sobrevivencia S(t)": 0.9607894391523232,
+          "Tiempo (años)": 2.0,
+          "VP Pago Esperado (×s)": 0.8693582353988057
+        },
+        {
+          "Factor VP  e^{-rt}": 0.8607079764250578,
+          "Pago Esperado (×s)": 0.9417645335842487,
+          "Prob. Sobrevivencia S(t)": 0.9417645335842487,
+          "Tiempo (años)": 3.0,
+          "VP Pago Esperado (×s)": 0.8105842459701871
+        },
+        {
+          "Factor VP  e^{-rt}": "NaN",
+          "Pago Esperado (×s)": "NaN",
+          "Prob. Sobrevivencia S(t)": "NaN",
+          "Tiempo (años)": "NaN",
+          "VP Pago Esperado (×s)": 2.612336301274941
+        }
+      ]
+    },
+    "vpc_total": 2.612336301274941,
+    "vppp": {
+      "columns": [
+        "Tiempo (años)",
+        "Prob. Incumplimiento Marginal q(t)",
+        "Pago Prorrateado (×s)",
+        "Pago Prorrateado Esperado (×s)",
+        "Factor VP  e^{-rt_mid}",
+        "VP Pago Prorrateado Esperado (×s)"
+      ],
+      "records": [
+        {
+          "Factor VP  e^{-rt_mid}": 0.9753099120283326,
+          "Pago Prorrateado (×s)": 0.5,
+          "Pago Prorrateado Esperado (×s)": 0.009900663346622374,
+          "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
+          "Tiempo (años)": 0.5,
+          "VP Pago Prorrateado Esperado (×s)": 0.009656215097616404
+        },
+        {
+          "Factor VP  e^{-rt_mid}": 0.9277434863285529,
+          "Pago Prorrateado (×s)": 0.5,
+          "Pago Prorrateado Esperado (×s)": 0.009704617077216038,
+          "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
+          "Tiempo (años)": 1.5,
+          "VP Pago Prorrateado Esperado (×s)": 0.009003395280700018
+        },
+        {
+          "Factor VP  e^{-rt_mid}": 0.8824969025845955,
+          "Pago Prorrateado (×s)": 0.5,
+          "Pago Prorrateado Esperado (×s)": 0.009512452784037229,
+          "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
+          "Tiempo (años)": 2.5,
+          "VP Pago Prorrateado Esperado (×s)": 0.008394710117895067
+        },
+        {
+          "Factor VP  e^{-rt_mid}": "NaN",
+          "Pago Prorrateado (×s)": "NaN",
+          "Pago Prorrateado Esperado (×s)": "NaN",
+          "Prob. Incumplimiento Marginal q(t)": "NaN",
+          "Tiempo (años)": "NaN",
+          "VP Pago Prorrateado Esperado (×s)": 0.02705432049621149
+        }
+      ]
+    },
+    "vppp_total": 0.02705432049621149,
+    "vpv": {
+      "columns": [
+        "Tiempo (años)",
+        "Prob. Incumplimiento Marginal q(t)",
+        "Tasa Recuperación (RR)",
+        "LGD (1-RR)",
+        "Pago Parcial Esperado",
+        "Factor VP  e^{-rt_mid}",
+        "VP Pago Parcial Esperado"
+      ],
+      "records": [
+        {
+          "Factor VP  e^{-rt_mid}": 0.9753099120283326,
+          "LGD (1-RR)": 0.6,
+          "Pago Parcial Esperado": 0.011880796015946849,
+          "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
+          "Tasa Recuperación (RR)": 0.4,
+          "Tiempo (años)": 0.5,
+          "VP Pago Parcial Esperado": 0.011587458117139685
+        },
+        {
+          "Factor VP  e^{-rt_mid}": 0.9277434863285529,
+          "LGD (1-RR)": 0.6,
+          "Pago Parcial Esperado": 0.011645540492659244,
+          "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
+          "Tasa Recuperación (RR)": 0.4,
+          "Tiempo (años)": 1.5,
+          "VP Pago Parcial Esperado": 0.01080407433684002
+        },
+        {
+          "Factor VP  e^{-rt_mid}": 0.8824969025845955,
+          "LGD (1-RR)": 0.6,
+          "Pago Parcial Esperado": 0.011414943340844674,
+          "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
+          "Tasa Recuperación (RR)": 0.4,
+          "Tiempo (años)": 2.5,
+          "VP Pago Parcial Esperado": 0.01007365214147408
+        },
+        {
+          "Factor VP  e^{-rt_mid}": "NaN",
+          "LGD (1-RR)": "NaN",
+          "Pago Parcial Esperado": "NaN",
+          "Prob. Incumplimiento Marginal q(t)": "NaN",
+          "Tasa Recuperación (RR)": "NaN",
+          "Tiempo (años)": "NaN",
+          "VP Pago Parcial Esperado": 0.032465184595453785
+        }
+      ]
+    },
+    "vpv_total": 0.032465184595453785
+  },
+  "valuar_tranche": {
+    "A": 1.484196910698112,
+    "B": 0.12221374357259848,
+    "C": 0.24442748714519696,
+    "E_T": 0.7440987577307302,
+    "E_all": [
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        0.038582617235460845,
+        0.5504374566035428,
+        0.9325951187978458,
+        0.9959242638943836,
+        0.9999254310768295
+      ],
+      [
+        0.005304104490584808,
+        0.30493441047315367,
+        0.8363619347422788,
+        0.9861822268127853,
+        0.9996464325477044
+      ]
+    ],
+    "spread": 0.15215753611654415,
+    "spread_bps": 1521.5753611654416
+  },
   "var_cvar_from_distribution": {
     "0.95": {
       "CVaR": 4.12965850701832,
@@ -1143,5 +1746,6 @@
   "vp_anualidad_nominal": 619.4374225455086,
   "vp_gradiente_aritmetico": 651.1501789849781,
   "vp_gradiente_geo": 574.0048465233505,
-  "vp_perpetuidad": 2000.0
+  "vp_perpetuidad": 2000.0,
+  "weighted_average_cost_of_capital": 0.08879999999999999
 }

@@ -20,6 +20,7 @@ from scipy.stats import norm as norm
 
 from utils import page_header, paso_a_paso, separador, alerta_metodo_numerico, themed_info, themed_success, themed_warning, themed_error, apply_plotly_theme, plotly_theme, plotly_colors, plotly_color, get_current_theme
 import app.domain as quact
+from quantitativeactuarial.derivatives import griegas_segundo_orden, implied_volatility_bsm
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -690,45 +691,9 @@ with tab_griegas:
         prices.append(pv)
         payoffs.append(max(s - K_gr, 0) if es_call_gr else max(K_gr - s, 0))
  
-    # ── Segundo orden vs Spot ─────────────────────────────────────────────────
-    def _d1d2(s, K, r, q, sig, T):
-        if T <= 0 or sig <= 0:
-            return 0.0, 0.0
-        d1 = (np.log(s / K) + (r - q + 0.5 * sig**2) * T) / (sig * np.sqrt(T))
-        return d1, d1 - sig * np.sqrt(T)
- 
-    def _griegas_2ord(s, K, r, q, sig, T, is_call):
-        zero = dict(vanna=0, vomma=0, charm=0, speed=0, color_val=0)
-        if T <= 1e-6 or sig <= 1e-6:
-            return zero
-        d1, d2 = _d1d2(s, K, r, q, sig, T)
-        npd1  = norm.pdf(d1)
-        sqrtT = np.sqrt(T)
-        vanna     = -np.exp(-q * T) * npd1 * d2 / sig
-        vega_raw  = s * np.exp(-q * T) * npd1 * sqrtT
-        vomma     = vega_raw * d1 * d2 / sig * 0.01
-        if is_call:
-            charm = (q * np.exp(-q * T) * norm.cdf(d1)
-                     - np.exp(-q * T) * npd1
-                     * (2 * (r - q) * T - d2 * sig * sqrtT)
-                     / (2 * T * sig * sqrtT))
-        else:
-            charm = (-q * np.exp(-q * T) * norm.cdf(-d1)
-                     - np.exp(-q * T) * npd1
-                     * (2 * (r - q) * T - d2 * sig * sqrtT)
-                     / (2 * T * sig * sqrtT))
-        charm /= 365.0
-        gamma_pt  = np.exp(-q * T) * npd1 / (s * sig * sqrtT)
-        speed     = -gamma_pt / s * (d1 / (sig * sqrtT) + 1)
-        color_val = (-np.exp(-q * T) * npd1 / (2 * s * T * sig * sqrtT)
-                     * (2 * q * T + 1
-                        + (2 * (r - q) * T - d2 * sig * sqrtT)
-                        * d1 / (sig * sqrtT))) / 365.0
-        return dict(vanna=vanna, vomma=vomma, charm=charm, speed=speed, color_val=color_val)
- 
     vannas, vommas, charms, speeds, colors_arr = [], [], [], [], []
     for s in spots:
-        g2 = _griegas_2ord(s, K_gr, r_gr, q_gr, sig_gr, T_gr, es_call_gr)
+        g2 = griegas_segundo_orden(s, K_gr, r_gr, q_gr, sig_gr, T_gr, es_call_gr)
         vannas.append(g2["vanna"])
         vommas.append(g2["vomma"])
         charms.append(g2["charm"])
@@ -2051,7 +2016,6 @@ with tab_real:
 # ═════════════════════════════════════════════════════════════════════════════
 with tab_vol:
     import datetime as _dt
-    from scipy.optimize import brentq as _brentq
 
     st.markdown("### Sonrisa de Volatilidad (Vol Implícita)")
     themed_info(
@@ -2111,12 +2075,8 @@ with tab_vol:
 
     separador()
     
-    # Calcular vol implícita
-    def _bsm_price(sigma):
-        return quact.black_scholes(S_vol, K_vol, r_vol, sigma, T_vol,
-                                        es_call_vol, q_vol) - precio_mkt
     try:
-        sig_impl = _brentq(_bsm_price, 1e-6, 10.0, xtol=1e-8, maxiter=200)
+        sig_impl = implied_volatility_bsm(precio_mkt, S_vol, K_vol, r_vol, T_vol, es_call_vol, q_vol)
         c_th_v = get_current_theme()
         
         themed_success(

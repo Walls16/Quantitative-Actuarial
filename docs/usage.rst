@@ -34,21 +34,8 @@ Credit Risk
    values = quact.bond_values_per_rating(1000, 0.05, 3, 1, 0.4, quact.DEFAULT_SPREADS)
    thresholds = quact.thresholds_per_bond(0, tm)
 
-Compatibility Modules
----------------------
 
-The Spanish-named compatibility modules still work:
+ola owowow
+----------
 
-.. code-block:: python
-
-   from quantitativeactuarial.tasas import valor_presente
-   from quantitativeactuarial.derivados import black_scholes
-   from quantitativeactuarial.credito import DEFAULT_TM
-
-New code can also import from the split packages:
-
-.. code-block:: python
-
-   from quantitativeactuarial.financial_math import valor_presente
-   from quantitativeactuarial.derivatives import black_scholes
-   from quantitativeactuarial.creditrisk import DEFAULT_TM
+esta buena la pag, no?

@@ -25,6 +25,7 @@ from utils import (
     themed_info, themed_success, themed_warning, themed_error,
     apply_plotly_theme, plotly_theme, plotly_colors, get_current_theme)
 import app.domain as quact
+from quantitativeactuarial.derivatives import payoff_leg_exotica as _payoff_leg_exotica
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -158,48 +159,6 @@ def _chart_payoff_exotico(titulo, S0, x_vals, series: dict,
     fig.update_layout(legend=dict(orientation="h", yanchor="bottom", y=1.02,
                                    xanchor="right", x=1))
     return fig
-
-
-# =============================================================================
-# HELPER: payoff terminal de una pata exótica
-# =============================================================================
-def _payoff_leg_exotica(tipo: str, posicion: int,
-                         S_T: np.ndarray, params: dict, prima: float) -> np.ndarray:
-    """
-    Calcula el flujo neto al vencimiento de una pata exótica.
-
-    tipo admite: gap_call | gap_put | con_call | con_put |
-                 aon_call | aon_put | dno_call | dno_put
-    posicion: +1 Long, -1 Short
-    params : dict con claves según el tipo (K, K1, K2, Q, H)
-    prima  : prima ya pagada/cobrada (positiva = desembolso)
-    """
-    K   = params.get("K",  100.0)
-    K1  = params.get("K1", K)
-    K2  = params.get("K2", K)
-    Q   = params.get("Q",  100.0)
-    H   = params.get("H",  K * 0.85)
-
-    if tipo == "gap_call":
-        payoff = np.where(S_T > K1, S_T - K2, 0.0)
-    elif tipo == "gap_put":
-        payoff = np.where(S_T < K1, K2 - S_T, 0.0)
-    elif tipo == "con_call":
-        payoff = np.where(S_T > K, Q, 0.0)
-    elif tipo == "con_put":
-        payoff = np.where(S_T < K, Q, 0.0)
-    elif tipo == "aon_call":
-        payoff = np.where(S_T > K, S_T, 0.0)
-    elif tipo == "aon_put":
-        payoff = np.where(S_T < K, S_T, 0.0)
-    elif tipo == "dno_call":
-        payoff = np.where(S_T > H, np.maximum(S_T - K, 0.0), 0.0)
-    elif tipo == "dno_put":
-        payoff = np.where(S_T > H, np.maximum(K - S_T, 0.0), 0.0)
-    else:
-        payoff = np.zeros_like(S_T)
-
-    return posicion * payoff - posicion * prima
 
 
 # ═════════════════════════════════════════════════════════════════════════════

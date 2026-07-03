@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import numpy as np
+from scipy.optimize import brentq
 from scipy.stats import norm
 
 
@@ -106,6 +107,12 @@ def black_76(F0: float, K: float, r: float, sigma: float, T: float, es_call: boo
     return call if es_call else put
 
 
+def bsm_d1_d2(S: float, K: float, r: float, q: float, sigma: float, T: float) -> tuple[float, float]:
+    """Return Black-Scholes-Merton ``d1`` and ``d2`` with continuous yield."""
+    d1 = (np.log(S / K) + (r - q + 0.5 * sigma**2) * T) / (sigma * np.sqrt(T))
+    return float(d1), float(d1 - sigma * np.sqrt(T))
+
+
 def calcular_griegas(S: float, K: float, r: float, sigma: float, T: float, es_call: bool = True, q: float = 0.0) -> dict[str, float]:
     """Devuelve dict de griegas BSM con dividendo q."""
     dc, dp, gamma, vega, tc, tp, rc, rp = griegas_bsm("Yield", S, K, T, r, sigma, extra=q)
@@ -114,10 +121,71 @@ def calcular_griegas(S: float, K: float, r: float, sigma: float, T: float, es_ca
     rho = rc if es_call else rp
     return {"delta": delta, "gamma": gamma, "theta": theta, "vega": vega, "rho": rho}
 
+
+def griegas_segundo_orden(S: float, K: float, r: float, q: float, sigma: float, T: float, es_call: bool = True) -> dict[str, float]:
+    """Compute selected second-order BSM Greeks: vanna, charm, color, and raw vega."""
+    if T <= 1e-6 or sigma <= 1e-6:
+        return {"vanna": 0.0, "vomma": 0.0, "charm": 0.0, "speed": 0.0, "color_val": 0.0}
+    d1, d2 = bsm_d1_d2(S, K, r, q, sigma, T)
+    pdf_d1 = norm.pdf(d1)
+    sqrt_t = np.sqrt(T)
+    discount_yield = np.exp(-q * T)
+    vanna = -discount_yield * pdf_d1 * d2 / sigma
+    vega_raw = S * discount_yield * pdf_d1 * sqrt_t
+    vomma = vega_raw * d1 * d2 / sigma * 0.01
+    if es_call:
+        charm = (
+            q * discount_yield * norm.cdf(d1)
+            - discount_yield * pdf_d1 * (2 * (r - q) * T - d2 * sigma * sqrt_t) / (2 * T * sigma * sqrt_t)
+        )
+    else:
+        charm = (
+            -q * discount_yield * norm.cdf(-d1)
+            - discount_yield * pdf_d1 * (2 * (r - q) * T - d2 * sigma * sqrt_t) / (2 * T * sigma * sqrt_t)
+        )
+    charm = charm / 365.0
+    gamma = discount_yield * pdf_d1 / (S * sigma * sqrt_t)
+    speed = -gamma / S * (d1 / (sigma * sqrt_t) + 1)
+    color = (
+        -discount_yield
+        * pdf_d1
+        / (2 * S * T * sigma * sqrt_t)
+        * (2 * q * T + 1 + (2 * (r - q) * T - d2 * sigma * sqrt_t) * d1 / (sigma * sqrt_t))
+        / 365.0
+    )
+    return {
+        "vanna": float(vanna),
+        "vomma": float(vomma),
+        "charm": float(charm),
+        "speed": float(speed),
+        "color_val": float(color),
+    }
+
+
+def implied_volatility_bsm(
+    market_price: float,
+    S: float,
+    K: float,
+    r: float,
+    T: float,
+    es_call: bool = True,
+    q: float = 0.0,
+    lower: float = 1e-6,
+    upper: float = 10.0,
+) -> float:
+    """Solve BSM implied volatility with Brent's method."""
+    def objective(sigma: float) -> float:
+        return black_scholes(S, K, r, sigma, T, es_call, q) - market_price
+
+    return float(brentq(objective, lower, upper, xtol=1e-8, maxiter=200))
+
 __all__ = [
     "opciones_bsm",
     "griegas_bsm",
     "black_scholes",
     "black_76",
+    "bsm_d1_d2",
     "calcular_griegas",
+    "griegas_segundo_orden",
+    "implied_volatility_bsm",
 ]
