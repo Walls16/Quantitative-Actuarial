@@ -22,8 +22,6 @@ from utils import (
     inject_global_css,
     render_theme_selector,
     get_current_theme,
-    index_card,
-    COLORS,
 )
 
 # =============================================================================
@@ -111,7 +109,31 @@ def portada():
         f"<h3 style='color:{c['subtitle_color']};font-weight:700;'>Mapa de la Calculadora</h3>",
         unsafe_allow_html=True,
     )
-    st.caption("Usa el menú lateral para navegar entre módulos.")
+    st.caption("Selecciona un módulo para abrirlo directamente.")
+
+    def page_card(numero: str, titulo: str, descripcion: str, variante: str, page: str):
+        colores = {
+            "a": (c["info_bg"], c["primary"], c["info_text"]),
+            "b": (c["success_bg"], c["success"], c["success_text"]),
+            "c": (c["warning_bg"], c["accent"], c["warning_text"]),
+        }
+        bg, borde, texto = colores.get(variante, colores["a"])
+        st.markdown(
+            f"<div style='"
+            f"background:{bg};color:{texto};"
+            f"border-left:5px solid {borde};border-radius:10px 10px 0 0;"
+            f"padding:12px 16px 4px 16px;margin-top:10px;"
+            f"'>"
+            f"<div style='font-size:13px;line-height:1.45;'>{descripcion}</div>"
+            f"</div>",
+            unsafe_allow_html=True,
+        )
+        st.page_link(page, label=f"{numero}. {titulo}")
+        st.markdown(
+            f"<div style='height:10px;margin-bottom:2px;border-left:5px solid {borde};"
+            f"background:{bg};border-radius:0 0 10px 10px;'></div>",
+            unsafe_allow_html=True,
+        )
 
     def seccion_label(icono: str, texto: str, color: str):
         st.markdown(
@@ -126,87 +148,131 @@ def portada():
 
     with col1:
         seccion_label("", "Matemáticas Financieras", c["primary"])
-        index_card(
+        page_card(
             "1",
             "Tasas de Interés",
             "Conversión entre tasas nominales, efectivas e instantáneas.",
             "a",
+            "pages/1_Tasas.py",
         )
-        index_card(
-            "2", "Valor del Dinero", "VP, VF, tasa de rendimiento y número de periodos.", "a"
+        page_card(
+            "2",
+            "Valor del Dinero",
+            "VP, VF, tasa de rendimiento y número de periodos.",
+            "a",
+            "pages/2_Valor_Dinero.py",
         )
-        index_card(
+        page_card(
             "3",
             "Rentas y Anualidades",
             "Constantes, geométricas y aritméticas (vencidas, anticipadas, continuas).",
             "a",
+            "pages/3_Rentas.py",
         )
-        index_card(
+        page_card(
             "4",
             "Tabla de Amortización",
             "Tablas dinámicas para créditos con enganche y fondos de amortización.",
             "a",
+            "pages/4_Amortizacion.py",
         )
 
     with col2:
         seccion_label("", "Valuación de Activos y Riesgos", c["success"])
-        index_card(
-            "5", "Valuación de Bonos", "Precio limpio, precio sucio y Yield to Maturity (YTM).", "b"
+        page_card(
+            "5",
+            "Valuación de Bonos",
+            "Precio limpio, precio sucio y Yield to Maturity (YTM).",
+            "b",
+            "pages/5_Bonos.py",
         )
-        index_card(
+        page_card(
             "6",
             "Valuación de Acciones",
             "Gordon-Shapiro y valuación relativa por múltiplos de mercado.",
             "b",
+            "pages/6_Acciones.py",
         )
-        index_card(
+        page_card(
             "7",
             "Portafolios Eficientes",
             "Optimización de Markowitz con datos reales de Yahoo Finance.",
             "b",
+            "pages/7_Portafolios.py",
         )
-        index_card(
+        page_card(
             "8",
             "Valuación Corporativa",
             "DCF, WACC y valuación de empresas por flujos descontados.",
             "b",
+            "pages/8_Valuacion_Corporativa.py",
         )
-        index_card("9", "Riesgo de Portafolios", "VaR y CVaR paramétrico y Monte Carlo.", "b")
-        index_card(
-            "16", "Optima Portafolios", "Optimización avanzada, backtesting y stress testing.", "b"
+        page_card(
+            "9",
+            "Riesgo de Portafolios",
+            "VaR y CVaR paramétrico y Monte Carlo.",
+            "b",
+            "pages/9_Riesgo.py",
+        )
+        page_card(
+            "16",
+            "Optima Portafolios",
+            "Optimización avanzada, backtesting y stress testing.",
+            "b",
+            "pages/16_Optima_Portafolios.py",
         )
 
     with col3:
         seccion_label("", "Derivados Financieros", c["accent"])
-        index_card("10", "Forwards", "Precio teórico y valuación de contratos forward.", "c")
-        index_card("11", "Derivados Vanilla", "Primas y Griegas con BSM y Árbol Binomial CRR.", "c")
-        index_card(
+        page_card(
+            "10",
+            "Forwards",
+            "Precio teórico y valuación de contratos forward.",
+            "c",
+            "pages/10_Forwards.py",
+        )
+        page_card(
+            "11",
+            "Derivados Vanilla",
+            "Primas y Griegas con BSM y Árbol Binomial CRR.",
+            "c",
+            "pages/11_Derivados_Vanilla.py",
+        )
+        page_card(
             "12",
             "Derivados Exóticos",
             "Barrera, Asiáticas, Lookback, Compuestas e Intercambio.",
             "c",
+            "pages/12_Derivados_Exoticos.py",
         )
-        index_card(
+        page_card(
             "13",
             "Derivados de Crédito — CDS",
             "Valuación de Credit Default Swaps (CDS) con metodología de Hull.",
             "c",
+            "pages/13_Derivados_Credito_CDS.py",
         )
-        index_card(
+        page_card(
             "14",
             "Derivados de Crédito — CDO",
             "Valuación de Collateralized Debt Obligations (CDO) con metodología de Hull.",
             "c",
+            "pages/14_Derivados_Credito_CDO.py",
         )
-        index_card(
+        page_card(
             "17",
             "VQD Derivados",
             "Modelos avanzados: Heston, Merton, SABR, VG, NIG y Bachelier.",
             "c",
+            "pages/17_VQD.py",
         )
         seccion_label("", "Referencia", c["text_muted"])
-        index_card(
-            "13", "Formulario", "Cheat-sheet descargable en HTML con todas las ecuaciones.", "a"
+        page_card(
+            "15",
+            "Formulario",
+            "Cheat-sheet descargable en HTML con todas las ecuaciones.",
+            "a",
+            "pages/15_Formulario.py",
         )
 
     st.write("---")
