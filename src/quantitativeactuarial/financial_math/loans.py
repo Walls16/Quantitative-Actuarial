@@ -34,14 +34,17 @@ def tabla_amortizacion(VP: float, i_m: float, n_m: int) -> pd.DataFrame:
             if abs(saldo) < 0.01:
                 saldo = 0.0
 
-        datos.append({
-            "Periodo": t,
-            "Saldo Inicial": saldo_inicial,
-            "Interés": interes,
-            "Amortización": amort,
-            "Saldo Insoluto": saldo
-        })
+        datos.append(
+            {
+                "Periodo": t,
+                "Saldo Inicial": saldo_inicial,
+                "Interés": interes,
+                "Amortización": amort,
+                "Saldo Insoluto": saldo,
+            }
+        )
 
     return pd.DataFrame(datos)
+
 
 __all__ = ["tabla_amortizacion"]

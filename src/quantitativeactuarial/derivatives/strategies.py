@@ -6,11 +6,13 @@ import numpy as np
 import pandas as pd
 
 
-def calcular_payoff_leg(tipo: str, posicion: int, S_T: np.ndarray, K: float, prima: float) -> np.ndarray:
+def calcular_payoff_leg(
+    tipo: str, posicion: int, S_T: np.ndarray, K: float, prima: float
+) -> np.ndarray:
     """Payoff de una pata individual para estrategias."""
-    if tipo == 'call':
+    if tipo == "call":
         payoff = np.maximum(S_T - K, 0)
-    elif tipo == 'put':
+    elif tipo == "put":
         payoff = np.maximum(K - S_T, 0)
     else:
         payoff = np.zeros_like(S_T)
@@ -48,11 +50,12 @@ def perfil_estrategia(S_spot: float, patas: list[dict], puntos: int = 500) -> pd
     payoff_total = np.zeros_like(S_T)
     data = {"S_T": S_T}
     for pata in patas:
-        pp = calcular_payoff_leg(pata['tipo'], pata['posicion'], S_T, pata['K'], pata['prima'])
+        pp = calcular_payoff_leg(pata["tipo"], pata["posicion"], S_T, pata["K"], pata["prima"])
         payoff_total += pp
         lbl = f"{'Long' if pata['posicion'] == 1 else 'Short'} {pata['tipo'].capitalize()} K={pata['K']}"
         data[lbl] = pp
     data["Payoff Neto"] = payoff_total
     return pd.DataFrame(data)
+
 
 __all__ = ["calcular_payoff_leg", "perfil_estrategia"]

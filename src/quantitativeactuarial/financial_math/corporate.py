@@ -96,7 +96,9 @@ def dcf_sensitivity_matrix(
             terminal_fcf = cashflows[-1] * (1 + growth)
             terminal_value = terminal_fcf / (discount_rate - growth)
             pv_terminal_value = terminal_value / (1 + discount_rate) ** projection_years
-            pv_fcfs = sum(cashflows[t - 1] / (1 + discount_rate) ** t for t in range(1, projection_years + 1))
+            pv_fcfs = sum(
+                cashflows[t - 1] / (1 + discount_rate) ** t for t in range(1, projection_years + 1)
+            )
             equity_value = (pv_fcfs + pv_terminal_value) - net_debt
             out[i, j] = equity_value / shares_outstanding if shares_outstanding > 0 else 0.0
     return out
@@ -114,7 +116,9 @@ def beta_alpha_from_returns(
     Daily excess returns are regressed by ordinary least squares:
     ``R_i - r_f = alpha + beta (R_m - r_f)``.
     """
-    df = pd.concat([asset_returns.rename("Accion"), market_returns.rename("Mercado")], axis=1, join="inner").dropna()
+    df = pd.concat(
+        [asset_returns.rename("Accion"), market_returns.rename("Mercado")], axis=1, join="inner"
+    ).dropna()
     rf_daily = (1 + risk_free_rate) ** (1 / trading_days) - 1
     df["Exc_A"] = df["Accion"] - rf_daily
     df["Exc_M"] = df["Mercado"] - rf_daily

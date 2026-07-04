@@ -57,7 +57,9 @@ def tabla_vpc_cds(hazard_rate: float, discount_rate: float, maturity: int) -> pd
     return df
 
 
-def tabla_vpv_cds(hazard_rate: float, discount_rate: float, maturity: int, recovery_rate: float) -> pd.DataFrame:
+def tabla_vpv_cds(
+    hazard_rate: float, discount_rate: float, maturity: int, recovery_rate: float
+) -> pd.DataFrame:
     """
     Present value table for the CDS contingent default leg.
 
@@ -133,7 +135,9 @@ def prima_cds(vpc_total: float, vppp_total: float, vpv_total: float) -> float:
     return float(vpv_total / denominator)
 
 
-def valuar_cds(hazard_rate: float, discount_rate: float, maturity: int, recovery_rate: float) -> dict[str, float | pd.DataFrame]:
+def valuar_cds(
+    hazard_rate: float, discount_rate: float, maturity: int, recovery_rate: float
+) -> dict[str, float | pd.DataFrame]:
     """Return the CDS legs, fair spread, and supporting tables."""
     probabilities = tabla_probabilidades_cds(hazard_rate, maturity)
     fixed_leg = tabla_vpc_cds(hazard_rate, discount_rate, maturity)

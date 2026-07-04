@@ -24,7 +24,7 @@ st.set_page_config(
 
 page_header(
     titulo="12. Formulario Oficial",
-    subtitulo="Cheat-sheet completo · Tres secciones descargables en HTML con renderizado LaTeX"
+    subtitulo="Cheat-sheet completo · Tres secciones descargables en HTML con renderizado LaTeX",
 )
 
 st.write(
@@ -34,6 +34,7 @@ st.write(
 )
 
 separador()
+
 
 # =============================================================================
 # GENERADOR DE HTML
@@ -97,18 +98,19 @@ def _html(titulo: str, cuerpo: str) -> str:
 # =============================================================================
 # PESTAÑAS
 # =============================================================================
-tab_mf, tab_ab, tab_der = st.tabs([
-    "Matemáticas Financieras",
-    "Acciones y Bonos",
-    "Derivados Financieros",
-])
+tab_mf, tab_ab, tab_der = st.tabs(
+    [
+        "Matemáticas Financieras",
+        "Acciones y Bonos",
+        "Derivados Financieros",
+    ]
+)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 1 — MATEMÁTICAS FINANCIERAS
 # ─────────────────────────────────────────────────────────────────────────────
 with tab_mf:
-
     st.subheader("1. Tasas de Interés")
     st.markdown(r"""
 | Concepto | Fórmula | Para qué se usa |
@@ -177,7 +179,9 @@ with tab_mf:
     separador()
 
     # HTML descargable (Note que aquí también cambiamos los | de la notación por \vert)
-    html_mf = _html("Formulario: Matemáticas Financieras", """
+    html_mf = _html(
+        "Formulario: Matemáticas Financieras",
+        """
   <h2>1. Tasas de Interés</h2>
   <table>
     <tr><th>Concepto</th><th>Fórmula</th><th>Uso</th></tr>
@@ -234,7 +238,8 @@ with tab_mf:
     <tr><td>Pago fijo ($R$)</td><td>$$R = VP\\left[\\frac{i_m}{1-(1+i_m)^{-nm}}\\right]$$</td><td>Cuota de amortización.</td></tr>
     <tr><td>Préstamo ($VP$)</td><td>$$VP = R\\left[\\frac{1-(1+i_m)^{-nm}}{i_m}\\right]$$</td><td>Monto máximo de crédito.</td></tr>
   </table>
-""")
+""",
+    )
 
     st.download_button(
         "⬇️ Descargar Formulario: Matemáticas Financieras (HTML)",
@@ -249,7 +254,6 @@ with tab_mf:
 # TAB 2 — ACCIONES Y BONOS
 # ─────────────────────────────────────────────────────────────────────────────
 with tab_ab:
-
     st.subheader("1. Valuación de Bonos")
     st.markdown(r"""
 | Concepto | Fórmula | Para qué se usa |
@@ -277,7 +281,9 @@ with tab_ab:
 
     separador()
 
-    html_ab = _html("Formulario: Acciones y Bonos", """
+    html_ab = _html(
+        "Formulario: Acciones y Bonos",
+        """
   <h2>1. Valuación de Bonos</h2>
   <table>
     <tr><th>Concepto</th><th>Fórmula</th><th>Uso</th></tr>
@@ -311,7 +317,8 @@ with tab_ab:
         <td>$$P_0 = \\text{UPA}\\times\\!\\left(\\frac{P}{E}\\right) \\quad|\\quad EV = \\text{EBITDA}\\times\\!\\left(\\frac{EV}{\\text{EBITDA}}\\right)$$</td>
         <td>Valuación relativa.</td></tr>
   </table>
-""")
+""",
+    )
 
     st.download_button(
         "⬇️ Descargar Formulario: Acciones y Bonos (HTML)",
@@ -326,7 +333,6 @@ with tab_ab:
 # TAB 3 — DERIVADOS FINANCIEROS
 # ─────────────────────────────────────────────────────────────────────────────
 with tab_der:
-
     st.subheader("1. Contratos Forward")
     st.markdown(r"""
 | Concepto | Fórmula | Para qué se usa |
@@ -391,7 +397,9 @@ with tab_der:
 
     separador()
 
-    html_der = _html("Formulario: Derivados Financieros", """
+    html_der = _html(
+        "Formulario: Derivados Financieros",
+        """
   <h2>1. Contratos Forward</h2>
   <table>
     <tr><th>Concepto</th><th>Fórmula</th><th>Uso</th></tr>
@@ -443,7 +451,8 @@ with tab_der:
     <tr><td>Vega</td><td>$$\\mathcal{V} = S_0\\sqrt{T}\\,e^{-qT}n(d_1)$$</td><td>+1% de volatilidad.</td></tr>
     <tr><td>Rho (call)</td><td>$$\\rho_c = KTe^{-rT}N(d_2)$$</td><td>+1% en tasa $r$.</td></tr>
   </table>
-""")
+""",
+    )
 
     st.download_button(
         "⬇️ Descargar Formulario: Derivados Financieros (HTML)",

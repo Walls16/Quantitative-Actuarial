@@ -27,255 +27,651 @@ THEMES = {
     # TEMAS CLAROS (9 Temas)
     # -------------------------------------------------------------------------
     "Azul & Rosa": {
-        "primary":       "#E84797", "secondary":     "#94C2DA", "accent":        "#E84797",
-        "success":       "#4E7CB2", "danger":        "#C62828", "warning":       "#D97706",
-        "bg_light":      "#EFE8E0", "border":        "#EAB4CC", "text_muted":    "#64748B",
-        "sidebar_bg":    "#F8F4F0", "title_color":   "#E84797", "subtitle_color":"#94C2DA",
-        "input_bg":      "#F2C8D8", "text_color":    "#1A1A2A", "bg_main":       "#FFFFFF",
-        "info_bg":       "#FFEBEE", "info_border":   "#E84797", "info_text":     "#1A3A5C",
-        "success_bg":    "#E0EEF8", "success_border":"#4E7CB2", "success_text":  "#1A3A5C",
-        "warning_bg":    "#F2C8D8", "warning_border":"#E84797", "warning_text":  "#5A3E00",
-        "error_bg":      "#FFEBEE", "error_border":  "#C62828", "error_text":    "#7B0000",
+        "primary": "#E84797",
+        "secondary": "#94C2DA",
+        "accent": "#E84797",
+        "success": "#4E7CB2",
+        "danger": "#C62828",
+        "warning": "#D97706",
+        "bg_light": "#EFE8E0",
+        "border": "#EAB4CC",
+        "text_muted": "#64748B",
+        "sidebar_bg": "#F8F4F0",
+        "title_color": "#E84797",
+        "subtitle_color": "#94C2DA",
+        "input_bg": "#F2C8D8",
+        "text_color": "#1A1A2A",
+        "bg_main": "#FFFFFF",
+        "info_bg": "#FFEBEE",
+        "info_border": "#E84797",
+        "info_text": "#1A3A5C",
+        "success_bg": "#E0EEF8",
+        "success_border": "#4E7CB2",
+        "success_text": "#1A3A5C",
+        "warning_bg": "#F2C8D8",
+        "warning_border": "#E84797",
+        "warning_text": "#5A3E00",
+        "error_bg": "#FFEBEE",
+        "error_border": "#C62828",
+        "error_text": "#7B0000",
     },
     "Azul Clasico": {
-        "primary":       "#1E3A8A", "secondary":     "#2563EB", "accent":        "#3B82F6",
-        "success":       "#2E7D32", "danger":        "#C62828", "warning":       "#D97706",
-        "bg_light":      "#F3F4F6", "border":        "#E2E8F0", "text_muted":    "#64748B",
-        "sidebar_bg":    "#F8FAFC", "title_color":   "#1E3A8A", "subtitle_color":"#2563EB",
-        "input_bg":      "#EFF6FF", "text_color":    "#0F172A", "bg_main":       "#FFFFFF",
-        "info_bg":       "#EFF6FF", "info_border":   "#2563EB", "info_text":     "#1E3A8A",
-        "success_bg":    "#F0FDF4", "success_border":"#2E7D32", "success_text":  "#14532D",
-        "warning_bg":    "#FFFBEB", "warning_border":"#D97706", "warning_text":  "#78350F",
-        "error_bg":      "#FEF2F2", "error_border":  "#C62828", "error_text":    "#7F1D1D",
+        "primary": "#1E3A8A",
+        "secondary": "#2563EB",
+        "accent": "#3B82F6",
+        "success": "#2E7D32",
+        "danger": "#C62828",
+        "warning": "#D97706",
+        "bg_light": "#F3F4F6",
+        "border": "#E2E8F0",
+        "text_muted": "#64748B",
+        "sidebar_bg": "#F8FAFC",
+        "title_color": "#1E3A8A",
+        "subtitle_color": "#2563EB",
+        "input_bg": "#EFF6FF",
+        "text_color": "#0F172A",
+        "bg_main": "#FFFFFF",
+        "info_bg": "#EFF6FF",
+        "info_border": "#2563EB",
+        "info_text": "#1E3A8A",
+        "success_bg": "#F0FDF4",
+        "success_border": "#2E7D32",
+        "success_text": "#14532D",
+        "warning_bg": "#FFFBEB",
+        "warning_border": "#D97706",
+        "warning_text": "#78350F",
+        "error_bg": "#FEF2F2",
+        "error_border": "#C62828",
+        "error_text": "#7F1D1D",
     },
     "Rojo Ejecutivo": {
-        "primary":       "#7B0000", "secondary":     "#C62828", "accent":        "#EF5350",
-        "success":       "#2E7D32", "danger":        "#B71C1C", "warning":       "#F57F17",
-        "bg_light":      "#FFF5F5", "border":        "#FFCDD2", "text_muted":    "#78909C",
-        "sidebar_bg":    "#FFF8F8", "title_color":   "#7B0000", "subtitle_color":"#C62828",
-        "input_bg":      "#FFF0F0", "text_color":    "#1A0000", "bg_main":       "#FFFFFF",
-        "info_bg":       "#FFF0F0", "info_border":   "#C62828", "info_text":     "#7B0000",
-        "success_bg":    "#F0FDF4", "success_border":"#2E7D32", "success_text":  "#14532D",
-        "warning_bg":    "#FFFBEB", "warning_border":"#F57F17", "warning_text":  "#78350F",
-        "error_bg":      "#FEF2F2", "error_border":  "#B71C1C", "error_text":    "#7F1D1D",
+        "primary": "#7B0000",
+        "secondary": "#C62828",
+        "accent": "#EF5350",
+        "success": "#2E7D32",
+        "danger": "#B71C1C",
+        "warning": "#F57F17",
+        "bg_light": "#FFF5F5",
+        "border": "#FFCDD2",
+        "text_muted": "#78909C",
+        "sidebar_bg": "#FFF8F8",
+        "title_color": "#7B0000",
+        "subtitle_color": "#C62828",
+        "input_bg": "#FFF0F0",
+        "text_color": "#1A0000",
+        "bg_main": "#FFFFFF",
+        "info_bg": "#FFF0F0",
+        "info_border": "#C62828",
+        "info_text": "#7B0000",
+        "success_bg": "#F0FDF4",
+        "success_border": "#2E7D32",
+        "success_text": "#14532D",
+        "warning_bg": "#FFFBEB",
+        "warning_border": "#F57F17",
+        "warning_text": "#78350F",
+        "error_bg": "#FEF2F2",
+        "error_border": "#B71C1C",
+        "error_text": "#7F1D1D",
     },
     "Verde Esmeralda": {
-        "primary":       "#064E3B", "secondary":     "#059669", "accent":        "#10B981",
-        "success":       "#047857", "danger":        "#DC2626", "warning":       "#D97706",
-        "bg_light":      "#F0FDF4", "border":        "#A7F3D0", "text_muted":    "#6B7280",
-        "sidebar_bg":    "#ECFDF5", "title_color":   "#064E3B", "subtitle_color":"#059669",
-        "input_bg":      "#DCFCE7", "text_color":    "#022C22", "bg_main":       "#FFFFFF",
-        "info_bg":       "#ECFDF5", "info_border":   "#10B981", "info_text":     "#064E3B",
-        "success_bg":    "#F0FDF4", "success_border":"#047857", "success_text":  "#14532D",
-        "warning_bg":    "#FFFBEB", "warning_border":"#D97706", "warning_text":  "#78350F",
-        "error_bg":      "#FEF2F2", "error_border":  "#DC2626", "error_text":    "#7F1D1D",
+        "primary": "#064E3B",
+        "secondary": "#059669",
+        "accent": "#10B981",
+        "success": "#047857",
+        "danger": "#DC2626",
+        "warning": "#D97706",
+        "bg_light": "#F0FDF4",
+        "border": "#A7F3D0",
+        "text_muted": "#6B7280",
+        "sidebar_bg": "#ECFDF5",
+        "title_color": "#064E3B",
+        "subtitle_color": "#059669",
+        "input_bg": "#DCFCE7",
+        "text_color": "#022C22",
+        "bg_main": "#FFFFFF",
+        "info_bg": "#ECFDF5",
+        "info_border": "#10B981",
+        "info_text": "#064E3B",
+        "success_bg": "#F0FDF4",
+        "success_border": "#047857",
+        "success_text": "#14532D",
+        "warning_bg": "#FFFBEB",
+        "warning_border": "#D97706",
+        "warning_text": "#78350F",
+        "error_bg": "#FEF2F2",
+        "error_border": "#DC2626",
+        "error_text": "#7F1D1D",
     },
     "Violeta Profundo": {
-        "primary":       "#3B0764", "secondary":     "#7C3AED", "accent":        "#A855F7",
-        "success":       "#166534", "danger":        "#B91C1C", "warning":       "#B45309",
-        "bg_light":      "#FAF5FF", "border":        "#E9D5FF", "text_muted":    "#94A3B8",
-        "sidebar_bg":    "#F5F0FF", "title_color":   "#3B0764", "subtitle_color":"#7C3AED",
-        "input_bg":      "#EDE9FE", "text_color":    "#1E0037", "bg_main":       "#FFFFFF",
-        "info_bg":       "#F5F3FF", "info_border":   "#7C3AED", "info_text":     "#3B0764",
-        "success_bg":    "#F0FDF4", "success_border":"#166534", "success_text":  "#14532D",
-        "warning_bg":    "#FFFBEB", "warning_border":"#B45309", "warning_text":  "#78350F",
-        "error_bg":      "#FEF2F2", "error_border":  "#B91C1C", "error_text":    "#7F1D1D",
+        "primary": "#3B0764",
+        "secondary": "#7C3AED",
+        "accent": "#A855F7",
+        "success": "#166534",
+        "danger": "#B91C1C",
+        "warning": "#B45309",
+        "bg_light": "#FAF5FF",
+        "border": "#E9D5FF",
+        "text_muted": "#94A3B8",
+        "sidebar_bg": "#F5F0FF",
+        "title_color": "#3B0764",
+        "subtitle_color": "#7C3AED",
+        "input_bg": "#EDE9FE",
+        "text_color": "#1E0037",
+        "bg_main": "#FFFFFF",
+        "info_bg": "#F5F3FF",
+        "info_border": "#7C3AED",
+        "info_text": "#3B0764",
+        "success_bg": "#F0FDF4",
+        "success_border": "#166534",
+        "success_text": "#14532D",
+        "warning_bg": "#FFFBEB",
+        "warning_border": "#B45309",
+        "warning_text": "#78350F",
+        "error_bg": "#FEF2F2",
+        "error_border": "#B91C1C",
+        "error_text": "#7F1D1D",
     },
     "Teal Minimalista": {
-        "primary":       "#134E4A", "secondary":     "#0D9488", "accent":        "#14B8A6",
-        "success":       "#166534", "danger":        "#DC2626", "warning":       "#CA8A04",
-        "bg_light":      "#F0FDFA", "border":        "#99F6E4", "text_muted":    "#64748B",
-        "sidebar_bg":    "#EAFAF8", "title_color":   "#134E4A", "subtitle_color":"#0D9488",
-        "input_bg":      "#CCFBF1", "text_color":    "#042F2E", "bg_main":       "#FFFFFF",
-        "info_bg":       "#F0FDFA", "info_border":   "#14B8A6", "info_text":     "#134E4A",
-        "success_bg":    "#F0FDF4", "success_border":"#166534", "success_text":  "#14532D",
-        "warning_bg":    "#FFFBEB", "warning_border":"#CA8A04", "warning_text":  "#78350F",
-        "error_bg":      "#FEF2F2", "error_border":  "#DC2626", "error_text":    "#7F1D1D",
+        "primary": "#134E4A",
+        "secondary": "#0D9488",
+        "accent": "#14B8A6",
+        "success": "#166534",
+        "danger": "#DC2626",
+        "warning": "#CA8A04",
+        "bg_light": "#F0FDFA",
+        "border": "#99F6E4",
+        "text_muted": "#64748B",
+        "sidebar_bg": "#EAFAF8",
+        "title_color": "#134E4A",
+        "subtitle_color": "#0D9488",
+        "input_bg": "#CCFBF1",
+        "text_color": "#042F2E",
+        "bg_main": "#FFFFFF",
+        "info_bg": "#F0FDFA",
+        "info_border": "#14B8A6",
+        "info_text": "#134E4A",
+        "success_bg": "#F0FDF4",
+        "success_border": "#166534",
+        "success_text": "#14532D",
+        "warning_bg": "#FFFBEB",
+        "warning_border": "#CA8A04",
+        "warning_text": "#78350F",
+        "error_bg": "#FEF2F2",
+        "error_border": "#DC2626",
+        "error_text": "#7F1D1D",
     },
     "Blanco Limpio": {
-        "primary":       "#111827", "secondary":     "#374151", "accent":        "#6B7280",
-        "success":       "#15803D", "danger":        "#B91C1C", "warning":       "#D97706",
-        "bg_light":      "#F9FAFB", "border":        "#E5E7EB", "text_muted":    "#9CA3AF",
-        "sidebar_bg":    "#FFFFFF", "title_color":   "#111827", "subtitle_color":"#374151",
-        "input_bg":      "#F3F4F6", "text_color":    "#111827", "bg_main":       "#FFFFFF",
-        "info_bg":       "#F0F9FF", "info_border":   "#6B7280", "info_text":     "#1F2937",
-        "success_bg":    "#F0FDF4", "success_border":"#15803D", "success_text":  "#14532D",
-        "warning_bg":    "#FFFBEB", "warning_border":"#D97706", "warning_text":  "#78350F",
-        "error_bg":      "#FEF2F2", "error_border":  "#B91C1C", "error_text":    "#7F1D1D",
+        "primary": "#111827",
+        "secondary": "#374151",
+        "accent": "#6B7280",
+        "success": "#15803D",
+        "danger": "#B91C1C",
+        "warning": "#D97706",
+        "bg_light": "#F9FAFB",
+        "border": "#E5E7EB",
+        "text_muted": "#9CA3AF",
+        "sidebar_bg": "#FFFFFF",
+        "title_color": "#111827",
+        "subtitle_color": "#374151",
+        "input_bg": "#F3F4F6",
+        "text_color": "#111827",
+        "bg_main": "#FFFFFF",
+        "info_bg": "#F0F9FF",
+        "info_border": "#6B7280",
+        "info_text": "#1F2937",
+        "success_bg": "#F0FDF4",
+        "success_border": "#15803D",
+        "success_text": "#14532D",
+        "warning_bg": "#FFFBEB",
+        "warning_border": "#D97706",
+        "warning_text": "#78350F",
+        "error_bg": "#FEF2F2",
+        "error_border": "#B91C1C",
+        "error_text": "#7F1D1D",
     },
     "Café Latte Soft": {
-        "primary":       "#92400E", "secondary":     "#B45309", "accent":        "#D97706",
-        "success":       "#15803D", "danger":        "#B91C1C", "warning":       "#B45309",
-        "bg_light":      "#FAFAF9", "border":        "#E7E5E4", "text_muted":    "#78716C",
-        "sidebar_bg":    "#F5F5F4", "title_color":   "#78350F", "subtitle_color":"#92400E",
-        "input_bg":      "#F5F5F4", "text_color":    "#292524", "bg_main":       "#FFFFFF",
-        "info_bg":       "#FDF2F2", "info_border":   "#D97706", "info_text":     "#78350F",
-        "success_bg":    "#F0FDF4", "success_border":"#15803D", "success_text":  "#14532D",
-        "warning_bg":    "#FFFBEB", "warning_border":"#D97706", "warning_text":  "#78350F",
-        "error_bg":      "#FEF2F2", "error_border":  "#B91C1C", "error_text":    "#7F1D1D",
+        "primary": "#92400E",
+        "secondary": "#B45309",
+        "accent": "#D97706",
+        "success": "#15803D",
+        "danger": "#B91C1C",
+        "warning": "#B45309",
+        "bg_light": "#FAFAF9",
+        "border": "#E7E5E4",
+        "text_muted": "#78716C",
+        "sidebar_bg": "#F5F5F4",
+        "title_color": "#78350F",
+        "subtitle_color": "#92400E",
+        "input_bg": "#F5F5F4",
+        "text_color": "#292524",
+        "bg_main": "#FFFFFF",
+        "info_bg": "#FDF2F2",
+        "info_border": "#D97706",
+        "info_text": "#78350F",
+        "success_bg": "#F0FDF4",
+        "success_border": "#15803D",
+        "success_text": "#14532D",
+        "warning_bg": "#FFFBEB",
+        "warning_border": "#D97706",
+        "warning_text": "#78350F",
+        "error_bg": "#FEF2F2",
+        "error_border": "#B91C1C",
+        "error_text": "#7F1D1D",
     },
     "Océano & Arena": {
-        "primary":       "#0369A1", "secondary":     "#0284C7", "accent":        "#D97706",
-        "success":       "#047857", "danger":        "#BE123C", "warning":       "#EA580C",
-        "bg_light":      "#FFFFFF", "border":        "#E0F2FE", "text_muted":    "#64748B",
-        "sidebar_bg":    "#F8FAFC", "title_color":   "#0369A1", "subtitle_color":"#0284C7",
-        "input_bg":      "#F0F9FF", "text_color":    "#0F172A", "bg_main":       "#FDFDF8",
-        "info_bg":       "#F0F9FF", "info_border":   "#0284C7", "info_text":     "#0369A1",
-        "success_bg":    "#ECFDF5", "success_border":"#047857", "success_text":  "#064E3B",
-        "warning_bg":    "#FFF7ED", "warning_border":"#EA580C", "warning_text":  "#9A3412",
-        "error_bg":      "#FFF1F2", "error_border":  "#BE123C", "error_text":    "#881337",
+        "primary": "#0369A1",
+        "secondary": "#0284C7",
+        "accent": "#D97706",
+        "success": "#047857",
+        "danger": "#BE123C",
+        "warning": "#EA580C",
+        "bg_light": "#FFFFFF",
+        "border": "#E0F2FE",
+        "text_muted": "#64748B",
+        "sidebar_bg": "#F8FAFC",
+        "title_color": "#0369A1",
+        "subtitle_color": "#0284C7",
+        "input_bg": "#F0F9FF",
+        "text_color": "#0F172A",
+        "bg_main": "#FDFDF8",
+        "info_bg": "#F0F9FF",
+        "info_border": "#0284C7",
+        "info_text": "#0369A1",
+        "success_bg": "#ECFDF5",
+        "success_border": "#047857",
+        "success_text": "#064E3B",
+        "warning_bg": "#FFF7ED",
+        "warning_border": "#EA580C",
+        "warning_text": "#9A3412",
+        "error_bg": "#FFF1F2",
+        "error_border": "#BE123C",
+        "error_text": "#881337",
     },
     "Ocre & Polvo": {
-        "primary":       "#9F5512", "secondary":     "#D38C3B", "accent":        "#613312",
-        "success":       "#A67C45", "danger":        "#7B2E10", "warning":       "#E29F4B",
-        "bg_light":      "#E2A761", "border":        "#8B4513", "text_muted":    "#4B2C16",
-        "sidebar_bg":    "#2B1B12", "title_color":   "#E79D43", "subtitle_color":"#C57D2E",
-        "input_bg":      "#3E2719", "text_color":    "#FAD4A6", "bg_main":       "#1A110B",
-        "info_bg":       "#4E3221", "info_border":   "#9F5512", "info_text":     "#FAD4A6",
-        "success_bg":    "#5C432A", "success_border":"#A67C45", "success_text":  "#E2A761",
-        "warning_bg":    "#7B4B20", "warning_border":"#E29F4B", "warning_text":  "#FFD3A0",
-        "error_bg":      "#3D1408", "error_border":  "#7B2E10", "error_text":    "#FF9B7D"
+        "primary": "#9F5512",
+        "secondary": "#D38C3B",
+        "accent": "#613312",
+        "success": "#A67C45",
+        "danger": "#7B2E10",
+        "warning": "#E29F4B",
+        "bg_light": "#E2A761",
+        "border": "#8B4513",
+        "text_muted": "#4B2C16",
+        "sidebar_bg": "#2B1B12",
+        "title_color": "#E79D43",
+        "subtitle_color": "#C57D2E",
+        "input_bg": "#3E2719",
+        "text_color": "#FAD4A6",
+        "bg_main": "#1A110B",
+        "info_bg": "#4E3221",
+        "info_border": "#9F5512",
+        "info_text": "#FAD4A6",
+        "success_bg": "#5C432A",
+        "success_border": "#A67C45",
+        "success_text": "#E2A761",
+        "warning_bg": "#7B4B20",
+        "warning_border": "#E29F4B",
+        "warning_text": "#FFD3A0",
+        "error_bg": "#3D1408",
+        "error_border": "#7B2E10",
+        "error_text": "#FF9B7D",
     },
     # -------------------------------------------------------------------------
     # TEMAS OSCUROS (9 Temas)
     # -------------------------------------------------------------------------
     "TRON Legacy": {
-        "primary":       "#00E5FF", "secondary":     "#008291", "accent":        "#FF8C00",
-        "success":       "#00E5FF", "danger":        "#FF2E2E", "warning":       "#FF8C00",
-        "bg_light":      "#0A1A2F", "border":        "#00E5FF33", "text_muted":    "#5080A0",
-        "sidebar_bg":    "#020A12", "title_color":   "#00E5FF", "subtitle_color":"#00A3B4",
-        "input_bg":      "#0D253F", "text_color":    "#E0F7FA", "bg_main":       "#01050A",
-        "info_bg":       "#002B36", "info_border":   "#00E5FF", "info_text":     "#80F1FF",
-        "success_bg":    "#002B36", "success_border":"#00E5FF", "success_text":  "#80F1FF",
-        "warning_bg":    "#1A1100", "warning_border":"#FF8C00", "warning_text":  "#FFD080",
-        "error_bg":      "#2A0000", "error_border":  "#FF2E2E", "error_text":    "#FFB2B2",
+        "primary": "#00E5FF",
+        "secondary": "#008291",
+        "accent": "#FF8C00",
+        "success": "#00E5FF",
+        "danger": "#FF2E2E",
+        "warning": "#FF8C00",
+        "bg_light": "#0A1A2F",
+        "border": "#00E5FF33",
+        "text_muted": "#5080A0",
+        "sidebar_bg": "#020A12",
+        "title_color": "#00E5FF",
+        "subtitle_color": "#00A3B4",
+        "input_bg": "#0D253F",
+        "text_color": "#E0F7FA",
+        "bg_main": "#01050A",
+        "info_bg": "#002B36",
+        "info_border": "#00E5FF",
+        "info_text": "#80F1FF",
+        "success_bg": "#002B36",
+        "success_border": "#00E5FF",
+        "success_text": "#80F1FF",
+        "warning_bg": "#1A1100",
+        "warning_border": "#FF8C00",
+        "warning_text": "#FFD080",
+        "error_bg": "#2A0000",
+        "error_border": "#FF2E2E",
+        "error_text": "#FFB2B2",
     },
     "Negro & Dorado": {
-        "primary":       "#D4AF37", "secondary":     "#AA8439", "accent":        "#FFD700",
-        "success":       "#D4AF37", "danger":        "#DC3545", "warning":       "#AA8439",
-        "bg_light":      "#1A1A1A", "border":        "#333333", "text_muted":    "#888888",
-        "sidebar_bg":    "#0A0A0A", "title_color":   "#D4AF37", "subtitle_color":"#AA8439",
-        "input_bg":      "#262626", "text_color":    "#FFFFFF", "bg_main":       "#000000",
-        "info_bg":       "#1A1608", "info_border":   "#D4AF37", "info_text":     "#F3E5AB",
-        "success_bg":    "#0D2B1F", "success_border":"#198754", "success_text":  "#6EE7B7",
-        "warning_bg":    "#261A00", "warning_border":"#AA8439", "warning_text":  "#FFD700",
-        "error_bg":      "#2A0000", "error_border":  "#DC3545", "error_text":    "#FFB2B2",
+        "primary": "#D4AF37",
+        "secondary": "#AA8439",
+        "accent": "#FFD700",
+        "success": "#D4AF37",
+        "danger": "#DC3545",
+        "warning": "#AA8439",
+        "bg_light": "#1A1A1A",
+        "border": "#333333",
+        "text_muted": "#888888",
+        "sidebar_bg": "#0A0A0A",
+        "title_color": "#D4AF37",
+        "subtitle_color": "#AA8439",
+        "input_bg": "#262626",
+        "text_color": "#FFFFFF",
+        "bg_main": "#000000",
+        "info_bg": "#1A1608",
+        "info_border": "#D4AF37",
+        "info_text": "#F3E5AB",
+        "success_bg": "#0D2B1F",
+        "success_border": "#198754",
+        "success_text": "#6EE7B7",
+        "warning_bg": "#261A00",
+        "warning_border": "#AA8439",
+        "warning_text": "#FFD700",
+        "error_bg": "#2A0000",
+        "error_border": "#DC3545",
+        "error_text": "#FFB2B2",
     },
     "Cyberpunk Night": {
-        "primary":       "#FDE047", "secondary":     "#FF00FF", "accent":        "#00FFFF",
-        "success":       "#00FFFF", "danger":        "#FF003C", "warning":       "#FDE047",
-        "bg_light":      "#120422", "border":        "#FF00FF44", "text_muted":    "#8B5CF6",
-        "sidebar_bg":    "#0B0118", "title_color":   "#FDE047", "subtitle_color":"#FF00FF",
-        "input_bg":      "#1E0836", "text_color":    "#F3E8FF", "bg_main":       "#05010D",
-        "info_bg":       "#1A0033", "info_border":   "#FF00FF", "info_text":     "#FFB3FF",
-        "success_bg":    "#002222", "success_border":"#00FFFF", "success_text":  "#B3FFFF",
-        "warning_bg":    "#221E00", "warning_border":"#FDE047", "warning_text":  "#FFF7B3",
-        "error_bg":      "#33000C", "error_border":  "#FF003C", "error_text":    "#FFB3C6",
+        "primary": "#FDE047",
+        "secondary": "#FF00FF",
+        "accent": "#00FFFF",
+        "success": "#00FFFF",
+        "danger": "#FF003C",
+        "warning": "#FDE047",
+        "bg_light": "#120422",
+        "border": "#FF00FF44",
+        "text_muted": "#8B5CF6",
+        "sidebar_bg": "#0B0118",
+        "title_color": "#FDE047",
+        "subtitle_color": "#FF00FF",
+        "input_bg": "#1E0836",
+        "text_color": "#F3E8FF",
+        "bg_main": "#05010D",
+        "info_bg": "#1A0033",
+        "info_border": "#FF00FF",
+        "info_text": "#FFB3FF",
+        "success_bg": "#002222",
+        "success_border": "#00FFFF",
+        "success_text": "#B3FFFF",
+        "warning_bg": "#221E00",
+        "warning_border": "#FDE047",
+        "warning_text": "#FFF7B3",
+        "error_bg": "#33000C",
+        "error_border": "#FF003C",
+        "error_text": "#FFB3C6",
     },
     "Gris Espacial": {
-        "primary":       "#A1A1AA", "secondary":     "#D4D4D8", "accent":        "#3B82F6",
-        "success":       "#22C55E", "danger":        "#EF4444", "warning":       "#F59E0B",
-        "bg_light":      "#27272A", "border":        "#3F3F46", "text_muted":    "#A1A1AA",
-        "sidebar_bg":    "#1F1F22", "title_color":   "#FFFFFF", "subtitle_color":"#D4D4D8",
-        "input_bg":      "#3F3F46", "text_color":    "#F4F4F5", "bg_main":       "#18181B",
-        "info_bg":       "#1E293B", "info_border":   "#3B82F6", "info_text":     "#93C5FD",
-        "success_bg":    "#064E3B", "success_border":"#10B981", "success_text":  "#6EE7B7",
-        "warning_bg":    "#422006", "warning_border":"#F59E0B", "warning_text":  "#FCD34D",
-        "error_bg":      "#4C0519", "error_border":  "#EF4444", "error_text":    "#FCA5A5",
+        "primary": "#A1A1AA",
+        "secondary": "#D4D4D8",
+        "accent": "#3B82F6",
+        "success": "#22C55E",
+        "danger": "#EF4444",
+        "warning": "#F59E0B",
+        "bg_light": "#27272A",
+        "border": "#3F3F46",
+        "text_muted": "#A1A1AA",
+        "sidebar_bg": "#1F1F22",
+        "title_color": "#FFFFFF",
+        "subtitle_color": "#D4D4D8",
+        "input_bg": "#3F3F46",
+        "text_color": "#F4F4F5",
+        "bg_main": "#18181B",
+        "info_bg": "#1E293B",
+        "info_border": "#3B82F6",
+        "info_text": "#93C5FD",
+        "success_bg": "#064E3B",
+        "success_border": "#10B981",
+        "success_text": "#6EE7B7",
+        "warning_bg": "#422006",
+        "warning_border": "#F59E0B",
+        "warning_text": "#FCD34D",
+        "error_bg": "#4C0519",
+        "error_border": "#EF4444",
+        "error_text": "#FCA5A5",
     },
     "Azul Medianoche": {
-        "primary":       "#38BDF8", "secondary":     "#7DD3FC", "accent":        "#0EA5E9",
-        "success":       "#10B981", "danger":        "#F43F5E", "warning":       "#F59E0B",
-        "bg_light":      "#1E293B", "border":        "#334155", "text_muted":    "#94A3B8",
-        "sidebar_bg":    "#152033", "title_color":   "#38BDF8", "subtitle_color":"#7DD3FC",
-        "input_bg":      "#334155", "text_color":    "#F8FAFC", "bg_main":       "#0F172A",
-        "info_bg":       "#0C4A6E", "info_border":   "#0EA5E9", "info_text":     "#BAE6FD",
-        "success_bg":    "#064E3B", "success_border":"#10B981", "success_text":  "#6EE7B7",
-        "warning_bg":    "#451A03", "warning_border":"#F59E0B", "warning_text":  "#FDE68A",
-        "error_bg":      "#4C0519", "error_border":  "#F43F5E", "error_text":    "#FECDD3",
+        "primary": "#38BDF8",
+        "secondary": "#7DD3FC",
+        "accent": "#0EA5E9",
+        "success": "#10B981",
+        "danger": "#F43F5E",
+        "warning": "#F59E0B",
+        "bg_light": "#1E293B",
+        "border": "#334155",
+        "text_muted": "#94A3B8",
+        "sidebar_bg": "#152033",
+        "title_color": "#38BDF8",
+        "subtitle_color": "#7DD3FC",
+        "input_bg": "#334155",
+        "text_color": "#F8FAFC",
+        "bg_main": "#0F172A",
+        "info_bg": "#0C4A6E",
+        "info_border": "#0EA5E9",
+        "info_text": "#BAE6FD",
+        "success_bg": "#064E3B",
+        "success_border": "#10B981",
+        "success_text": "#6EE7B7",
+        "warning_bg": "#451A03",
+        "warning_border": "#F59E0B",
+        "warning_text": "#FDE68A",
+        "error_bg": "#4C0519",
+        "error_border": "#F43F5E",
+        "error_text": "#FECDD3",
     },
     "Tema Drácula": {
-        "primary":       "#FF79C6", "secondary":     "#BD93F9", "accent":        "#50FA7B",
-        "success":       "#50FA7B", "danger":        "#FF5555", "warning":       "#F1FA8C",
-        "bg_light":      "#44475A", "border":        "#6272A4", "text_muted":    "#6272A4",
-        "sidebar_bg":    "#21222C", "title_color":   "#FF79C6", "subtitle_color":"#BD93F9",
-        "input_bg":      "#44475A", "text_color":    "#F8F8F2", "bg_main":       "#282A36",
-        "info_bg":       "#21222C", "info_border":   "#8BE9FD", "info_text":     "#8BE9FD",
-        "success_bg":    "#21222C", "success_border":"#50FA7B", "success_text":  "#50FA7B",
-        "warning_bg":    "#21222C", "warning_border":"#F1FA8C", "warning_text":  "#F1FA8C",
-        "error_bg":      "#21222C", "error_border":  "#FF5555", "error_text":    "#FF5555",
+        "primary": "#FF79C6",
+        "secondary": "#BD93F9",
+        "accent": "#50FA7B",
+        "success": "#50FA7B",
+        "danger": "#FF5555",
+        "warning": "#F1FA8C",
+        "bg_light": "#44475A",
+        "border": "#6272A4",
+        "text_muted": "#6272A4",
+        "sidebar_bg": "#21222C",
+        "title_color": "#FF79C6",
+        "subtitle_color": "#BD93F9",
+        "input_bg": "#44475A",
+        "text_color": "#F8F8F2",
+        "bg_main": "#282A36",
+        "info_bg": "#21222C",
+        "info_border": "#8BE9FD",
+        "info_text": "#8BE9FD",
+        "success_bg": "#21222C",
+        "success_border": "#50FA7B",
+        "success_text": "#50FA7B",
+        "warning_bg": "#21222C",
+        "warning_border": "#F1FA8C",
+        "warning_text": "#F1FA8C",
+        "error_bg": "#21222C",
+        "error_border": "#FF5555",
+        "error_text": "#FF5555",
     },
     "Bosque Luminiscente": {
-        "primary":       "#A3E635", "secondary":     "#84CC16", "accent":        "#2DD4BF",
-        "success":       "#4ADE80", "danger":        "#F87171", "warning":       "#FBBF24",
-        "bg_light":      "#0B291C", "border":        "#064E3B", "text_muted":    "#6EE7B7",
-        "sidebar_bg":    "#04140D", "title_color":   "#A3E635", "subtitle_color":"#D9F99D",
-        "input_bg":      "#133E2B", "text_color":    "#ECFCCB", "bg_main":       "#061E14",
-        "info_bg":       "#134E4A", "info_border":   "#2DD4BF", "info_text":     "#99F6E4",
-        "success_bg":    "#064E3B", "success_border":"#4ADE80", "success_text":  "#A7F3D0",
-        "warning_bg":    "#331A00", "warning_border":"#FBBF24", "warning_text":  "#FDE68A",
-        "error_bg":      "#450A0A", "error_border":  "#F87171", "error_text":    "#FECACA",
+        "primary": "#A3E635",
+        "secondary": "#84CC16",
+        "accent": "#2DD4BF",
+        "success": "#4ADE80",
+        "danger": "#F87171",
+        "warning": "#FBBF24",
+        "bg_light": "#0B291C",
+        "border": "#064E3B",
+        "text_muted": "#6EE7B7",
+        "sidebar_bg": "#04140D",
+        "title_color": "#A3E635",
+        "subtitle_color": "#D9F99D",
+        "input_bg": "#133E2B",
+        "text_color": "#ECFCCB",
+        "bg_main": "#061E14",
+        "info_bg": "#134E4A",
+        "info_border": "#2DD4BF",
+        "info_text": "#99F6E4",
+        "success_bg": "#064E3B",
+        "success_border": "#4ADE80",
+        "success_text": "#A7F3D0",
+        "warning_bg": "#331A00",
+        "warning_border": "#FBBF24",
+        "warning_text": "#FDE68A",
+        "error_bg": "#450A0A",
+        "error_border": "#F87171",
+        "error_text": "#FECACA",
     },
     "Obsidiana Roja": {
-        "primary":       "#FF1E1E", "secondary":     "#950101", "accent":        "#FF4D4D",
-        "success":       "#FF1E1E", "danger":        "#950101", "warning":       "#FF4D4D",
-        "bg_light":      "#1A0000", "border":        "#4D0000", "text_muted":    "#804040",
-        "sidebar_bg":    "#0D0000", "title_color":   "#FF1E1E", "subtitle_color":"#950101",
-        "input_bg":      "#260000", "text_color":    "#FFDADA", "bg_main":       "#050000",
-        "info_bg":       "#260000", "info_border":   "#FF1E1E", "info_text":     "#FFB3B3",
-        "success_bg":    "#260000", "success_border":"#FF1E1E", "success_text":  "#FFB3B3",
-        "warning_bg":    "#331100", "warning_border":"#FF4D4D", "warning_text":  "#FFD1B3",
-        "error_bg":      "#4D0000", "error_border":  "#950101", "error_text":    "#FF8080",
+        "primary": "#FF1E1E",
+        "secondary": "#950101",
+        "accent": "#FF4D4D",
+        "success": "#FF1E1E",
+        "danger": "#950101",
+        "warning": "#FF4D4D",
+        "bg_light": "#1A0000",
+        "border": "#4D0000",
+        "text_muted": "#804040",
+        "sidebar_bg": "#0D0000",
+        "title_color": "#FF1E1E",
+        "subtitle_color": "#950101",
+        "input_bg": "#260000",
+        "text_color": "#FFDADA",
+        "bg_main": "#050000",
+        "info_bg": "#260000",
+        "info_border": "#FF1E1E",
+        "info_text": "#FFB3B3",
+        "success_bg": "#260000",
+        "success_border": "#FF1E1E",
+        "success_text": "#FFB3B3",
+        "warning_bg": "#331100",
+        "warning_border": "#FF4D4D",
+        "warning_text": "#FFD1B3",
+        "error_bg": "#4D0000",
+        "error_border": "#950101",
+        "error_text": "#FF8080",
     },
     "Espacio Profundo": {
-        "primary":       "#A855F7", "secondary":     "#7C3AED", "accent":        "#C084FC",
-        "success":       "#22D3EE", "danger":        "#F43F5E", "warning":       "#FB923C",
-        "bg_light":      "#1E1B4B", "border":        "#312E81", "text_muted":    "#94A3B8",
-        "sidebar_bg":    "#0F0E23", "title_color":   "#C084FC", "subtitle_color":"#A855F7",
-        "input_bg":      "#1E1B4B", "text_color":    "#F5F3FF", "bg_main":       "#020617",
-        "info_bg":       "#1E1B4B", "info_border":   "#A855F7", "info_text":     "#E9D5FF",
-        "success_bg":    "#083344", "success_border":"#22D3EE", "success_text":  "#A5F3FC",
-        "warning_bg":    "#431407", "warning_border":"#FB923C", "warning_text":  "#FFEDD5",
-        "error_bg":      "#450A0A", "error_border":  "#F43F5E", "error_text":    "#FECACA",
+        "primary": "#A855F7",
+        "secondary": "#7C3AED",
+        "accent": "#C084FC",
+        "success": "#22D3EE",
+        "danger": "#F43F5E",
+        "warning": "#FB923C",
+        "bg_light": "#1E1B4B",
+        "border": "#312E81",
+        "text_muted": "#94A3B8",
+        "sidebar_bg": "#0F0E23",
+        "title_color": "#C084FC",
+        "subtitle_color": "#A855F7",
+        "input_bg": "#1E1B4B",
+        "text_color": "#F5F3FF",
+        "bg_main": "#020617",
+        "info_bg": "#1E1B4B",
+        "info_border": "#A855F7",
+        "info_text": "#E9D5FF",
+        "success_bg": "#083344",
+        "success_border": "#22D3EE",
+        "success_text": "#A5F3FC",
+        "warning_bg": "#431407",
+        "warning_border": "#FB923C",
+        "warning_text": "#FFEDD5",
+        "error_bg": "#450A0A",
+        "error_border": "#F43F5E",
+        "error_text": "#FECACA",
     },
     "Cyan Nocturno": {
-        "primary":       "#0A7276", "secondary":     "#03649F", "accent":        "#75CEC5",
-        "success":       "#015468", "danger":        "#C62828", "warning":       "#E1C16E",
-        "bg_light":      "#00455B", "border":        "#0A7276", "text_muted":    "#94C2DA",
-        "sidebar_bg":    "#001B24", "title_color":   "#75CEC5", "subtitle_color":"#0A7276",
-        "input_bg":      "#002B36", "text_color":    "#E0F7FA", "bg_main":       "#000000",
-        "info_bg":       "#003649", "info_border":   "#0A7276", "info_text":     "#E0F7FA",
-        "success_bg":    "#00242B", "success_border":"#015468", "success_text":  "#75CEC5",
-        "warning_bg":    "#2B2400", "warning_border":"#E1C16E", "warning_text":  "#FFECB3",
-        "error_bg":      "#240000", "error_border":  "#C62828", "error_text":    "#FFEBEE",
+        "primary": "#0A7276",
+        "secondary": "#03649F",
+        "accent": "#75CEC5",
+        "success": "#015468",
+        "danger": "#C62828",
+        "warning": "#E1C16E",
+        "bg_light": "#00455B",
+        "border": "#0A7276",
+        "text_muted": "#94C2DA",
+        "sidebar_bg": "#001B24",
+        "title_color": "#75CEC5",
+        "subtitle_color": "#0A7276",
+        "input_bg": "#002B36",
+        "text_color": "#E0F7FA",
+        "bg_main": "#000000",
+        "info_bg": "#003649",
+        "info_border": "#0A7276",
+        "info_text": "#E0F7FA",
+        "success_bg": "#00242B",
+        "success_border": "#015468",
+        "success_text": "#75CEC5",
+        "warning_bg": "#2B2400",
+        "warning_border": "#E1C16E",
+        "warning_text": "#FFECB3",
+        "error_bg": "#240000",
+        "error_border": "#C62828",
+        "error_text": "#FFEBEE",
     },
     "Joi Hologram": {
-        "primary":       "#D43D96", "secondary":     "#4A55A2", "accent":        "#7986CB",
-        "success":       "#2E7D32", "danger":        "#961053", "warning":       "#FFD54F",
-        "bg_light":      "#A569BD", "border":        "#D43D96", "text_muted":    "#B19CD9",
-        "sidebar_bg":    "#282046", "title_color":   "#FF69B4", "subtitle_color":"#8E99F3",
-        "input_bg":      "#3B2A5E", "text_color":    "#F3E5F5", "bg_main":       "#1A142F",
-        "info_bg":       "#4A148C", "info_border":   "#D43D96", "info_text":     "#F3E5F5",
-        "success_bg":    "#1B5E20", "success_border":"#4CAF50", "success_text":  "#E8F5E9",
-        "warning_bg":    "#4A3B00", "warning_border":"#FFD54F", "warning_text":  "#FFFDE7",
-        "error_bg":      "#4A001F", "error_border":  "#961053", "error_text":    "#FFEBEE"
-    }, 
+        "primary": "#D43D96",
+        "secondary": "#4A55A2",
+        "accent": "#7986CB",
+        "success": "#2E7D32",
+        "danger": "#961053",
+        "warning": "#FFD54F",
+        "bg_light": "#A569BD",
+        "border": "#D43D96",
+        "text_muted": "#B19CD9",
+        "sidebar_bg": "#282046",
+        "title_color": "#FF69B4",
+        "subtitle_color": "#8E99F3",
+        "input_bg": "#3B2A5E",
+        "text_color": "#F3E5F5",
+        "bg_main": "#1A142F",
+        "info_bg": "#4A148C",
+        "info_border": "#D43D96",
+        "info_text": "#F3E5F5",
+        "success_bg": "#1B5E20",
+        "success_border": "#4CAF50",
+        "success_text": "#E8F5E9",
+        "warning_bg": "#4A3B00",
+        "warning_border": "#FFD54F",
+        "warning_text": "#FFFDE7",
+        "error_bg": "#4A001F",
+        "error_border": "#961053",
+        "error_text": "#FFEBEE",
+    },
     "Rooftop Contrast": {
-        "primary":       "#1D4D3A", "secondary":     "#126B72", "accent":        "#B3112B",
-        "success":       "#4E8F6A", "danger":        "#B3112B", "warning":       "#A56767",
-        "bg_light":      "#7CAB8E", "border":        "#1D4D3A", "text_muted":    "#687B75",
-        "sidebar_bg":    "#0C1E18", "title_color":   "#95CBD2", "subtitle_color":"#5995A0",
-        "input_bg":      "#162E25", "text_color":    "#D4E1DD", "bg_main":       "#050C0A",
-        "info_bg":       "#0A2B23", "info_border":   "#1D4D3A", "info_text":     "#D4E1DD",
-        "success_bg":    "#1D3A2C", "success_border":"#4E8F6A", "success_text":  "#9EC4AF",
-        "warning_bg":    "#3A2B2B", "warning_border":"#A56767", "warning_text":  "#E2CECE",
-        "error_bg":      "#3A080A", "error_border":  "#B3112B", "error_text":    "#FFBABD"
-    }
+        "primary": "#1D4D3A",
+        "secondary": "#126B72",
+        "accent": "#B3112B",
+        "success": "#4E8F6A",
+        "danger": "#B3112B",
+        "warning": "#A56767",
+        "bg_light": "#7CAB8E",
+        "border": "#1D4D3A",
+        "text_muted": "#687B75",
+        "sidebar_bg": "#0C1E18",
+        "title_color": "#95CBD2",
+        "subtitle_color": "#5995A0",
+        "input_bg": "#162E25",
+        "text_color": "#D4E1DD",
+        "bg_main": "#050C0A",
+        "info_bg": "#0A2B23",
+        "info_border": "#1D4D3A",
+        "info_text": "#D4E1DD",
+        "success_bg": "#1D3A2C",
+        "success_border": "#4E8F6A",
+        "success_text": "#9EC4AF",
+        "warning_bg": "#3A2B2B",
+        "warning_border": "#A56767",
+        "warning_text": "#E2CECE",
+        "error_bg": "#3A080A",
+        "error_border": "#B3112B",
+        "error_text": "#FFBABD",
+    },
 }
 
 
-
 _DEFAULT_THEME = "Azul Clasico"
+
 
 # =============================================================================
 # SELECTOR DE TEMA
@@ -284,44 +680,45 @@ def get_current_theme() -> dict:
     selected = st.session_state.get("theme_name", _DEFAULT_THEME)
     return THEMES.get(selected, THEMES[_DEFAULT_THEME])
 
+
 def render_theme_selector():
     with st.sidebar:
         st.markdown("---")
         st.markdown("#### Tema de Color")
 
         temas_oscuros = [
-            "TRON Legacy", 
-            "Negro & Dorado", 
-            "Cyberpunk Night", 
-            "Gris Espacial", 
-            "Azul Medianoche", 
-            "Tema Drácula", 
-            "Bosque Luminiscente", 
-            "Obsidiana Roja", 
+            "TRON Legacy",
+            "Negro & Dorado",
+            "Cyberpunk Night",
+            "Gris Espacial",
+            "Azul Medianoche",
+            "Tema Drácula",
+            "Bosque Luminiscente",
+            "Obsidiana Roja",
             "Espacio Profundo",
             "Ocre & Polvo",
             "Cyan Nocturno",
-            "Joi Hologram", 
-            "Rooftop Contrast"
+            "Joi Hologram",
+            "Rooftop Contrast",
         ]
 
         temas_claros = [
-            "Azul & Rosa (Predeterminado)", 
-            "Azul Clasico", 
-            "Rojo Ejecutivo", 
-            "Verde Esmeralda", 
-            "Violeta Profundo", 
-            "Teal Minimalista", 
-            "Blanco Limpio", 
-            "Café Latte Soft", 
-            "Océano & Arena"
+            "Azul & Rosa (Predeterminado)",
+            "Azul Clasico",
+            "Rojo Ejecutivo",
+            "Verde Esmeralda",
+            "Violeta Profundo",
+            "Teal Minimalista",
+            "Blanco Limpio",
+            "Café Latte Soft",
+            "Océano & Arena",
         ]
         # 2. Selector de categoría (filtro)
         categoria = st.radio(
             "Filtrar por:",
             ["Todos", "Claros", "Oscuros"],
             horizontal=True,
-            label_visibility="collapsed"
+            label_visibility="collapsed",
         )
 
         # 3. Construimos la lista de opciones basada en el filtro
@@ -336,7 +733,7 @@ def render_theme_selector():
         # 4. Obtenemos el tema actual desde session_state
         tema_actual = st.session_state.get("theme_name", todas_opciones[0])
 
-        # 5. Prevención de errores: si el usuario filtra "Claros" pero tenía un tema oscuro, 
+        # 5. Prevención de errores: si el usuario filtra "Claros" pero tenía un tema oscuro,
         # seleccionamos el primer elemento de la lista filtrada temporalmente.
         if tema_actual not in opciones_filtradas:
             idx_actual = 0
@@ -348,13 +745,14 @@ def render_theme_selector():
             "Elige tu estilo:",
             opciones_filtradas,
             index=idx_actual,
-            key="_theme_selector_box", # Cambiamos ligeramente la key
+            key="_theme_selector_box",  # Cambiamos ligeramente la key
             label_visibility="collapsed",
         )
-        
+
         # 7. Guardamos el resultado en la variable global del estado
         st.session_state["theme_name"] = tema_elegido
         st.caption("El tema se aplica a todos los módulos.")
+
 
 # =============================================================================
 # CSS GLOBAL DINAMICO
@@ -368,10 +766,10 @@ def _build_css(c: dict) -> str:
        1. VARIABLES CSS — anulan las de Streamlit (dark/light mode)
        ══════════════════════════════════════════════════════════ */
     :root, [data-theme], [data-theme="dark"], [data-theme="light"] {{
-        --background-color:           {c['bg_main']}    !important;
-        --secondary-background-color: {c['bg_light']}   !important;
-        --text-color:                 {c['text_color']}  !important;
-        --primary-color:              {c['accent']}      !important;
+        --background-color:           {c["bg_main"]}    !important;
+        --secondary-background-color: {c["bg_light"]}   !important;
+        --text-color:                 {c["text_color"]}  !important;
+        --primary-color:              {c["accent"]}      !important;
     }}
 
     /* ══════════════════════════════════════════════════════════
@@ -381,19 +779,19 @@ def _build_css(c: dict) -> str:
     [data-testid="stToolbar"],
     header[data-testid="stHeader"],
     .stApp > header {{
-        background-color: {c['sidebar_bg']} !important;
-        border-bottom: 1px solid {c['border']} !important;
+        background-color: {c["sidebar_bg"]} !important;
+        border-bottom: 1px solid {c["border"]} !important;
         box-shadow: none !important;
     }}
     /* Iconos del header */
     [data-testid="stHeader"] svg,
     [data-testid="stToolbar"] svg {{
-        fill: {c['text_muted']} !important;
-        color: {c['text_muted']} !important;
+        fill: {c["text_muted"]} !important;
+        color: {c["text_muted"]} !important;
     }}
     /* Decoracion superior (barra de color) */
     [data-testid="stDecoration"] {{
-        background: linear-gradient(90deg, {c['accent']}, {c['primary']}) !important;
+        background: linear-gradient(90deg, {c["accent"]}, {c["primary"]}) !important;
         height: 3px !important;
     }}
 
@@ -409,8 +807,8 @@ def _build_css(c: dict) -> str:
     .block-container,
     .main,
     section.main {{
-        background-color: {c['bg_main']} !important;
-        color:            {c['text_color']} !important;
+        background-color: {c["bg_main"]} !important;
+        color:            {c["text_color"]} !important;
     }}
 
     /* ══════════════════════════════════════════════════════════
@@ -419,12 +817,12 @@ def _build_css(c: dict) -> str:
     [data-testid="stSidebar"],
     [data-testid="stSidebar"] > div,
     [data-testid="stSidebarContent"] {{
-        background-color: {c['sidebar_bg']} !important;
-        border-right: 1px solid {c['border']} !important;
+        background-color: {c["sidebar_bg"]} !important;
+        border-right: 1px solid {c["border"]} !important;
     }}
     [data-testid="stSidebar"] *,
     [data-testid="stSidebarContent"] * {{
-        color: {c['text_color']} !important;
+        color: {c["text_color"]} !important;
     }}
 
     /* ══════════════════════════════════════════════════════════
@@ -433,20 +831,20 @@ def _build_css(c: dict) -> str:
     p, li, td, th,
     [data-testid="stMarkdownContainer"],
     [data-testid="stMarkdownContainer"] * {{
-        color: {c['text_color']} !important;
+        color: {c["text_color"]} !important;
     }}
     /* Headings h3/h4 (ej. "Resultados de la Valuacion") */
     h1, h2, h3, h4, h5, h6 {{
-        color: {c['subtitle_color']} !important;
+        color: {c["subtitle_color"]} !important;
     }}
     /* Captions */
     [data-testid="stCaptionContainer"],
     [data-testid="stCaptionContainer"] * {{
-        color: {c['text_muted']} !important;
+        color: {c["text_muted"]} !important;
     }}
     /* Labels de inputs */
     label, [data-testid="stWidgetLabel"] * {{
-        color: {c['text_color']} !important;
+        color: {c["text_color"]} !important;
     }}
 
     /* ══════════════════════════════════════════════════════════
@@ -455,7 +853,7 @@ def _build_css(c: dict) -> str:
     .main-title {{
         font-size: 36px;
         font-weight: 900;
-        color: {c['title_color']} !important;
+        color: {c["title_color"]} !important;
         text-align: center;
         letter-spacing: -0.5px;
         margin-bottom: 4px;
@@ -463,17 +861,17 @@ def _build_css(c: dict) -> str:
     .section-header {{
         font-size: 23px;
         font-weight: 700;
-        color: {c['subtitle_color']} !important;
+        color: {c["subtitle_color"]} !important;
         margin-top: 16px;
         padding-bottom: 6px;
-        border-bottom: 3px solid {c['accent']};
+        border-bottom: 3px solid {c["accent"]};
     }}
     .formula-box {{
-        background-color: {c['input_bg']} !important;
-        color: {c['text_color']} !important;
+        background-color: {c["input_bg"]} !important;
+        color: {c["text_color"]} !important;
         padding: 14px 18px;
         border-radius: 8px;
-        border-left: 5px solid {c['accent']};
+        border-left: 5px solid {c["accent"]};
         margin: 12px 0;
     }}
 
@@ -484,71 +882,71 @@ def _build_css(c: dict) -> str:
     [data-testid="stExpander"] > details,
     [data-baseweb="accordion"],
     [data-baseweb="accordion"] > div {{
-        background-color: {c['bg_light']} !important;
-        border: 1px solid {c['border']} !important;
+        background-color: {c["bg_light"]} !important;
+        border: 1px solid {c["border"]} !important;
         border-radius: 8px !important;
     }}
     [data-testid="stExpander"] summary,
     [data-testid="stExpander"] details summary,
     [data-baseweb="accordion"] button {{
-        background-color: {c['bg_light']} !important;
-        color: {c['primary']} !important;
+        background-color: {c["bg_light"]} !important;
+        color: {c["primary"]} !important;
         font-weight: 600 !important;
         border-radius: 8px !important;
     }}
     [data-testid="stExpander"] details > div,
     [data-testid="stExpander"] > details > div {{
-        background-color: {c['bg_light']} !important;
-        color: {c['text_color']} !important;
+        background-color: {c["bg_light"]} !important;
+        color: {c["text_color"]} !important;
     }}
     [data-testid="stExpander"] svg {{
-        fill: {c['primary']} !important;
-        stroke: {c['primary']} !important;
+        fill: {c["primary"]} !important;
+        stroke: {c["primary"]} !important;
     }}
 
     /* ══════════════════════════════════════════════════════════
        8. INPUTS, SELECTS, DATE INPUTS
        ══════════════════════════════════════════════════════════ */
     input, textarea {{
-        background-color: {c['input_bg']} !important;
-        color: {c['text_color']} !important;
-        border-color: {c['border']} !important;
+        background-color: {c["input_bg"]} !important;
+        color: {c["text_color"]} !important;
+        border-color: {c["border"]} !important;
     }}
     [data-baseweb="input"],
     [data-baseweb="input"] > div,
     [data-testid="stNumberInput"] > div,
     [data-testid="stTextInput"] > div,
     [data-testid="stDateInput"] > div {{
-        background-color: {c['input_bg']} !important;
-        border-color: {c['border']} !important;
+        background-color: {c["input_bg"]} !important;
+        border-color: {c["border"]} !important;
     }}
     /* Botones +/- de number_input */
     [data-testid="stNumberInput"] button {{
-        background-color: {c['primary']} !important;
+        background-color: {c["primary"]} !important;
         color: #ffffff !important;
-        border-color: {c['primary']} !important;
+        border-color: {c["primary"]} !important;
     }}
     [data-testid="stNumberInput"] button:hover {{
-        background-color: {c['accent']} !important;
-        border-color: {c['accent']} !important;
+        background-color: {c["accent"]} !important;
+        border-color: {c["accent"]} !important;
     }}
     /* Select / dropdown */
     [data-baseweb="select"] > div,
     [data-baseweb="select"] > div > div {{
-        background-color: {c['input_bg']} !important;
-        color: {c['text_color']} !important;
-        border-color: {c['border']} !important;
+        background-color: {c["input_bg"]} !important;
+        color: {c["text_color"]} !important;
+        border-color: {c["border"]} !important;
     }}
     /* Opciones del dropdown */
     [data-baseweb="menu"],
     [data-baseweb="menu"] li,
     [role="listbox"],
     [role="option"] {{
-        background-color: {c['bg_light']} !important;
-        color: {c['text_color']} !important;
+        background-color: {c["bg_light"]} !important;
+        color: {c["text_color"]} !important;
     }}
     [role="option"]:hover {{
-        background-color: {c['border']} !important;
+        background-color: {c["border"]} !important;
     }}
 
     /* ══════════════════════════════════════════════════════════
@@ -556,18 +954,18 @@ def _build_css(c: dict) -> str:
        ══════════════════════════════════════════════════════════ */
     [data-testid="stButton"] > button,
     [data-testid="stFormSubmitButton"] > button {{
-        background-color: {c['primary']} !important;
+        background-color: {c["primary"]} !important;
         color: #ffffff !important;
-        border-color: {c['primary']} !important;
+        border-color: {c["primary"]} !important;
         border-radius: 6px !important;
     }}
     [data-testid="stButton"] > button:hover,
     [data-testid="stFormSubmitButton"] > button:hover {{
-        background-color: {c['accent']} !important;
-        border-color: {c['accent']} !important;
+        background-color: {c["accent"]} !important;
+        border-color: {c["accent"]} !important;
     }}
     [data-testid="stLinkButton"] > a {{
-        background-color: {c['primary']} !important;
+        background-color: {c["primary"]} !important;
         color: #ffffff !important;
         border-radius: 6px !important;
     }}
@@ -586,76 +984,76 @@ def _build_css(c: dict) -> str:
     /* INFO */
     [data-testid="stAlert"][data-type="info"],
     div[data-baseweb="notification"][data-type="info"] {{
-        background-color: {c['info_bg']} !important;
-        border-left-color: {c['info_border']} !important;
+        background-color: {c["info_bg"]} !important;
+        border-left-color: {c["info_border"]} !important;
     }}
     [data-testid="stAlert"][data-type="info"] *,
     [data-testid="stAlert"][data-type="info"] p,
     [data-testid="stAlert"][data-type="info"] span {{
-        color: {c['info_text']} !important;
+        color: {c["info_text"]} !important;
     }}
     [data-testid="stAlert"][data-type="info"] svg {{
-        fill: {c['info_border']} !important;
-        color: {c['info_border']} !important;
+        fill: {c["info_border"]} !important;
+        color: {c["info_border"]} !important;
     }}
     /* SUCCESS */
     [data-testid="stAlert"][data-type="success"],
     div[data-baseweb="notification"][data-type="success"] {{
-        background-color: {c['success_bg']} !important;
-        border-left-color: {c['success_border']} !important;
+        background-color: {c["success_bg"]} !important;
+        border-left-color: {c["success_border"]} !important;
     }}
     [data-testid="stAlert"][data-type="success"] *,
     [data-testid="stAlert"][data-type="success"] p,
     [data-testid="stAlert"][data-type="success"] span {{
-        color: {c['success_text']} !important;
+        color: {c["success_text"]} !important;
     }}
     [data-testid="stAlert"][data-type="success"] svg {{
-        fill: {c['success_border']} !important;
-        color: {c['success_border']} !important;
+        fill: {c["success_border"]} !important;
+        color: {c["success_border"]} !important;
     }}
     /* WARNING */
     [data-testid="stAlert"][data-type="warning"],
     div[data-baseweb="notification"][data-type="warning"] {{
-        background-color: {c['warning_bg']} !important;
-        border-left-color: {c['warning_border']} !important;
+        background-color: {c["warning_bg"]} !important;
+        border-left-color: {c["warning_border"]} !important;
     }}
     [data-testid="stAlert"][data-type="warning"] *,
     [data-testid="stAlert"][data-type="warning"] p,
     [data-testid="stAlert"][data-type="warning"] span {{
-        color: {c['warning_text']} !important;
+        color: {c["warning_text"]} !important;
     }}
     [data-testid="stAlert"][data-type="warning"] svg {{
-        fill: {c['warning_border']} !important;
-        color: {c['warning_border']} !important;
+        fill: {c["warning_border"]} !important;
+        color: {c["warning_border"]} !important;
     }}
     /* ERROR */
     [data-testid="stAlert"][data-type="error"],
     div[data-baseweb="notification"][data-type="error"] {{
-        background-color: {c['error_bg']} !important;
-        border-left-color: {c['error_border']} !important;
+        background-color: {c["error_bg"]} !important;
+        border-left-color: {c["error_border"]} !important;
     }}
     [data-testid="stAlert"][data-type="error"] *,
     [data-testid="stAlert"][data-type="error"] p,
     [data-testid="stAlert"][data-type="error"] span {{
-        color: {c['error_text']} !important;
+        color: {c["error_text"]} !important;
     }}
     [data-testid="stAlert"][data-type="error"] svg {{
-        fill: {c['error_border']} !important;
-        color: {c['error_border']} !important;
+        fill: {c["error_border"]} !important;
+        color: {c["error_border"]} !important;
     }}
 
     /* ══════════════════════════════════════════════════════════
        11. METRICAS
        ══════════════════════════════════════════════════════════ */
     [data-testid="stMetricValue"] {{
-        color: {c['title_color']} !important;
+        color: {c["title_color"]} !important;
         font-weight: 700;
     }}
     [data-testid="stMetricLabel"] {{
-        color: {c['text_muted']} !important;
+        color: {c["text_muted"]} !important;
     }}
     [data-testid="stMetricDelta"] {{
-        color: {c['text_muted']} !important;
+        color: {c["text_muted"]} !important;
     }}
 
     /* ══════════════════════════════════════════════════════════
@@ -663,15 +1061,15 @@ def _build_css(c: dict) -> str:
        ══════════════════════════════════════════════════════════ */
     [data-testid="stTabs"],
     [data-testid="stTabsContent"] {{
-        background-color: {c['bg_main']} !important;
+        background-color: {c["bg_main"]} !important;
     }}
     [data-testid="stTabs"] button {{
-        color: {c['text_muted']} !important;
+        color: {c["text_muted"]} !important;
         background-color: transparent !important;
     }}
     [data-testid="stTabs"] button[aria-selected="true"] {{
-        color: {c['accent']} !important;
-        border-bottom: 2px solid {c['accent']} !important;
+        color: {c["accent"]} !important;
+        border-bottom: 2px solid {c["accent"]} !important;
     }}
 
     /* ══════════════════════════════════════════════════════════
@@ -679,7 +1077,7 @@ def _build_css(c: dict) -> str:
        ══════════════════════════════════════════════════════════ */
     [data-testid="stRadio"] label,
     [data-testid="stCheckbox"] label {{
-        color: {c['primary']} !important;
+        color: {c["primary"]} !important;
         font-weight: 600;
     }}
 
@@ -693,61 +1091,61 @@ def _build_css(c: dict) -> str:
     [data-testid="stDataFrameResizable"],
     [data-testid="stDataFrame"] {{
         border-radius: 8px !important;
-        border: 1px solid {c['border']} !important;
+        border: 1px solid {c["border"]} !important;
         overflow: hidden;
     }}
     /* st.table — tabla HTML estática (sí se puede estilizar con CSS) */
     [data-testid="stTable"] table {{
-        background-color: {c['bg_main']} !important;
-        color: {c['text_color']} !important;
+        background-color: {c["bg_main"]} !important;
+        color: {c["text_color"]} !important;
         border-collapse: collapse;
         width: 100%;
     }}
     [data-testid="stTable"] th {{
-        background-color: {c['bg_light']} !important;
-        color: {c['subtitle_color']} !important;
-        border-bottom: 2px solid {c['accent']} !important;
+        background-color: {c["bg_light"]} !important;
+        color: {c["subtitle_color"]} !important;
+        border-bottom: 2px solid {c["accent"]} !important;
         padding: 8px 12px;
     }}
     [data-testid="stTable"] td {{
-        background-color: {c['bg_main']} !important;
-        color: {c['text_color']} !important;
-        border-bottom: 1px solid {c['border']} !important;
+        background-color: {c["bg_main"]} !important;
+        color: {c["text_color"]} !important;
+        border-bottom: 1px solid {c["border"]} !important;
         padding: 7px 12px;
     }}
     [data-testid="stTable"] tr:nth-child(even) td {{
-        background-color: {c['bg_light']} !important;
+        background-color: {c["bg_light"]} !important;
     }}
 
     /* ══════════════════════════════════════════════════════════
        15. TARJETAS CALL / PUT
        ══════════════════════════════════════════════════════════ */
     .result-call {{
-        background-color: {c['success_bg']} !important;
+        background-color: {c["success_bg"]} !important;
         padding: 15px;
         border-radius: 10px;
-        border-left: 5px solid {c['success']};
+        border-left: 5px solid {c["success"]};
     }}
     .result-call h3 {{
-        color: {c['success']} !important;
+        color: {c["success"]} !important;
         margin: 0;
     }}
     .result-put {{
-        background-color: {c['error_bg']} !important;
+        background-color: {c["error_bg"]} !important;
         padding: 15px;
         border-radius: 10px;
-        border-left: 5px solid {c['danger']};
+        border-left: 5px solid {c["danger"]};
     }}
     .result-put h3 {{
-        color: {c['danger']} !important;
+        color: {c["danger"]} !important;
         margin: 0;
     }}
     .result-card {{
-        background: {c['bg_light']} !important;
-        color: {c['text_color']} !important;
+        background: {c["bg_light"]} !important;
+        color: {c["text_color"]} !important;
         padding: 18px;
         border-radius: 12px;
-        border: 1px solid {c['border']};
+        border: 1px solid {c["border"]};
         margin: 10px 0;
     }}
 
@@ -755,13 +1153,13 @@ def _build_css(c: dict) -> str:
        16. SEPARADORES Y MISCELANEOS
        ══════════════════════════════════════════════════════════ */
     hr {{
-        border-color: {c['border']} !important;
+        border-color: {c["border"]} !important;
     }}
     ::-webkit-scrollbar-track {{
-        background: {c['bg_light']};
+        background: {c["bg_light"]};
     }}
     ::-webkit-scrollbar-thumb {{
-        background: {c['border']};
+        background: {c["border"]};
         border-radius: 4px;
     }}
 
@@ -787,6 +1185,7 @@ COLORS = THEMES[_DEFAULT_THEME]
 # =============================================================================
 # HELPERS DE UI
 # =============================================================================
+
 
 def page_header(titulo: str, subtitulo: str = ""):
     inject_global_css()
@@ -846,10 +1245,12 @@ def separador():
 # respeta el tema activo sin depender de los selectores de Streamlit.
 # =============================================================================
 
+
 def _bold_to_html(texto: str) -> str:
     """Convierte **negrita** a <strong>negrita</strong>."""
     import re
-    return re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', texto)
+
+    return re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", texto)
 
 
 def themed_info(texto: str):
@@ -918,9 +1319,9 @@ def index_card(numero: str, titulo: str, descripcion: str, variante: str = "a"):
     """
     c = get_current_theme()
     colores = {
-        "a": (c["info_bg"],    c["primary"],  c["info_text"]),
-        "b": (c["success_bg"], c["success"],  c["success_text"]),
-        "c": (c["warning_bg"], c["accent"],   c["warning_text"]),
+        "a": (c["info_bg"], c["primary"], c["info_text"]),
+        "b": (c["success_bg"], c["success"], c["success_text"]),
+        "c": (c["warning_bg"], c["accent"], c["warning_text"]),
     }
     bg, borde, texto = colores.get(variante, colores["a"])
     st.markdown(
@@ -943,6 +1344,7 @@ def index_card(numero: str, titulo: str, descripcion: str, variante: str = "a"):
 # O pasar directamente a px/go:  layout=plotly_layout()
 # =============================================================================
 
+
 def plotly_color(hex_str: str) -> str:
     """
     Convierte colores hex de 8 dígitos (#RRGGBBAA) a 6 dígitos (#RRGGBB)
@@ -963,31 +1365,31 @@ def plotly_layout(**extra) -> dict:
     c = get_current_theme()
     border = plotly_color(c["border"])
     base = dict(
-        paper_bgcolor = c["bg_main"],
-        plot_bgcolor  = c["bg_light"],
-        font          = dict(color=c["text_color"], family="Source Sans Pro, sans-serif"),
-        title_font    = dict(color=c["subtitle_color"]),
-        legend        = dict(
-            bgcolor     = c["bg_light"],
-            bordercolor = border,
-            borderwidth = 1,
-            font        = dict(color=c["text_color"]),
+        paper_bgcolor=c["bg_main"],
+        plot_bgcolor=c["bg_light"],
+        font=dict(color=c["text_color"], family="Source Sans Pro, sans-serif"),
+        title_font=dict(color=c["subtitle_color"]),
+        legend=dict(
+            bgcolor=c["bg_light"],
+            bordercolor=border,
+            borderwidth=1,
+            font=dict(color=c["text_color"]),
         ),
-        xaxis = dict(
-            gridcolor    = border,
-            linecolor    = border,
-            tickfont     = dict(color=c["text_muted"]),
-            title_font   = dict(color=c["text_color"]),
-            zerolinecolor= border,
+        xaxis=dict(
+            gridcolor=border,
+            linecolor=border,
+            tickfont=dict(color=c["text_muted"]),
+            title_font=dict(color=c["text_color"]),
+            zerolinecolor=border,
         ),
-        yaxis = dict(
-            gridcolor    = border,
-            linecolor    = border,
-            tickfont     = dict(color=c["text_muted"]),
-            title_font   = dict(color=c["text_color"]),
-            zerolinecolor= border,
+        yaxis=dict(
+            gridcolor=border,
+            linecolor=border,
+            tickfont=dict(color=c["text_muted"]),
+            title_font=dict(color=c["text_color"]),
+            zerolinecolor=border,
         ),
-        margin = dict(l=40, r=20, t=50, b=40),
+        margin=dict(l=40, r=20, t=50, b=40),
     )
     base.update(extra)
     return base
@@ -1009,6 +1411,7 @@ def apply_plotly_theme(fig, **extra):
 # Devuelve un dict de layout y colores para usar en todas las graficas plotly,
 # garantizando que siempre respondan al tema activo.
 # =============================================================================
+
 
 def plotly_theme() -> dict:
     """
@@ -1048,9 +1451,15 @@ def plotly_theme() -> dict:
             zerolinecolor=border,
         ),
         colorway=[
-            c["primary"], c["accent"], c["success"],
-            c["secondary"], c["warning"], c["danger"],
-            "#8B5CF6", "#06B6D4", "#F59E0B",
+            c["primary"],
+            c["accent"],
+            c["success"],
+            c["secondary"],
+            c["warning"],
+            c["danger"],
+            "#8B5CF6",
+            "#06B6D4",
+            "#F59E0B",
         ],
     )
 
@@ -1059,9 +1468,16 @@ def plotly_colors() -> list:
     """Lista de colores del tema para usar en color_discrete_sequence."""
     c = get_current_theme()
     return [
-        c["primary"], c["accent"], c["success"],
-        c["secondary"], c["warning"], c["danger"],
-        "#8B5CF6", "#06B6D4", "#F59E0B", "#EC4899",
+        c["primary"],
+        c["accent"],
+        c["success"],
+        c["secondary"],
+        c["warning"],
+        c["danger"],
+        "#8B5CF6",
+        "#06B6D4",
+        "#F59E0B",
+        "#EC4899",
     ]
 
 
@@ -1071,22 +1487,28 @@ def df_style(df):
     Uso: st.dataframe(df_style(df), ...)
     """
     c = get_current_theme()
-    return (
-        df.style
-        .set_properties(**{
+    return df.style.set_properties(
+        **{
             "background-color": c["bg_light"],
-            "color":            c["text_color"],
-            "border-color":     c["border"],
-        })
-        .set_table_styles([
-            {"selector": "th", "props": [
-                ("background-color", c["primary"]),
-                ("color",            "#ffffff"),
-                ("font-weight",      "700"),
-                ("border-color",     c["border"]),
-            ]},
-            {"selector": "tr:hover td", "props": [
-                ("background-color", c["border"]),
-            ]},
-        ])
+            "color": c["text_color"],
+            "border-color": c["border"],
+        }
+    ).set_table_styles(
+        [
+            {
+                "selector": "th",
+                "props": [
+                    ("background-color", c["primary"]),
+                    ("color", "#ffffff"),
+                    ("font-weight", "700"),
+                    ("border-color", c["border"]),
+                ],
+            },
+            {
+                "selector": "tr:hover td",
+                "props": [
+                    ("background-color", c["border"]),
+                ],
+            },
+        ]
     )

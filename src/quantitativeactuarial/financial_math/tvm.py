@@ -57,14 +57,19 @@ def desglosar_periodos(n: float) -> pd.DataFrame:
     seg_raw = frac_min * 60
     segundos = int(seg_raw)
 
-    return pd.DataFrame([{
-        "Años": anios,
-        "Meses": meses,
-        "Días": dias,
-        "Horas": horas,
-        "Minutos": minutos,
-        "Segundos": segundos
-    }])
+    return pd.DataFrame(
+        [
+            {
+                "Años": anios,
+                "Meses": meses,
+                "Días": dias,
+                "Horas": horas,
+                "Minutos": minutos,
+                "Segundos": segundos,
+            }
+        ]
+    )
+
 
 __all__ = [
     "valor_futuro",

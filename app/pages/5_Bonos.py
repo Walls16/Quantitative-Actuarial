@@ -12,7 +12,16 @@ Cubre:
 import numpy as np
 import streamlit as st
 
-from utils import page_header, paso_a_paso, separador, alerta_metodo_numerico, themed_info, themed_success, themed_warning, themed_error
+from utils import (
+    page_header,
+    paso_a_paso,
+    separador,
+    alerta_metodo_numerico,
+    themed_info,
+    themed_success,
+    themed_warning,
+    themed_error,
+)
 import app.domain as quact
 
 # =============================================================================
@@ -32,7 +41,7 @@ css_paso = "text-align: center; font-size: 22px; font-weight: bold; padding: 4px
 
 page_header(
     titulo="5. Valuación de Bonos y Obligaciones",
-    subtitulo="Precio limpio · Yield to Maturity (YTM) · Duración · Convexidad · Simulador de estrés"
+    subtitulo="Precio limpio · Yield to Maturity (YTM) · Duración · Convexidad · Simulador de estrés",
 )
 
 # =============================================================================
@@ -64,17 +73,23 @@ c1, c2, c3 = st.columns(3)
 
 with c1:
     st.markdown("**Características del Bono**")
-    F_bono      = st.number_input("Valor Nominal ($F$)",
-                                   min_value=0.01, value=1_000.0,
-                                   step=100.0, key="bono_f")
-    r_nom_bono  = st.number_input("Tasa Cupón Nominal Anual ($r^{(m)}$) %",
-                                   value=8.0, step=0.1, key="bono_r") / 100
-    igual_C     = st.checkbox("Valor de Redención ($C$) = Valor Nominal",
-                               value=True, key="bono_check_c")
-    C_bono      = F_bono if igual_C else st.number_input(
-                    "Valor de Redención ($C$)",
-                    min_value=0.01, value=1_000.0, step=100.0, key="bono_c"
-                  )
+    F_bono = st.number_input(
+        "Valor Nominal ($F$)", min_value=0.01, value=1_000.0, step=100.0, key="bono_f"
+    )
+    r_nom_bono = (
+        st.number_input("Tasa Cupón Nominal Anual ($r^{(m)}$) %", value=8.0, step=0.1, key="bono_r")
+        / 100
+    )
+    igual_C = st.checkbox(
+        "Valor de Redención ($C$) = Valor Nominal", value=True, key="bono_check_c"
+    )
+    C_bono = (
+        F_bono
+        if igual_C
+        else st.number_input(
+            "Valor de Redención ($C$)", min_value=0.01, value=1_000.0, step=100.0, key="bono_c"
+        )
+    )
 
 with c2:
     st.markdown("**Condiciones de Mercado**")
@@ -86,34 +101,50 @@ with c2:
             key="tipo_tasa_b",
         )
         if tipo_tasa_bono == "Tasa efectiva periódica":
-            i_mercado     = st.number_input("Tasa efectiva periódica ($i_m$) %",
-                                             value=5.0, step=0.1, key="bono_ieff") / 100
-            str_i_bono    = r"i_m"
+            i_mercado = (
+                st.number_input(
+                    "Tasa efectiva periódica ($i_m$) %", value=5.0, step=0.1, key="bono_ieff"
+                )
+                / 100
+            )
+            str_i_bono = r"i_m"
         else:
-            i_nom_mercado = st.number_input("Tasa nominal anual ($i^{(m)}$) %",
-                                             value=10.0, step=0.1, key="bono_inom") / 100
-            str_i_bono    = r"\frac{i^{(m)}}{m}"
+            i_nom_mercado = (
+                st.number_input(
+                    "Tasa nominal anual ($i^{(m)}$) %", value=10.0, step=0.1, key="bono_inom"
+                )
+                / 100
+            )
+            str_i_bono = r"\frac{i^{(m)}}{m}"
     else:
-        precio_mercado = st.number_input("Precio actual en el mercado ($P$)",
-                                          min_value=0.01, value=950.0,
-                                          step=10.0, key="bono_p_mercado")
+        precio_mercado = st.number_input(
+            "Precio actual en el mercado ($P$)",
+            min_value=0.01,
+            value=950.0,
+            step=10.0,
+            key="bono_p_mercado",
+        )
 
 with c3:
     st.markdown("**Plazos**")
-    n_anios_bono = st.number_input("Años al vencimiento ($n$)",
-                                    min_value=0.1, value=5.0,
-                                    step=1.0, key="bono_n")
-    m_bono       = st.number_input("Cupones por año ($m$)",
-                                    min_value=1.0, value=2.0, step=1.0,
-                                    help="Ej. 2 = semestral, 4 = trimestral",
-                                    key="bono_m")
+    n_anios_bono = st.number_input(
+        "Años al vencimiento ($n$)", min_value=0.1, value=5.0, step=1.0, key="bono_n"
+    )
+    m_bono = st.number_input(
+        "Cupones por año ($m$)",
+        min_value=1.0,
+        value=2.0,
+        step=1.0,
+        help="Ej. 2 = semestral, 4 = trimestral",
+        key="bono_m",
+    )
 
 # =============================================================================
 # CÁLCULOS BASE
 # =============================================================================
 n_periodos_bono = int(n_anios_bono * m_bono)
-r_periodo       = r_nom_bono / m_bono
-cupon_Fr        = F_bono * r_periodo
+r_periodo = r_nom_bono / m_bono
+cupon_Fr = F_bono * r_periodo
 
 separador()
 st.markdown("### Resultados de la Valuación")
@@ -126,12 +157,11 @@ p_final = None
 # CASO A: CALCULAR PRECIO  (P)
 # ─────────────────────────────────────────────────────────────────────────────
 if modo_bono.startswith("Precio"):
-
     if tipo_tasa_bono == "Tasa efectiva periódica":
-        i_periodo_bono    = i_mercado
+        i_periodo_bono = i_mercado
         str_val_i_mercado = f"{i_mercado:.6f}"
     else:
-        i_periodo_bono    = i_nom_mercado / m_bono
+        i_periodo_bono = i_nom_mercado / m_bono
         str_val_i_mercado = f"{i_periodo_bono:.6f}"
 
     precio_P, _, vp_cup, vp_red = quact.precio_bono(
@@ -151,7 +181,7 @@ if modo_bono.startswith("Precio"):
         )
         st.metric("VP de Cupones", f"${vp_cup:,.4f}")
         st.metric("VP de Redención", f"${vp_red:,.4f}")
-        
+
         # Estado del bono con los themes
         if precio_P > C_bono:
             themed_success("Estado: Se vende con **PRIMA** (sobre la par)")
@@ -164,30 +194,39 @@ if modo_bono.startswith("Precio"):
         if tipo_tasa_bono == "Tasa efectiva periódica":
             st.latex(r"P = Fr \left[ \frac{1-(1+i_m)^{-nm}}{i_m} \right] + C(1+i_m)^{-nm}")
         else:
-            st.latex(r"P = Fr \left[ \frac{1-\left(1+\frac{i^{(m)}}{m}\right)^{-nm}}{\frac{i^{(m)}}{m}} \right] + C\left(1+\frac{i^{(m)}}{m}\right)^{-nm}")
+            st.latex(
+                r"P = Fr \left[ \frac{1-\left(1+\frac{i^{(m)}}{m}\right)^{-nm}}{\frac{i^{(m)}}{m}} \right] + C\left(1+\frac{i^{(m)}}{m}\right)^{-nm}"
+            )
 
     with paso_a_paso():
         st.latex(r"Fr = F \times \frac{r^{(m)}}{m}")
-        st.latex(rf"Fr = {F_bono:,.2f} \times \frac{{{r_nom_bono:.4f}}}{{{m_bono:g}}} = {cupon_Fr:,.4f}")
+        st.latex(
+            rf"Fr = {F_bono:,.2f} \times \frac{{{r_nom_bono:.4f}}}{{{m_bono:g}}} = {cupon_Fr:,.4f}"
+        )
         st.write("---")
-        
+
         st.latex(r"P = Fr \left[ \frac{1-(1+i_m)^{-nm}}{i_m} \right] + C(1+i_m)^{-nm}")
-        st.latex(rf"P = {cupon_Fr:,.4f} \left[ \frac{{1-(1+{str_val_i_mercado})^{{-{n_periodos_bono:g}}}}}{{{str_val_i_mercado}}} \right] + {C_bono:,.2f}(1+{str_val_i_mercado})^{{-{n_periodos_bono:g}}}")
-        
+        st.latex(
+            rf"P = {cupon_Fr:,.4f} \left[ \frac{{1-(1+{str_val_i_mercado})^{{-{n_periodos_bono:g}}}}}{{{str_val_i_mercado}}} \right] + {C_bono:,.2f}(1+{str_val_i_mercado})^{{-{n_periodos_bono:g}}}"
+        )
+
         factor_d = (1 + i_periodo_bono) ** (-n_periodos_bono)
         factor_a = (1 - factor_d) / i_periodo_bono
-        
-        st.latex(rf"P = {cupon_Fr:,.4f} \left[ \frac{{1 - {factor_d:.6f}}}{{{str_val_i_mercado}}} \right] + {C_bono:,.2f}({factor_d:.6f})")
+
+        st.latex(
+            rf"P = {cupon_Fr:,.4f} \left[ \frac{{1 - {factor_d:.6f}}}{{{str_val_i_mercado}}} \right] + {C_bono:,.2f}({factor_d:.6f})"
+        )
         st.latex(rf"P = {cupon_Fr:,.4f} [{factor_a:.6f}] + {C_bono:,.2f}({factor_d:.6f})")
         st.latex(rf"P = {vp_cup:,.4f} + {vp_red:,.4f}")
-        
-        themed_success(f"<div style='{css_paso}'><span style='{math_style}'>P</span> = ${precio_P:,.4f}</div>")
+
+        themed_success(
+            f"<div style='{css_paso}'><span style='{math_style}'>P</span> = ${precio_P:,.4f}</div>"
+        )
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CASO B: CALCULAR YTM
 # ─────────────────────────────────────────────────────────────────────────────
 else:
-
     i_periodo_res = quact.tasa_rendimiento_bono(
         precio_mercado, F_bono, r_periodo, C_bono, n_periodos_bono
     )
@@ -197,8 +236,8 @@ else:
         st.stop()
 
     i_nom_res = i_periodo_res * m_bono
-    i_final   = i_periodo_res
-    p_final   = precio_mercado
+    i_final = i_periodo_res
+    p_final = precio_mercado
 
     col_res1, col_res2 = st.columns([1, 1])
 
@@ -206,11 +245,11 @@ else:
         themed_info(
             f"<div style='{css_contenedor}'>"
             f"<span style='{css_titulo}'>YTM Nominal Anual</span>"
-            f"<span style='{css_valor}'>{i_nom_res*100:.4f}%</span>"
+            f"<span style='{css_valor}'>{i_nom_res * 100:.4f}%</span>"
             f"</div>"
         )
-        st.metric("Tasa Efectiva Periódica ($i_m$)", f"{i_periodo_res*100:.4f}%")
-        
+        st.metric("Tasa Efectiva Periódica ($i_m$)", f"{i_periodo_res * 100:.4f}%")
+
         # Estado del bono
         if precio_mercado > C_bono:
             themed_success("Estado: Se vende con **PRIMA** (Rendimiento < Tasa Cupón)")
@@ -225,22 +264,23 @@ else:
 
     with paso_a_paso():
         st.latex(r"P_{mdo} = Fr \left[ \frac{1-(1+i_m)^{-nm}}{i_m} \right] + C(1+i_m)^{-nm}")
-        st.latex(rf"{precio_mercado:,.2f} = {cupon_Fr:,.4f} \left[ \frac{{1-(1+i_m)^{{-{n_periodos_bono:g}}}}}{{i_m}} \right] + {C_bono:,.2f}(1+i_m)^{{-{n_periodos_bono:g}}}")
+        st.latex(
+            rf"{precio_mercado:,.2f} = {cupon_Fr:,.4f} \left[ \frac{{1-(1+i_m)^{{-{n_periodos_bono:g}}}}}{{i_m}} \right] + {C_bono:,.2f}(1+i_m)^{{-{n_periodos_bono:g}}}"
+        )
         alerta_metodo_numerico()
-        
-        st.latex(rf"i_m \approx {i_periodo_res:.6f} \implies {i_periodo_res*100:.4f}\%")
+
+        st.latex(rf"i_m \approx {i_periodo_res:.6f} \implies {i_periodo_res * 100:.4f}\%")
         st.write("---")
         st.latex(rf"\text{{YTM}} = i_m \times m")
         st.latex(rf"\text{{YTM}} = {i_periodo_res:.6f} \times {m_bono:g} = {i_nom_res:.6f}")
-        
-        themed_info(f"<div style='{css_paso}'>YTM = {i_nom_res*100:.4f}%</div>")
+
+        themed_info(f"<div style='{css_paso}'>YTM = {i_nom_res * 100:.4f}%</div>")
 
 
 # =============================================================================
 # ANÁLISIS DE RIESGO DE TASA DE INTERÉS
 # =============================================================================
 if i_final is not None and p_final is not None:
-
     separador()
     st.markdown("### Análisis de Riesgo de Tasas de Interés")
     themed_warning(
@@ -285,22 +325,25 @@ if i_final is not None and p_final is not None:
         st.markdown(
             "Utiliza el control deslizante para simular una variación brusca (<span style='font-family: serif; font-style: italic;'>Δy</span>) en las tasas de rendimiento exigidas por el mercado hoy mismo "
             "y observa cómo impacta matemáticamente al precio actual de tu bono.",
-            unsafe_allow_html=True
+            unsafe_allow_html=True,
         )
 
         delta_y_pct = st.slider(
             "Variación de tasas de interés (Δy):",
-            min_value=-5.0, max_value=5.0,
-            value=1.0, step=0.1, format="%f%%",
+            min_value=-5.0,
+            max_value=5.0,
+            value=1.0,
+            step=0.1,
+            format="%f%%",
             key="stress_slider",
         )
         delta_y = delta_y_pct / 100.0
 
-        impacto_dur  = -mod_d * delta_y
-        impacto_conv = 0.5 * conv * (delta_y ** 2)
-        impacto_tot  = impacto_dur + impacto_conv
+        impacto_dur = -mod_d * delta_y
+        impacto_conv = 0.5 * conv * (delta_y**2)
+        impacto_tot = impacto_dur + impacto_conv
         nuevo_precio = p_final * (1 + impacto_tot)
-        variacion    = nuevo_precio - p_final
+        variacion = nuevo_precio - p_final
 
         col_s1, col_s2 = st.columns([1, 1])
 
@@ -314,17 +357,23 @@ if i_final is not None and p_final is not None:
             st.metric(
                 "Impacto Total (Variación)",
                 f"${variacion:+,.4f}",
-                delta=f"{impacto_tot*100:+.2f}%",
-                delta_color="inverse"
+                delta=f"{impacto_tot * 100:+.2f}%",
+                delta_color="inverse",
             )
             st.caption(
-                f"Efecto lineal (Duración): **{impacto_dur*100:+.4f}%**<br>"
-                f"Corrección curva (Convexidad): **{impacto_conv*100:+.4f}%**",
-                unsafe_allow_html=True
+                f"Efecto lineal (Duración): **{impacto_dur * 100:+.4f}%**<br>"
+                f"Corrección curva (Convexidad): **{impacto_conv * 100:+.4f}%**",
+                unsafe_allow_html=True,
             )
 
         with col_s2:
             st.latex(r"\frac{\Delta P}{P} \approx -D_{Mod}(\Delta y) + \frac{1}{2}C(\Delta y)^2")
-            st.latex(rf"\frac{{\Delta P}}{{P}} \approx -({mod_d:.4f})({delta_y:.4f}) + \frac{{1}}{{2}}({conv:.4f})({delta_y:.4f})^2")
-            st.latex(rf"\frac{{\Delta P}}{{P}} \approx {impacto_dur:.6f} + {impacto_conv:.6f} = {impacto_tot:.6f}")
-            st.latex(rf"\text{{Nuevo P}} = {p_final:,.4f} \times (1 {impacto_tot:+.6f}) = {nuevo_precio:,.4f}")
+            st.latex(
+                rf"\frac{{\Delta P}}{{P}} \approx -({mod_d:.4f})({delta_y:.4f}) + \frac{{1}}{{2}}({conv:.4f})({delta_y:.4f})^2"
+            )
+            st.latex(
+                rf"\frac{{\Delta P}}{{P}} \approx {impacto_dur:.6f} + {impacto_conv:.6f} = {impacto_tot:.6f}"
+            )
+            st.latex(
+                rf"\text{{Nuevo P}} = {p_final:,.4f} \times (1 {impacto_tot:+.6f}) = {nuevo_precio:,.4f}"
+            )

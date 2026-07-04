@@ -18,6 +18,7 @@ def rendimiento_requerido_accion(D1: float, P0: float, g: float) -> float:
 def valuacion_multiplos(metrica_valor: float, multiplo_objetivo: float) -> float:
     return metrica_valor * multiplo_objetivo
 
+
 __all__ = [
     "valuacion_gordon_shapiro",
     "rendimiento_requerido_accion",

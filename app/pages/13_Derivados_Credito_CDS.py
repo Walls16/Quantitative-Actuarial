@@ -19,9 +19,17 @@ import streamlit as st
 import plotly.graph_objects as go
 
 from utils import (
-    page_header, paso_a_paso, separador,
-    themed_info, themed_success, themed_warning, themed_error,
-    apply_plotly_theme, plotly_theme, plotly_colors, plotly_color,
+    page_header,
+    paso_a_paso,
+    separador,
+    themed_info,
+    themed_success,
+    themed_warning,
+    themed_error,
+    apply_plotly_theme,
+    plotly_theme,
+    plotly_colors,
+    plotly_color,
     get_current_theme,
 )
 from quantitativeactuarial.creditrisk import (
@@ -41,34 +49,38 @@ st.set_page_config(
     layout="wide",
 )
 # --- Estilos globales ---
-math_style     = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
-css_titulo     = "font-size: 20px; opacity: 0.85; font-weight: 500;"
-css_valor      = "font-size: 28px; font-weight: bold;"
+math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
+css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"
+css_valor = "font-size: 28px; font-weight: bold;"
 css_contenedor = "display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 0;"
-css_paso       = "text-align: center; font-size: 22px; font-weight: bold; padding: 4px 0; margin: 0;"
+css_paso = "text-align: center; font-size: 22px; font-weight: bold; padding: 4px 0; margin: 0;"
 
 # Variante para columnas estrechas (Agregado)
 css_contenedor_col = "display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding: 8px 0;"
-css_titulo_col = "font-size: 16px; opacity: 0.85; font-weight: 500; margin-bottom: 4px; text-align: center;"
+css_titulo_col = (
+    "font-size: 16px; opacity: 0.85; font-weight: 500; margin-bottom: 4px; text-align: center;"
+)
 css_valor_col = "font-size: 24px; font-weight: bold; text-align: center;"
 
 page_header(
     titulo="13. Derivados de Crédito — CDS",
-    subtitulo="Credit Default Swap · Prima CDS · Pata Fija · Pata Contingente · Mark-to-Market"
+    subtitulo="Credit Default Swap · Prima CDS · Pata Fija · Pata Contingente · Mark-to-Market",
 )
 
 # =============================================================================
 # PESTAÑAS
 # =============================================================================
-tab_prima, tab_mtm, tab_sens = st.tabs([
-    "Prima del CDS (Pricing)",
-    "Valuación a Mercado (MTM)",
-    "Análisis de Sensibilidad",
-])
+tab_prima, tab_mtm, tab_sens = st.tabs(
+    [
+        "Prima del CDS (Pricing)",
+        "Valuación a Mercado (MTM)",
+        "Análisis de Sensibilidad",
+    ]
+)
 
 
 def format_pct(v, decimales=4):
-    return f"{v*100:.{decimales}f}%"
+    return f"{v * 100:.{decimales}f}%"
 
 
 # ═════════════════════════════════════════════════════════════════════════════
@@ -97,39 +109,63 @@ with tab_prima:
     col_riesgo, col_rr, col_r, col_T = st.columns(4)
 
     with col_riesgo:
-        lam_input = st.number_input(
-            "λ — Hazard Rate (%)",
-            min_value=0.001, max_value=50.0, value=0.14, step=0.001,
-            format="%.3f", key="cds_lam_direct",
-            help=(
-                "Tasa de riesgo instantánea continua bajo el supuesto de distribución "
-                "exponencial del tiempo de incumplimiento.\n\n"
-                "S(t) = e^{−λt} | F(t) = 1 − e^{−λt}"
-            ),
-        ) / 100.0
+        lam_input = (
+            st.number_input(
+                "λ — Hazard Rate (%)",
+                min_value=0.001,
+                max_value=50.0,
+                value=0.14,
+                step=0.001,
+                format="%.3f",
+                key="cds_lam_direct",
+                help=(
+                    "Tasa de riesgo instantánea continua bajo el supuesto de distribución "
+                    "exponencial del tiempo de incumplimiento.\n\n"
+                    "S(t) = e^{−λt} | F(t) = 1 − e^{−λt}"
+                ),
+            )
+            / 100.0
+        )
 
     with col_rr:
-        rr_input = st.number_input(
-            "RR — Recovery Rate (%)",
-            min_value=0.0, max_value=99.99, value=80.0, step=1.0,
-            format="%.2f", key="cds_rr",
-            help="Porcentaje del nocional que se recupera en caso de default."
-        ) / 100.0
+        rr_input = (
+            st.number_input(
+                "RR — Recovery Rate (%)",
+                min_value=0.0,
+                max_value=99.99,
+                value=80.0,
+                step=1.0,
+                format="%.2f",
+                key="cds_rr",
+                help="Porcentaje del nocional que se recupera en caso de default.",
+            )
+            / 100.0
+        )
 
     with col_r:
-        r_input = st.number_input(
-            "r — Tasa Libre de Riesgo (%)",
-            min_value=0.001, max_value=30.0, value=5.0, step=0.1,
-            format="%.3f", key="cds_r",
-            help="Tasa de descuento libre de riesgo (continua). Se usa e^{−rt}."
-        ) / 100.0
+        r_input = (
+            st.number_input(
+                "r — Tasa Libre de Riesgo (%)",
+                min_value=0.001,
+                max_value=30.0,
+                value=5.0,
+                step=0.1,
+                format="%.3f",
+                key="cds_r",
+                help="Tasa de descuento libre de riesgo (continua). Se usa e^{−rt}.",
+            )
+            / 100.0
+        )
 
     with col_T:
         T_input = st.number_input(
             "T — Plazo (años)",
-            min_value=1, max_value=30, value=5, step=1,
+            min_value=1,
+            max_value=30,
+            value=5,
+            step=1,
             key="cds_T",
-            help="Vencimiento del contrato CDS en años enteros."
+            help="Vencimiento del contrato CDS en años enteros.",
         )
 
     # ── Variables derivadas ───────────────────────────────────────────────────
@@ -156,25 +192,25 @@ with tab_prima:
         st.markdown(
             f"<div style='{css_contenedor_col}'>"
             f"<span style='{css_titulo_col}'><span style='{math_style}'>&lambda;</span> — Hazard Rate</span>"
-            f"<span style='{css_valor_col}'>{lam*100:.4f}%</span>"
-            f"</div>", 
-            unsafe_allow_html=True
+            f"<span style='{css_valor_col}'>{lam * 100:.4f}%</span>"
+            f"</div>",
+            unsafe_allow_html=True,
         )
     with col_h2:
         st.markdown(
             f"<div style='{css_contenedor_col}'>"
             f"<span style='{css_titulo_col}'><span style='{math_style}'>S(1)</span> — Prob. sobrevivir 1 año</span>"
-            f"<span style='{css_valor_col}'>{np.exp(-lam)*100:.4f}%</span>"
-            f"</div>", 
-            unsafe_allow_html=True
+            f"<span style='{css_valor_col}'>{np.exp(-lam) * 100:.4f}%</span>"
+            f"</div>",
+            unsafe_allow_html=True,
         )
     with col_h3:
         st.markdown(
             f"<div style='{css_contenedor_col}'>"
             f"<span style='{css_titulo_col}'>LGD = 1 &minus; RR</span>"
             f"<span style='{css_valor_col}'>{format_pct(lgd, 2)}</span>"
-            f"</div>", 
-            unsafe_allow_html=True
+            f"</div>",
+            unsafe_allow_html=True,
         )
 
     with paso_a_paso("Ver desarrollo — Hazard Rate"):
@@ -182,14 +218,12 @@ with tab_prima:
         st.latex(r"P[t^* < t] = F(t) = 1 - e^{-\lambda t}")
         st.latex(r"P[t^* \geq t] = S(t) = e^{-\lambda t}")
         st.write("---")
-        st.markdown(f"**Con λ = {lam*100:.4f}%**, probabilidades de sobrevivencia:")
+        st.markdown(f"**Con λ = {lam * 100:.4f}%**, probabilidades de sobrevivencia:")
         for t in range(1, min(int(T_input), 5) + 1):
             ps_t = np.exp(-lam * t)
-            st.latex(
-                rf"S({t}) = e^{{-{lam:.6f} \times {t}}} = {ps_t:.6f}"
-            )
+            st.latex(rf"S({t}) = e^{{-{lam:.6f} \times {t}}} = {ps_t:.6f}")
         themed_success(
-            f"<div style='{css_paso}'>λ = {lam*100:.4f}% &nbsp;|&nbsp; LGD = {lgd*100:.2f}%</div>"
+            f"<div style='{css_paso}'>λ = {lam * 100:.4f}% &nbsp;|&nbsp; LGD = {lgd * 100:.2f}%</div>"
         )
 
     separador()
@@ -207,16 +241,24 @@ with tab_prima:
     df_probs_show = df_probs.set_index("t (años)")
 
     st.dataframe(
-        df_probs_show.style.format({
-            "S(t) Sobrevivencia":     "{:.6f}",
-            "F(t) Incump. Acumulada": "{:.6f}",
-            "q(t) Incump. Marginal":  "{:.6f}",
-        }).bar(
+        df_probs_show.style.format(
+            {
+                "S(t) Sobrevivencia": "{:.6f}",
+                "F(t) Incump. Acumulada": "{:.6f}",
+                "q(t) Incump. Marginal": "{:.6f}",
+            }
+        )
+        .bar(
             subset=["S(t) Sobrevivencia"],
-            color="#2ecc71", vmin=0, vmax=1,
-        ).bar(
+            color="#2ecc71",
+            vmin=0,
+            vmax=1,
+        )
+        .bar(
             subset=["F(t) Incump. Acumulada", "q(t) Incump. Marginal"],
-            color="#e74c3c", vmin=0, vmax=df_probs["F(t) Incump. Acumulada"].max(),
+            color="#e74c3c",
+            vmin=0,
+            vmax=df_probs["F(t) Incump. Acumulada"].max(),
         ),
         use_container_width=True,
     )
@@ -233,7 +275,7 @@ with tab_prima:
         )
         st.markdown("**Ejemplo numérico:**")
         for t in range(1, min(int(T_input), 3) + 1):
-            ps_t    = np.exp(-lam * t)
+            ps_t = np.exp(-lam * t)
             ps_prev = np.exp(-lam * (t - 1))
             pd_marg = ps_prev - ps_t
             st.latex(
@@ -262,12 +304,15 @@ with tab_prima:
     vpc_total = df_vpc.loc["Total", "VP Pago Esperado (×s)"]
 
     st.dataframe(
-        df_vpc.style.format({
-            "Prob. Sobrevivencia S(t)": "{:.6f}",
-            "Pago Esperado (×s)":       "{:.6f}",
-            "Factor VP  e^{-rt}":       "{:.6f}",
-            "VP Pago Esperado (×s)":    "{:.6f}",
-        }, na_rep=""),
+        df_vpc.style.format(
+            {
+                "Prob. Sobrevivencia S(t)": "{:.6f}",
+                "Pago Esperado (×s)": "{:.6f}",
+                "Factor VP  e^{-rt}": "{:.6f}",
+                "VP Pago Esperado (×s)": "{:.6f}",
+            },
+            na_rep="",
+        ),
         use_container_width=True,
     )
 
@@ -279,9 +324,9 @@ with tab_prima:
         st.latex(r"\text{VPC}_{\text{CDS}} = s \cdot \sum_{t=1}^{T} S(t) \cdot e^{-r \cdot t}")
         st.write("Desglose para cada año:")
         for t in range(1, int(T_input) + 1):
-            ps_t  = np.exp(-lam * t)
+            ps_t = np.exp(-lam * t)
             fvp_t = np.exp(-r_input * t)
-            vp_t  = ps_t * fvp_t
+            vp_t = ps_t * fvp_t
             st.latex(
                 rf"t={t}: \quad S({t}) \cdot e^{{-r \cdot {t}}} = "
                 rf"{ps_t:.6f} \times {fvp_t:.6f} = {vp_t:.6f} \cdot s"
@@ -309,41 +354,42 @@ with tab_prima:
     vpv_total = df_vpv.loc["Total", "VP Pago Parcial Esperado"]
 
     st.dataframe(
-        df_vpv.style.format({
-            "Prob. Incumplimiento Marginal q(t)": "{:.6f}",
-            "Tasa Recuperación (RR)":             "{:.0%}",
-            "LGD (1-RR)":                         "{:.0%}",
-            "Pago Parcial Esperado":              "{:.6f}",
-            "Factor VP  e^{-rt_mid}":             "{:.6f}",
-            "VP Pago Parcial Esperado":           "{:.6f}",
-        }, na_rep=""),
+        df_vpv.style.format(
+            {
+                "Prob. Incumplimiento Marginal q(t)": "{:.6f}",
+                "Tasa Recuperación (RR)": "{:.0%}",
+                "LGD (1-RR)": "{:.0%}",
+                "Pago Parcial Esperado": "{:.6f}",
+                "Factor VP  e^{-rt_mid}": "{:.6f}",
+                "VP Pago Parcial Esperado": "{:.6f}",
+            },
+            na_rep="",
+        ),
         use_container_width=True,
     )
 
-    themed_error(
-        f"<div style='{css_paso}'>VPV<sub>CDS</sub> = <b>{vpv_total:.6f}</b></div>"
-    )
+    themed_error(f"<div style='{css_paso}'>VPV<sub>CDS</sub> = <b>{vpv_total:.6f}</b></div>")
 
     with paso_a_paso("Ver desarrollo — VPV_CDS"):
-        st.latex(r"\text{VPV}_{\text{CDS}} = \sum_{t=1}^{T} q(t) \cdot (1-RR) \cdot e^{-r \cdot (t-0.5)}")
+        st.latex(
+            r"\text{VPV}_{\text{CDS}} = \sum_{t=1}^{T} q(t) \cdot (1-RR) \cdot e^{-r \cdot (t-0.5)}"
+        )
         st.latex(rf"LGD = 1 - RR = 1 - {rr_input:.2f} = {lgd:.2f}")
         st.write("Desglose para cada período:")
         for t in range(1, int(T_input) + 1):
-            t_mid   = t - 0.5
+            t_mid = t - 0.5
             ps_prev = np.exp(-lam * (t - 1))
-            ps_t    = np.exp(-lam * t)
+            ps_t = np.exp(-lam * t)
             pd_cond = ps_prev - ps_t
-            pago_p  = lgd * pd_cond
-            fvp     = np.exp(-r_input * t_mid)
+            pago_p = lgd * pd_cond
+            fvp = np.exp(-r_input * t_mid)
             vp_pago = pago_p * fvp
             st.latex(
                 rf"t={t}: \quad q({t}) \cdot LGD \cdot e^{{-r \cdot {t_mid}}} = "
                 rf"{pd_cond:.6f} \times {lgd:.4f} \times {fvp:.6f} = {vp_pago:.6f}"
             )
         st.write("---")
-        themed_error(
-            f"<div style='{css_paso}'>VPV<sub>CDS</sub> = {vpv_total:.6f}</div>"
-        )
+        themed_error(f"<div style='{css_paso}'>VPV<sub>CDS</sub> = {vpv_total:.6f}</div>")
 
     separador()
 
@@ -364,13 +410,16 @@ with tab_prima:
     vppp_total = df_vppp.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
 
     st.dataframe(
-        df_vppp.style.format({
-            "Prob. Incumplimiento Marginal q(t)":  "{:.6f}",
-            "Pago Prorrateado (×s)":               "{:.1f}",
-            "Pago Prorrateado Esperado (×s)":      "{:.6f}",
-            "Factor VP  e^{-rt_mid}":              "{:.6f}",
-            "VP Pago Prorrateado Esperado (×s)":   "{:.6f}",
-        }, na_rep=""),
+        df_vppp.style.format(
+            {
+                "Prob. Incumplimiento Marginal q(t)": "{:.6f}",
+                "Pago Prorrateado (×s)": "{:.1f}",
+                "Pago Prorrateado Esperado (×s)": "{:.6f}",
+                "Factor VP  e^{-rt_mid}": "{:.6f}",
+                "VP Pago Prorrateado Esperado (×s)": "{:.6f}",
+            },
+            na_rep="",
+        ),
         use_container_width=True,
     )
 
@@ -379,15 +428,17 @@ with tab_prima:
     )
 
     with paso_a_paso("Ver desarrollo — VPPP_CDS"):
-        st.latex(r"\text{VPPP}_{\text{CDS}} = s \cdot \sum_{t=1}^{T} 0.5 \cdot q(t) \cdot e^{-r \cdot (t-0.5)}")
+        st.latex(
+            r"\text{VPPP}_{\text{CDS}} = s \cdot \sum_{t=1}^{T} 0.5 \cdot q(t) \cdot e^{-r \cdot (t-0.5)}"
+        )
         st.write("Desglose para cada período:")
         for t in range(1, int(T_input) + 1):
-            t_mid   = t - 0.5
+            t_mid = t - 0.5
             ps_prev = np.exp(-lam * (t - 1))
-            ps_t    = np.exp(-lam * t)
+            ps_t = np.exp(-lam * t)
             pd_cond = ps_prev - ps_t
-            pago_p  = 0.5 * pd_cond
-            fvp     = np.exp(-r_input * t_mid)
+            pago_p = 0.5 * pd_cond
+            fvp = np.exp(-r_input * t_mid)
             vp_pago = pago_p * fvp
             st.latex(
                 rf"t={t}: \quad 0.5 \cdot q({t}) \cdot e^{{-r \cdot {t_mid}}} = "
@@ -415,7 +466,7 @@ with tab_prima:
     )
 
     s_prima = prima_cds(vpc_total, vppp_total, vpv_total)
-    s_pb    = s_prima * 10_000  # en puntos base
+    s_pb = s_prima * 10_000  # en puntos base
 
     col_p1, col_p2, col_p3, col_p4 = st.columns(4)
 
@@ -424,32 +475,32 @@ with tab_prima:
             f"<div style='{css_contenedor_col}'>"
             f"<span style='{css_titulo_col}'>VPC<sub>CDS</sub></span>"
             f"<span style='{css_valor_col}'>{vpc_total:.6f} &times; <span style='{math_style}'>s</span></span>"
-            f"</div>", 
-            unsafe_allow_html=True
+            f"</div>",
+            unsafe_allow_html=True,
         )
     with col_p2:
         st.markdown(
             f"<div style='{css_contenedor_col}'>"
             f"<span style='{css_titulo_col}'>VPPP<sub>CDS</sub></span>"
             f"<span style='{css_valor_col}'>{vppp_total:.6f} &times; <span style='{math_style}'>s</span></span>"
-            f"</div>", 
-            unsafe_allow_html=True
+            f"</div>",
+            unsafe_allow_html=True,
         )
     with col_p3:
         st.markdown(
             f"<div style='{css_contenedor_col}'>"
             f"<span style='{css_titulo_col}'>VPV<sub>CDS</sub></span>"
             f"<span style='{css_valor_col}'>{vpv_total:.6f}</span>"
-            f"</div>", 
-            unsafe_allow_html=True
+            f"</div>",
+            unsafe_allow_html=True,
         )
     with col_p4:
         st.markdown(
             f"<div style='{css_contenedor_col}'>"
             f"<span style='{css_titulo_col}'>Pata Fija Total</span>"
             f"<span style='{css_valor_col}'>{vpc_total + vppp_total:.6f} &times; <span style='{math_style}'>s</span></span>"
-            f"</div>", 
-            unsafe_allow_html=True
+            f"</div>",
+            unsafe_allow_html=True,
         )
 
     separador()
@@ -459,29 +510,29 @@ with tab_prima:
         themed_success(
             f"<div style='{css_contenedor}'>"
             f"<span style='{css_titulo}'>Prima CDS (<span style='{math_style}'>s</span>)</span>"
-            f"<span style='{css_valor}'>{s_prima*100:.4f}% &nbsp;=&nbsp; {s_pb:.1f} pb</span>"
+            f"<span style='{css_valor}'>{s_prima * 100:.4f}% &nbsp;=&nbsp; {s_pb:.1f} pb</span>"
             f"</div>"
         )
     with col_s2:
         themed_info(
             f"Es decir, la prima anual del CDS sería de <b>{round(s_pb)} puntos base</b>. "
-            f"El comprador paga <b>{s_prima*100:.4f}%</b> del nocional cada año a cambio de "
+            f"El comprador paga <b>{s_prima * 100:.4f}%</b> del nocional cada año a cambio de "
             f"protección ante el incumplimiento del emisor de referencia."
         )
 
     with paso_a_paso("Ver desarrollo — Prima s"):
-        st.latex(r"s = \frac{\text{VPV}_{\text{CDS}}}{\text{VPC}_{\text{CDS}} + \text{VPPP}_{\text{CDS}}}")
+        st.latex(
+            r"s = \frac{\text{VPV}_{\text{CDS}}}{\text{VPC}_{\text{CDS}} + \text{VPPP}_{\text{CDS}}}"
+        )
         st.latex(
             rf"s = \frac{{{vpv_total:.6f}}}{{{vpc_total:.6f} + {vppp_total:.6f}}}"
             rf" = \frac{{{vpv_total:.6f}}}{{{vpc_total + vppp_total:.6f}}}"
             rf" = {s_prima:.6f}"
         )
-        st.latex(
-            rf"s = {s_prima*100:.4f}\% = {s_pb:.2f} \text{{ puntos base}}"
-        )
+        st.latex(rf"s = {s_prima * 100:.4f}\% = {s_pb:.2f} \text{{ puntos base}}")
         themed_success(
             f"<div style='{css_paso}'>"
-            f"<span style='{math_style}'>s</span> = {s_prima*100:.4f}% = <b>{round(s_pb, 1)} pb</b>"
+            f"<span style='{math_style}'>s</span> = {s_prima * 100:.4f}% = <b>{round(s_pb, 1)} pb</b>"
             f"</div>"
         )
 
@@ -511,16 +562,22 @@ with tab_mtm:
     with col_m1:
         s0_pb = st.number_input(
             "s₀ — Prima original del CDS (puntos base)",
-            min_value=0.0, value=15.0, step=0.5, format="%.1f",
+            min_value=0.0,
+            value=15.0,
+            step=0.5,
+            format="%.1f",
             key="cds_s0",
-            help="La prima en puntos base a la que se emitió originalmente el CDS."
+            help="La prima en puntos base a la que se emitió originalmente el CDS.",
         )
     with col_m2:
         s1_pb = st.number_input(
             "s₁ — Prima actual de mercado (puntos base)",
-            min_value=0.0, value=float(round(s_pb, 1)), step=0.5, format="%.1f",
+            min_value=0.0,
+            value=float(round(s_pb, 1)),
+            step=0.5,
+            format="%.1f",
             key="cds_s1",
-            help="La prima CDS que cotiza actualmente el mercado para el mismo riesgo."
+            help="La prima CDS que cotiza actualmente el mercado para el mismo riesgo.",
         )
 
     separador()
@@ -529,35 +586,35 @@ with tab_mtm:
     s1 = s1_pb / 10_000
 
     pata_fija = vpc_total + vppp_total
-    vpc_s0    = pata_fija * s0
-    vpc_s1    = pata_fija * s1
-    mtm       = (s1 - s0) * pata_fija
+    vpc_s0 = pata_fija * s0
+    vpc_s1 = pata_fija * s1
+    mtm = (s1 - s0) * pata_fija
 
     col_mt1, col_mt2, col_mt3 = st.columns(3)
-    
+
     with col_mt1:
         st.markdown(
             f"<div style='{css_contenedor_col}'>"
             f"<span style='{css_titulo_col}'>Pata Fija (&times;1)</span>"
             f"<span style='{css_valor_col}'>{pata_fija:.6f}</span>"
-            f"</div>", 
-            unsafe_allow_html=True
+            f"</div>",
+            unsafe_allow_html=True,
         )
     with col_mt2:
         st.markdown(
             f"<div style='{css_contenedor_col}'>"
             f"<span style='{css_titulo_col}'>Pata Fija con <span style='{math_style}'>s<sub>0</sub></span></span>"
             f"<span style='{css_valor_col}'>{vpc_s0:.6f}</span>"
-            f"</div>", 
-            unsafe_allow_html=True
+            f"</div>",
+            unsafe_allow_html=True,
         )
     with col_mt3:
         st.markdown(
             f"<div style='{css_contenedor_col}'>"
             f"<span style='{css_titulo_col}'>Pata Fija con <span style='{math_style}'>s<sub>1</sub></span></span>"
             f"<span style='{css_valor_col}'>{vpc_s1:.6f}</span>"
-            f"</div>", 
-            unsafe_allow_html=True
+            f"</div>",
+            unsafe_allow_html=True,
         )
 
     separador()
@@ -588,13 +645,11 @@ with tab_mtm:
         )
 
     with paso_a_paso("Ver desarrollo — MTM"):
-        st.latex(r"\text{MTM} = (s_1 - s_0) \times (\text{VPC}_{\text{CDS}} + \text{VPPP}_{\text{CDS}})")
         st.latex(
-            rf"\text{{MTM}} = ({s1:.6f} - {s0:.6f}) \times {pata_fija:.6f}"
+            r"\text{MTM} = (s_1 - s_0) \times (\text{VPC}_{\text{CDS}} + \text{VPPP}_{\text{CDS}})"
         )
-        st.latex(
-            rf"\text{{MTM}} = {s1 - s0:.6f} \times {pata_fija:.6f} = {mtm:.6f}"
-        )
+        st.latex(rf"\text{{MTM}} = ({s1:.6f} - {s0:.6f}) \times {pata_fija:.6f}")
+        st.latex(rf"\text{{MTM}} = {s1 - s0:.6f} \times {pata_fija:.6f} = {mtm:.6f}")
         if mtm >= 0:
             themed_success(f"<div style='{css_paso}'>MTM = +{mtm:.6f}</div>")
         else:
@@ -616,10 +671,12 @@ with tab_sens:
 
     separador()
 
-    tab_s1, tab_s2 = st.tabs([
-        "Spread vs Recovery Rate",
-        "Spread vs Hazard Rate",
-    ])
+    tab_s1, tab_s2 = st.tabs(
+        [
+            "Spread vs Recovery Rate",
+            "Spread vs Hazard Rate",
+        ]
+    )
 
     # ── Spread vs RR ──────────────────────────────────────────────────────────
     with tab_s1:
@@ -633,35 +690,39 @@ with tab_sens:
         rr_vals = np.linspace(0, 0.999, 200)
         spreads_rr = []
         for rr_v in rr_vals:
-            df_vpv_s  = tabla_vpv_cds(lam, r_input, int(T_input), rr_v)
+            df_vpv_s = tabla_vpv_cds(lam, r_input, int(T_input), rr_v)
             df_vppp_s = tabla_vppp_cds(lam, r_input, int(T_input))
-            df_vpc_s  = tabla_vpc_cds(lam, r_input, int(T_input))
-            vpv_s     = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
-            vppp_s    = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
-            vpc_s_v   = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
-            s_v       = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
+            df_vpc_s = tabla_vpc_cds(lam, r_input, int(T_input))
+            vpv_s = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
+            vppp_s = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
+            vpc_s_v = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
+            s_v = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
             spreads_rr.append(s_v)
 
         c_tema2 = get_current_theme()
         fig_rr = go.Figure()
-        fig_rr.add_trace(go.Scatter(
-            x=rr_vals * 100,
-            y=spreads_rr,
-            mode="lines",
-            name="Spread CDS",
-            line=dict(color=c_tema2["primary"], width=2.5),
-        ))
-        fig_rr.add_trace(go.Scatter(
-            x=[rr_input * 100],
-            y=[s_pb],
-            mode="markers",
-            name=f"RR actual = {rr_input*100:.0f}% → s = {s_pb:.1f} pb",
-            marker=dict(color=c_tema2["accent"], size=10, symbol="circle"),
-        ))
+        fig_rr.add_trace(
+            go.Scatter(
+                x=rr_vals * 100,
+                y=spreads_rr,
+                mode="lines",
+                name="Spread CDS",
+                line=dict(color=c_tema2["primary"], width=2.5),
+            )
+        )
+        fig_rr.add_trace(
+            go.Scatter(
+                x=[rr_input * 100],
+                y=[s_pb],
+                mode="markers",
+                name=f"RR actual = {rr_input * 100:.0f}% → s = {s_pb:.1f} pb",
+                marker=dict(color=c_tema2["accent"], size=10, symbol="circle"),
+            )
+        )
         fig_rr.update_layout(
             **plotly_theme(),
             title=dict(
-                text=f"Spread CDS (pb) vs Recovery Rate | λ={lam*100:.4f}% | T={int(T_input)}a | r={r_input*100:.2f}%",
+                text=f"Spread CDS (pb) vs Recovery Rate | λ={lam * 100:.4f}% | T={int(T_input)}a | r={r_input * 100:.2f}%",
                 font=dict(size=13),
             ),
             xaxis_title="Recovery Rate (%)",
@@ -677,14 +738,14 @@ with tab_sens:
         for rr_v in rr_tbl:
             if rr_v >= 1.0:
                 rr_v = 0.999
-            df_vpv_s  = tabla_vpv_cds(lam, r_input, int(T_input), rr_v)
+            df_vpv_s = tabla_vpv_cds(lam, r_input, int(T_input), rr_v)
             df_vppp_s = tabla_vppp_cds(lam, r_input, int(T_input))
-            df_vpc_s  = tabla_vpc_cds(lam, r_input, int(T_input))
-            vpv_s     = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
-            vppp_s    = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
-            vpc_s_v   = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
-            s_v_pb    = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
-            rows_tbl.append({"RR": f"{rr_v*100:.0f}%", "Spread CDS (pb)": round(s_v_pb)})
+            df_vpc_s = tabla_vpc_cds(lam, r_input, int(T_input))
+            vpv_s = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
+            vppp_s = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
+            vpc_s_v = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
+            s_v_pb = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
+            rows_tbl.append({"RR": f"{rr_v * 100:.0f}%", "Spread CDS (pb)": round(s_v_pb)})
 
         df_tbl_rr = pd.DataFrame(rows_tbl)
         rr_ref = f"{round(rr_input * 100):.0f}%"
@@ -713,34 +774,38 @@ with tab_sens:
         lam_vals = np.linspace(0.0001, 0.20, 200)
         spreads_lam = []
         for lam_v in lam_vals:
-            df_vpv_s  = tabla_vpv_cds(lam_v, r_input, int(T_input), rr_input)
+            df_vpv_s = tabla_vpv_cds(lam_v, r_input, int(T_input), rr_input)
             df_vppp_s = tabla_vppp_cds(lam_v, r_input, int(T_input))
-            df_vpc_s  = tabla_vpc_cds(lam_v, r_input, int(T_input))
-            vpv_s     = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
-            vppp_s    = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
-            vpc_s_v   = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
-            s_v_pb    = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
+            df_vpc_s = tabla_vpc_cds(lam_v, r_input, int(T_input))
+            vpv_s = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
+            vppp_s = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
+            vpc_s_v = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
+            s_v_pb = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
             spreads_lam.append(s_v_pb)
 
         fig_lam = go.Figure()
-        fig_lam.add_trace(go.Scatter(
-            x=lam_vals * 100,
-            y=spreads_lam,
-            mode="lines",
-            name="Spread CDS",
-            line=dict(color=c_tema2["success"], width=2.5),
-        ))
-        fig_lam.add_trace(go.Scatter(
-            x=[lam * 100],
-            y=[s_pb],
-            mode="markers",
-            name=f"λ actual = {lam*100:.4f}% → s = {s_pb:.1f} pb",
-            marker=dict(color=c_tema2["accent"], size=10, symbol="circle"),
-        ))
+        fig_lam.add_trace(
+            go.Scatter(
+                x=lam_vals * 100,
+                y=spreads_lam,
+                mode="lines",
+                name="Spread CDS",
+                line=dict(color=c_tema2["success"], width=2.5),
+            )
+        )
+        fig_lam.add_trace(
+            go.Scatter(
+                x=[lam * 100],
+                y=[s_pb],
+                mode="markers",
+                name=f"λ actual = {lam * 100:.4f}% → s = {s_pb:.1f} pb",
+                marker=dict(color=c_tema2["accent"], size=10, symbol="circle"),
+            )
+        )
         fig_lam.update_layout(
             **plotly_theme(),
             title=dict(
-                text=f"Spread CDS (pb) vs Hazard Rate | RR={rr_input*100:.0f}% | T={int(T_input)}a | r={r_input*100:.2f}%",
+                text=f"Spread CDS (pb) vs Hazard Rate | RR={rr_input * 100:.0f}% | T={int(T_input)}a | r={r_input * 100:.2f}%",
                 font=dict(size=13),
             ),
             xaxis_title="Hazard Rate λ (%)",
@@ -757,35 +822,37 @@ with tab_sens:
             "Las zonas oscuras (alto spread) corresponden a emisores de alto riesgo con baja recuperación."
         )
 
-        rr_hm  = np.arange(0.0, 1.0, 0.10)
+        rr_hm = np.arange(0.0, 1.0, 0.10)
         lam_hm = np.arange(0.0005, 0.051, 0.005)
-        z_hm   = []
+        z_hm = []
         for lam_v in lam_hm:
             row_hm = []
             for rr_v in rr_hm:
-                df_vpv_s  = tabla_vpv_cds(lam_v, r_input, int(T_input), rr_v)
+                df_vpv_s = tabla_vpv_cds(lam_v, r_input, int(T_input), rr_v)
                 df_vppp_s = tabla_vppp_cds(lam_v, r_input, int(T_input))
-                df_vpc_s  = tabla_vpc_cds(lam_v, r_input, int(T_input))
-                vpv_s     = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
-                vppp_s    = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
-                vpc_s_v   = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
-                s_pb_hm   = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
+                df_vpc_s = tabla_vpc_cds(lam_v, r_input, int(T_input))
+                vpv_s = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
+                vppp_s = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
+                vpc_s_v = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
+                s_pb_hm = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
                 row_hm.append(round(s_pb_hm, 1))
             z_hm.append(row_hm)
 
-        fig_hm = go.Figure(data=go.Heatmap(
-            z=z_hm,
-            x=[f"{v*100:.0f}%" for v in rr_hm],
-            y=[f"{v*100:.2f}%" for v in lam_hm],
-            colorscale="RdYlGn_r",
-            colorbar=dict(title="Spread (pb)"),
-            text=[[f"{val:.0f}" for val in row] for row in z_hm],
-            texttemplate="%{text}",
-        ))
+        fig_hm = go.Figure(
+            data=go.Heatmap(
+                z=z_hm,
+                x=[f"{v * 100:.0f}%" for v in rr_hm],
+                y=[f"{v * 100:.2f}%" for v in lam_hm],
+                colorscale="RdYlGn_r",
+                colorbar=dict(title="Spread (pb)"),
+                text=[[f"{val:.0f}" for val in row] for row in z_hm],
+                texttemplate="%{text}",
+            )
+        )
         fig_hm.update_layout(
             **plotly_theme(),
             title=dict(
-                text=f"Spread CDS (pb) | T={int(T_input)}a | r={r_input*100:.2f}%",
+                text=f"Spread CDS (pb) | T={int(T_input)}a | r={r_input * 100:.2f}%",
                 font=dict(size=13),
             ),
             xaxis_title="Recovery Rate (RR)",

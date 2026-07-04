@@ -9,7 +9,15 @@ Soporta tasas efectivas, nominales e instantáneas (continuas).
 import numpy as np
 import streamlit as st
 
-from utils import page_header, paso_a_paso, separador, themed_info, themed_success, themed_warning, themed_error
+from utils import (
+    page_header,
+    paso_a_paso,
+    separador,
+    themed_info,
+    themed_success,
+    themed_warning,
+    themed_error,
+)
 import app.domain as quact
 
 # =============================================================================
@@ -22,25 +30,27 @@ st.set_page_config(
 )
 # --- Estilos globales para métricas destacadas ---
 math_style = "font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: normal; padding: 0 2px;"
-css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;" # ¡Actualizado a 20px!
+css_titulo = "font-size: 20px; opacity: 0.85; font-weight: 500;"  # ¡Actualizado a 20px!
 css_valor = "font-size: 28px; font-weight: bold;"
 css_contenedor = "display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 12px 0;"
 css_paso = "text-align: center; font-size: 22px; font-weight: bold; padding: 4px 0; margin: 0;"
 
 page_header(
     titulo="2. Valor del Dinero en el Tiempo",
-    subtitulo="Interés compuesto · VP · VF · Tasa de rendimiento · Número de periodos"
+    subtitulo="Interés compuesto · VP · VF · Tasa de rendimiento · Número de periodos",
 )
 
 # =============================================================================
 # PESTAÑAS PRINCIPALES
 # =============================================================================
-t1, t2, t3, t4 = st.tabs([
-    "Valor Futuro",
-    "Valor Presente",
-    "Número de Periodos",
-    "Tasa de Rendimiento",
-])
+t1, t2, t3, t4 = st.tabs(
+    [
+        "Valor Futuro",
+        "Valor Presente",
+        "Número de Periodos",
+        "Tasa de Rendimiento",
+    ]
+)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # TAB 1: VALOR FUTURO
@@ -65,11 +75,20 @@ with t1:
     # ── Efectiva ──────────────────────────────────────────
     if escenario_vf == "Tasa efectiva":
         with c1:
-            C0_vf = st.number_input("Capital Inicial ($C_0$)", min_value=0.0, value=20_000.0, step=1_000.0, key="vf_c0_1")
-            i_vf  = st.number_input("Tasa efectiva anual ($i$) %", value=6.8, step=0.1, key="vf_i") / 100
-            n_vf  = st.number_input("Años ($n$)", min_value=0.0, value=6.0, step=1.0, key="vf_n")
-        
-        vf_res     = quact.valor_futuro(C0_vf, i_vf, n_vf)
+            C0_vf = st.number_input(
+                "Capital Inicial ($C_0$)",
+                min_value=0.0,
+                value=20_000.0,
+                step=1_000.0,
+                key="vf_c0_1",
+            )
+            i_vf = (
+                st.number_input("Tasa efectiva anual ($i$) %", value=6.8, step=0.1, key="vf_i")
+                / 100
+            )
+            n_vf = st.number_input("Años ($n$)", min_value=0.0, value=6.0, step=1.0, key="vf_n")
+
+        vf_res = quact.valor_futuro(C0_vf, i_vf, n_vf)
         formula_vf = r"VF = C_0 (1+i)^n"
 
         with c2:
@@ -84,20 +103,33 @@ with t1:
         with paso_a_paso():
             st.latex(formula_vf)
             st.latex(rf"VF = {C0_vf:,.2f} (1 + {i_vf:.4f})^{{{n_vf:g}}}")
-            st.latex(rf"VF = {C0_vf:,.2f} ({(1+i_vf)**n_vf:.6f})")
+            st.latex(rf"VF = {C0_vf:,.2f} ({(1 + i_vf) ** n_vf:.6f})")
             themed_success(f"<div style='{css_paso}'>VF = ${vf_res:,.2f}</div>")
 
     # ── Nominal ───────────────────────────────────────────
     elif escenario_vf == "Tasa nominal":
         with c1:
-            C0_vf    = st.number_input("Capital Inicial ($C_0$)", min_value=0.0, value=54_000.0, step=1_000.0, key="vf_c0_2")
-            i_nom_vf = st.number_input("Tasa nominal anual ($i^{(m)}$) %", value=11.25, step=0.1, key="vf_inom") / 100
-            n_vf2    = st.number_input("Años ($n$)", min_value=0.0, value=8.0, step=1.0, key="vf_n2")
-            m_vf     = st.number_input("Periodos por año ($m$)", min_value=1.0, value=4.0, step=1.0, key="vf_m")
+            C0_vf = st.number_input(
+                "Capital Inicial ($C_0$)",
+                min_value=0.0,
+                value=54_000.0,
+                step=1_000.0,
+                key="vf_c0_2",
+            )
+            i_nom_vf = (
+                st.number_input(
+                    "Tasa nominal anual ($i^{(m)}$) %", value=11.25, step=0.1, key="vf_inom"
+                )
+                / 100
+            )
+            n_vf2 = st.number_input("Años ($n$)", min_value=0.0, value=8.0, step=1.0, key="vf_n2")
+            m_vf = st.number_input(
+                "Periodos por año ($m$)", min_value=1.0, value=4.0, step=1.0, key="vf_m"
+            )
 
-        im_vf      = i_nom_vf / m_vf
-        nm_vf      = n_vf2 * m_vf
-        vf_res     = quact.valor_futuro(C0_vf, im_vf, nm_vf)
+        im_vf = i_nom_vf / m_vf
+        nm_vf = n_vf2 * m_vf
+        vf_res = quact.valor_futuro(C0_vf, im_vf, nm_vf)
         formula_vf = r"VF = C_0 \left(1+\frac{i^{(m)}}{m}\right)^{nm}"
 
         with c2:
@@ -111,19 +143,30 @@ with t1:
 
         with paso_a_paso():
             st.latex(formula_vf)
-            st.latex(rf"VF = {C0_vf:,.2f} \left(1 + \frac{{{i_nom_vf:.4f}}}{{{m_vf:g}}}\right)^{{{n_vf2:g} \times {m_vf:g}}}")
+            st.latex(
+                rf"VF = {C0_vf:,.2f} \left(1 + \frac{{{i_nom_vf:.4f}}}{{{m_vf:g}}}\right)^{{{n_vf2:g} \times {m_vf:g}}}"
+            )
             st.latex(rf"VF = {C0_vf:,.2f} (1 + {im_vf:.6f})^{{{nm_vf:g}}}")
-            st.latex(rf"VF = {C0_vf:,.2f} ({(1+im_vf)**nm_vf:.6f})")
+            st.latex(rf"VF = {C0_vf:,.2f} ({(1 + im_vf) ** nm_vf:.6f})")
             themed_success(f"<div style='{css_paso}'>VF = ${vf_res:,.2f}</div>")
 
     # ── Instantánea ───────────────────────────────────────
     else:
         with c1:
-            C0_vf = st.number_input("Capital Inicial ($C_0$)", min_value=0.0, value=20_000.0, step=1_000.0, key="vf_c0_3")
-            d_vf  = st.number_input("Tasa instantánea ($\\delta$) %", value=5.0, step=0.1, key="vf_d") / 100
+            C0_vf = st.number_input(
+                "Capital Inicial ($C_0$)",
+                min_value=0.0,
+                value=20_000.0,
+                step=1_000.0,
+                key="vf_c0_3",
+            )
+            d_vf = (
+                st.number_input("Tasa instantánea ($\\delta$) %", value=5.0, step=0.1, key="vf_d")
+                / 100
+            )
             n_vf3 = st.number_input("Años ($n$)", min_value=0.0, value=10.0, step=1.0, key="vf_n3")
 
-        vf_res     = quact.valor_futuro_continuo(C0_vf, d_vf, n_vf3)
+        vf_res = quact.valor_futuro_continuo(C0_vf, d_vf, n_vf3)
         formula_vf = r"VF = C_0 e^{\delta n}"
 
         with c2:
@@ -138,8 +181,8 @@ with t1:
         with paso_a_paso():
             st.latex(formula_vf)
             st.latex(rf"VF = {C0_vf:,.2f} e^{{({d_vf:.4f})({n_vf3:g})}}")
-            st.latex(rf"VF = {C0_vf:,.2f} e^{{{d_vf*n_vf3:.6f}}}")
-            st.latex(rf"VF = {C0_vf:,.2f} ({np.exp(d_vf*n_vf3):.6f})")
+            st.latex(rf"VF = {C0_vf:,.2f} e^{{{d_vf * n_vf3:.6f}}}")
+            st.latex(rf"VF = {C0_vf:,.2f} ({np.exp(d_vf * n_vf3):.6f})")
             themed_success(f"<div style='{css_paso}'>VF = ${vf_res:,.2f}</div>")
 
 
@@ -167,11 +210,16 @@ with t2:
     # ── Efectiva ──────────────────────────────────────────
     if escenario_vp == "Tasa efectiva":
         with c1:
-            Cn_vp = st.number_input("Valor Futuro ($C_n$)", min_value=0.0, value=245_000.0, step=1_000.0, key="vp_cn_1")
-            i_vp  = st.number_input("Tasa efectiva anual ($i$) %", value=11.2, step=0.1, key="vp_i") / 100
-            n_vp  = st.number_input("Años ($n$)", min_value=0.0, value=9.0, step=1.0, key="vp_n")
+            Cn_vp = st.number_input(
+                "Valor Futuro ($C_n$)", min_value=0.0, value=245_000.0, step=1_000.0, key="vp_cn_1"
+            )
+            i_vp = (
+                st.number_input("Tasa efectiva anual ($i$) %", value=11.2, step=0.1, key="vp_i")
+                / 100
+            )
+            n_vp = st.number_input("Años ($n$)", min_value=0.0, value=9.0, step=1.0, key="vp_n")
 
-        vp_res     = quact.valor_presente(Cn_vp, i_vp, n_vp)
+        vp_res = quact.valor_presente(Cn_vp, i_vp, n_vp)
         formula_vp = r"VP = C_n (1+i)^{-n}"
 
         with c2:
@@ -186,20 +234,29 @@ with t2:
         with paso_a_paso():
             st.latex(formula_vp)
             st.latex(rf"VP = {Cn_vp:,.2f} (1 + {i_vp:.4f})^{{-{n_vp:g}}}")
-            st.latex(rf"VP = {Cn_vp:,.2f} ({(1+i_vp)**(-n_vp):.6f})")
+            st.latex(rf"VP = {Cn_vp:,.2f} ({(1 + i_vp) ** (-n_vp):.6f})")
             themed_info(f"<div style='{css_paso}'>VP = ${vp_res:,.2f}</div>")
 
     # ── Nominal ───────────────────────────────────────────
     elif escenario_vp == "Tasa nominal":
         with c1:
-            Cn_vp    = st.number_input("Valor Futuro ($C_n$)", min_value=0.0, value=1_000.0, step=100.0, key="vp_cn_2")
-            i_nom_vp = st.number_input("Tasa nominal anual ($i^{(m)}$) %", value=10.0, step=0.1, key="vp_inom") / 100
-            n_vp2    = st.number_input("Años ($n$)", min_value=0.0, value=10.0, step=1.0, key="vp_n2")
-            m_vp     = st.number_input("Periodos por año ($m$)", min_value=1.0, value=2.0, step=1.0, key="vp_m")
+            Cn_vp = st.number_input(
+                "Valor Futuro ($C_n$)", min_value=0.0, value=1_000.0, step=100.0, key="vp_cn_2"
+            )
+            i_nom_vp = (
+                st.number_input(
+                    "Tasa nominal anual ($i^{(m)}$) %", value=10.0, step=0.1, key="vp_inom"
+                )
+                / 100
+            )
+            n_vp2 = st.number_input("Años ($n$)", min_value=0.0, value=10.0, step=1.0, key="vp_n2")
+            m_vp = st.number_input(
+                "Periodos por año ($m$)", min_value=1.0, value=2.0, step=1.0, key="vp_m"
+            )
 
-        im_vp      = i_nom_vp / m_vp
-        nm_vp      = n_vp2 * m_vp
-        vp_res     = quact.valor_presente(Cn_vp, im_vp, nm_vp)
+        im_vp = i_nom_vp / m_vp
+        nm_vp = n_vp2 * m_vp
+        vp_res = quact.valor_presente(Cn_vp, im_vp, nm_vp)
         formula_vp = r"VP = C_n \left(1+\frac{i^{(m)}}{m}\right)^{-nm}"
 
         with c2:
@@ -213,19 +270,26 @@ with t2:
 
         with paso_a_paso():
             st.latex(formula_vp)
-            st.latex(rf"VP = {Cn_vp:,.2f} \left(1 + \frac{{{i_nom_vp:.4f}}}{{{m_vp:g}}}\right)^{{-({n_vp2:g} \times {m_vp:g})}}")
+            st.latex(
+                rf"VP = {Cn_vp:,.2f} \left(1 + \frac{{{i_nom_vp:.4f}}}{{{m_vp:g}}}\right)^{{-({n_vp2:g} \times {m_vp:g})}}"
+            )
             st.latex(rf"VP = {Cn_vp:,.2f} (1 + {im_vp:.6f})^{{-{nm_vp:g}}}")
-            st.latex(rf"VP = {Cn_vp:,.2f} ({(1+im_vp)**(-nm_vp):.6f})")
+            st.latex(rf"VP = {Cn_vp:,.2f} ({(1 + im_vp) ** (-nm_vp):.6f})")
             themed_info(f"<div style='{css_paso}'>VP = ${vp_res:,.2f}</div>")
 
     # ── Instantánea ───────────────────────────────────────
     else:
         with c1:
-            Cn_vp = st.number_input("Valor Futuro ($C_n$)", min_value=0.0, value=1_000.0, step=100.0, key="vp_cn_3")
-            d_vp  = st.number_input("Tasa instantánea ($\\delta$) %", value=5.0, step=0.1, key="vp_d") / 100
+            Cn_vp = st.number_input(
+                "Valor Futuro ($C_n$)", min_value=0.0, value=1_000.0, step=100.0, key="vp_cn_3"
+            )
+            d_vp = (
+                st.number_input("Tasa instantánea ($\\delta$) %", value=5.0, step=0.1, key="vp_d")
+                / 100
+            )
             n_vp3 = st.number_input("Años ($n$)", min_value=0.0, value=10.0, step=1.0, key="vp_n3")
 
-        vp_res     = quact.valor_presente_continuo(Cn_vp, d_vp, n_vp3)
+        vp_res = quact.valor_presente_continuo(Cn_vp, d_vp, n_vp3)
         formula_vp = r"VP = C_n e^{-\delta n}"
 
         with c2:
@@ -240,8 +304,8 @@ with t2:
         with paso_a_paso():
             st.latex(formula_vp)
             st.latex(rf"VP = {Cn_vp:,.2f} e^{{-({d_vp:.4f})({n_vp3:g})}}")
-            st.latex(rf"VP = {Cn_vp:,.2f} e^{{-{d_vp*n_vp3:.6f}}}")
-            st.latex(rf"VP = {Cn_vp:,.2f} ({np.exp(-d_vp*n_vp3):.6f})")
+            st.latex(rf"VP = {Cn_vp:,.2f} e^{{-{d_vp * n_vp3:.6f}}}")
+            st.latex(rf"VP = {Cn_vp:,.2f} ({np.exp(-d_vp * n_vp3):.6f})")
             themed_info(f"<div style='{css_paso}'>VP = ${vp_res:,.2f}</div>")
 
 
@@ -258,9 +322,18 @@ with t3:
     c1, c2 = st.columns(2)
 
     with c1:
-        va_nper = st.number_input("Valor Inicial ($C_0$)", min_value=0.01, value=50_000.0, step=1_000.0, key="nper_va")
-        vf_nper = st.number_input("Valor Final ($C_n$)",   min_value=0.01, value=245_000.0, step=1_000.0, key="nper_vf")
-        i_nper  = st.number_input("Tasa Efectiva ($i$) %", min_value=0.0001, value=4.3, step=0.1, key="nper_i") / 100
+        va_nper = st.number_input(
+            "Valor Inicial ($C_0$)", min_value=0.01, value=50_000.0, step=1_000.0, key="nper_va"
+        )
+        vf_nper = st.number_input(
+            "Valor Final ($C_n$)", min_value=0.01, value=245_000.0, step=1_000.0, key="nper_vf"
+        )
+        i_nper = (
+            st.number_input(
+                "Tasa Efectiva ($i$) %", min_value=0.0001, value=4.3, step=0.1, key="nper_i"
+            )
+            / 100
+        )
 
     with c2:
         n_res = quact.numero_periodos(va_nper, vf_nper, i_nper)
@@ -280,25 +353,29 @@ with t3:
         st.write("---")
 
         ratio = vf_nper / va_nper
-        num   = np.log(ratio)
-        den   = np.log(1 + i_nper)
+        num = np.log(ratio)
+        den = np.log(1 + i_nper)
 
         st.latex(rf"n = \frac{{\ln({vf_nper:,.2f} / {va_nper:,.2f})}}{{\ln(1 + {i_nper:.4f})}}")
-        st.latex(rf"n = \frac{{\ln({ratio:.6f})}}{{\ln({1+i_nper:.6f})}}")
+        st.latex(rf"n = \frac{{\ln({ratio:.6f})}}{{\ln({1 + i_nper:.6f})}}")
         st.latex(rf"n = \frac{{{num:.6f}}}{{{den:.6f}}}")
-        themed_info(f"<div style='{css_paso}'><span style='{math_style}'>n</span> = {n_res:.5f} periodos</div>")
+        themed_info(
+            f"<div style='{css_paso}'><span style='{math_style}'>n</span> = {n_res:.5f} periodos</div>"
+        )
 
     # Desglose del tiempo exacto
     separador()
     st.markdown("#### Desglose temporal exacto")
     df_desglose = quact.desglosar_periodos(n_res)
     st.dataframe(
-        df_desglose.style.set_properties(**{
-            "background-color": "#F3F4F6",
-            "color":            "#1E3A8A",
-            "font-weight":      "bold",
-            "text-align":       "center",
-        }),
+        df_desglose.style.set_properties(
+            **{
+                "background-color": "#F3F4F6",
+                "color": "#1E3A8A",
+                "font-weight": "bold",
+                "text-align": "center",
+            }
+        ),
         use_container_width=True,
         hide_index=True,
     )
@@ -317,16 +394,22 @@ with t4:
     c1, c2 = st.columns(2)
 
     with c1:
-        va_rate = st.number_input("Valor Inicial ($C_0$)", min_value=0.01, value=4_582_500.0, step=1_000.0, key="rate_va")
-        vf_rate = st.number_input("Valor Final ($C_n$)",   min_value=0.01, value=9_360_000.0, step=1_000.0, key="rate_vf")
-        n_rate  = st.number_input("Periodos ($n$)",        min_value=0.1, value=10.0, step=1.0, key="rate_n")
+        va_rate = st.number_input(
+            "Valor Inicial ($C_0$)", min_value=0.01, value=4_582_500.0, step=1_000.0, key="rate_va"
+        )
+        vf_rate = st.number_input(
+            "Valor Final ($C_n$)", min_value=0.01, value=9_360_000.0, step=1_000.0, key="rate_vf"
+        )
+        n_rate = st.number_input(
+            "Periodos ($n$)", min_value=0.1, value=10.0, step=1.0, key="rate_n"
+        )
 
     with c2:
         i_res = quact.tasa_rendimiento(va_rate, vf_rate, n_rate)
         themed_success(
             f"<div style='{css_contenedor}'>"
             f"<span style='{css_titulo}'>Tasa de Rendimiento (<span style='{math_style}'>i</span>)</span>"
-            f"<span style='{css_valor}'>{i_res*100:.4f}%</span>"
+            f"<span style='{css_valor}'>{i_res * 100:.4f}%</span>"
             f"</div>"
         )
         st.latex(r"i = \left(\frac{C_n}{C_0}\right)^{\frac{1}{n}} - 1")
@@ -338,10 +421,14 @@ with t4:
         st.latex(r"i = \left(\frac{C_n}{C_0}\right)^{\frac{1}{n}} - 1")
         st.write("---")
 
-        ratio   = vf_rate / va_rate
+        ratio = vf_rate / va_rate
         exp_val = 1 / n_rate
 
-        st.latex(rf"i = \left(\frac{{{vf_rate:,.2f}}}{{{va_rate:,.2f}}}\right)^{{\frac{{1}}{{{n_rate:g}}}}} - 1")
+        st.latex(
+            rf"i = \left(\frac{{{vf_rate:,.2f}}}{{{va_rate:,.2f}}}\right)^{{\frac{{1}}{{{n_rate:g}}}}} - 1"
+        )
         st.latex(rf"i = ({ratio:.6f})^{{{exp_val:.6f}}} - 1")
         st.latex(rf"i = {ratio**exp_val:.6f} - 1")
-        themed_success(f"<div style='{css_paso}'><span style='{math_style}'>i</span> = {i_res*100:.4f}% por periodo</div>")
+        themed_success(
+            f"<div style='{css_paso}'><span style='{math_style}'>i</span> = {i_res * 100:.4f}% por periodo</div>"
+        )

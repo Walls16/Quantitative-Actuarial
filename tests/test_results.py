@@ -23,11 +23,7 @@ def saved_results() -> dict[str, Any]:
 
 
 def public_function_names() -> set[str]:
-    return {
-        name
-        for name in quact.__all__
-        if inspect.isfunction(getattr(quact, name, None))
-    }
+    return {name for name in quact.__all__ if inspect.isfunction(getattr(quact, name, None))}
 
 
 def normalize_result(value: Any) -> Any:
@@ -39,6 +35,9 @@ def normalize_result(value: Any) -> Any:
 
     if isinstance(value, pd.Series):
         return normalize_result(value.to_dict())
+
+    if isinstance(value, pd.Timestamp):
+        return value.isoformat()
 
     if isinstance(value, np.ndarray):
         return normalize_result(value.tolist())
@@ -93,4 +92,3 @@ def test_every_public_function_has_a_saved_result_case() -> None:
 def test_function_matches_saved_result(function_name: str, saved_results: dict[str, Any]) -> None:
     actual = normalize_result(CASES[function_name]())
     assert_matches_saved_result(actual, saved_results[function_name])
-

@@ -6,7 +6,13 @@ import numpy as np
 from scipy.stats import norm
 
 
-def calcular_var_parametrico(rend_anual: float, vol_anual: float, valor_portafolio: float, nivel_confianza: float, dias_horizonte: int | float) -> tuple[float, float, float, float]:
+def calcular_var_parametrico(
+    rend_anual: float,
+    vol_anual: float,
+    valor_portafolio: float,
+    nivel_confianza: float,
+    dias_horizonte: int | float,
+) -> tuple[float, float, float, float]:
     t = dias_horizonte / 252.0
     rend_periodo = rend_anual * t
     vol_periodo = vol_anual * np.sqrt(t)
@@ -15,7 +21,15 @@ def calcular_var_parametrico(rend_anual: float, vol_anual: float, valor_portafol
     return max(var_monto, 0), z_score, rend_periodo, vol_periodo
 
 
-def calcular_var_cvar_montecarlo(rend_anual: float, vol_anual: float, valor_portafolio: float, nivel_confianza: float, dias_horizonte: int | float, simulaciones: int = 10000, seed: int = 42) -> tuple[float, float]:
+def calcular_var_cvar_montecarlo(
+    rend_anual: float,
+    vol_anual: float,
+    valor_portafolio: float,
+    nivel_confianza: float,
+    dias_horizonte: int | float,
+    simulaciones: int = 10000,
+    seed: int = 42,
+) -> tuple[float, float]:
     t = dias_horizonte / 252.0
     rend_periodo = rend_anual * t
     vol_periodo = vol_anual * np.sqrt(t)
@@ -33,5 +47,6 @@ def calcular_var_cvar_montecarlo(rend_anual: float, vol_anual: float, valor_port
     cvar_alpha = cola.mean() if len(cola) > 0 else q_alpha
 
     return max(-q_alpha * valor_portafolio, 0), max(-cvar_alpha * valor_portafolio, 0)
+
 
 __all__ = ["calcular_var_parametrico", "calcular_var_cvar_montecarlo"]

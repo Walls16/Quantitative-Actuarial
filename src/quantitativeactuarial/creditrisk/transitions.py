@@ -7,8 +7,9 @@ import numpy as np
 from .data import RATINGS_EMIT, _TM_RAW_17x19
 
 
-def build_transition_matrix(raw_17x19: np.ndarray | None = None,
-                             nr_treatment: str = "redistribute") -> np.ndarray:
+def build_transition_matrix(
+    raw_17x19: np.ndarray | None = None, nr_treatment: str = "redistribute"
+) -> np.ndarray:
     """
     Construye la matriz de transición de trabajo a partir de la raw 17x19.
 
@@ -26,12 +27,12 @@ def build_transition_matrix(raw_17x19: np.ndarray | None = None,
     if raw_17x19 is None:
         raw_17x19 = _TM_RAW_17x19.copy()
 
-    raw = raw_17x19.astype(float).copy()   # (17, 19)
+    raw = raw_17x19.astype(float).copy()  # (17, 19)
 
     # Separar columnas: 0..16=AAA..CCC/C, 17=D, 18=NR
-    rated_probs = raw[:, :17]   # AAA..CCC/C  (17 cols)
-    d_probs     = raw[:, 17]    # D
-    nr_probs    = raw[:, 18]    # NR
+    rated_probs = raw[:, :17]  # AAA..CCC/C  (17 cols)
+    d_probs = raw[:, 17]  # D
+    nr_probs = raw[:, 18]  # NR
 
     if nr_treatment == "raw_with_d":
         # Probabilidades S&P crudas, columnas AAA..D (18 destinos), SIN NR.
@@ -39,8 +40,9 @@ def build_transition_matrix(raw_17x19: np.ndarray | None = None,
         # Este es el modo clásico de los libros de texto / ejercicios de CreditMetrics.
         # Devuelve (18, 18): filas 0..16 suman < 1;  fila D = estado absorbente.
         raw18 = np.column_stack([rated_probs, d_probs])  # (17, 18)
-        d_row = np.zeros(18); d_row[-1] = 1.0
-        return np.vstack([raw18, d_row])   # (18, 18)
+        d_row = np.zeros(18)
+        d_row[-1] = 1.0
+        return np.vstack([raw18, d_row])  # (18, 18)
 
     elif nr_treatment == "redistribute":
         # Redistribuir NR proporcionalmente entre los 18 estados (AAA..CCC/C + D)
@@ -49,26 +51,29 @@ def build_transition_matrix(raw_17x19: np.ndarray | None = None,
         sums_rated_d[sums_rated_d == 0] = 1.0
         adjusted = rated_plus_d + nr_probs[:, None] * (rated_plus_d / sums_rated_d)
         # Normalize to sum exactly 1
-        rs = adjusted.sum(axis=1, keepdims=True); rs[rs==0] = 1.0
-        adjusted = adjusted / rs   # (17, 18)
-        d_row = np.zeros(18); d_row[-1] = 1.0
-        return np.vstack([adjusted, d_row])   # (18, 18)
+        rs = adjusted.sum(axis=1, keepdims=True)
+        rs[rs == 0] = 1.0
+        adjusted = adjusted / rs  # (17, 18)
+        d_row = np.zeros(18)
+        d_row[-1] = 1.0
+        return np.vstack([adjusted, d_row])  # (18, 18)
 
     elif nr_treatment == "simple_normalize":
         # Descartar NR, renormalizar (AAA..D) a 1 via escala simple
         rated_plus_d = np.column_stack([rated_probs, d_probs])  # (17, 18)
         sums = rated_plus_d.sum(axis=1, keepdims=True)
         sums[sums == 0] = 1.0
-        adjusted = rated_plus_d / sums   # (17, 18)
-        d_row = np.zeros(18); d_row[-1] = 1.0
-        return np.vstack([adjusted, d_row])   # (18, 18)
+        adjusted = rated_plus_d / sums  # (17, 18)
+        d_row = np.zeros(18)
+        d_row[-1] = 1.0
+        return np.vstack([adjusted, d_row])  # (18, 18)
 
     else:  # 'raw_no_d_nr'
         # Usar AAA..CCC/C tal como son, sin D, sin NR, sin normalizar
         # Retorna (17, 17) — coherente para ejercicios de clase
         # NOTA: las filas suman < 1 porque NR y D están excluidos
         # En este modo se asume que el residuo "desaparece" (no default, no NR)
-        return rated_probs.copy()   # (17, 17)
+        return rated_probs.copy()  # (17, 17)
 
 
 DEFAULT_TM = build_transition_matrix()

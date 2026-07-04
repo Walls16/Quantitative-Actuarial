@@ -6,7 +6,9 @@ import numpy as np
 from scipy.optimize import root_scalar
 
 
-def precio_bono(F: float, r_m: float, C: float, i_m: float, n: int) -> tuple[float, float, float, float]:
+def precio_bono(
+    F: float, r_m: float, C: float, i_m: float, n: int
+) -> tuple[float, float, float, float]:
     cupon_Fr = F * r_m
 
     if i_m == 0:
@@ -28,13 +30,15 @@ def tasa_rendimiento_bono(P: float, F: float, r_m: float, C: float, n: int) -> f
         return precio_calc - P
 
     try:
-        res = root_scalar(f, bracket=[-0.99, 10.0], method='brentq')
+        res = root_scalar(f, bracket=[-0.99, 10.0], method="brentq")
         return res.root
     except Exception:
         return np.nan
 
 
-def riesgo_bono(F: float, r_periodo: float, C: float, i_periodo: float, n_periodos: int, m: int | float) -> tuple[float, float, float]:
+def riesgo_bono(
+    F: float, r_periodo: float, C: float, i_periodo: float, n_periodos: int, m: int | float
+) -> tuple[float, float, float]:
     cupon = F * r_periodo
     precio = 0.0
     sum_mac = 0.0
@@ -50,8 +54,9 @@ def riesgo_bono(F: float, r_periodo: float, C: float, i_periodo: float, n_period
     mac_duration_periodos = sum_mac / precio
     mac_duration_anios = mac_duration_periodos / m
     mod_duration_anios = mac_duration_anios / (1 + i_periodo)
-    convexity_anios = sum_conv / (precio * (m ** 2) * ((1 + i_periodo) ** 2))
+    convexity_anios = sum_conv / (precio * (m**2) * ((1 + i_periodo) ** 2))
 
     return mac_duration_anios, mod_duration_anios, convexity_anios
+
 
 __all__ = ["precio_bono", "tasa_rendimiento_bono", "riesgo_bono"]

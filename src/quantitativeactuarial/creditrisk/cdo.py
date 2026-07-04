@@ -20,7 +20,9 @@ def log_binomial_coefficient(n: int, k: int) -> float:
     return float(gammaln(n + 1) - gammaln(k + 1) - gammaln(n - k + 1))
 
 
-def conditional_default_probability(t: float, hazard_rate: float, rho: float, factor: np.ndarray) -> np.ndarray:
+def conditional_default_probability(
+    t: float, hazard_rate: float, rho: float, factor: np.ndarray
+) -> np.ndarray:
     """
     Compute Hull one-factor conditional default probability.
 

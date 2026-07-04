@@ -27,7 +27,7 @@ from quantitativeactuarial.credito import (
     bond_values_per_rating,
     independent_distribution,
     var_cvar_from_distribution,
-    var_cvar_parametric,             # ← VaR Normal (coincide con Excel)
+    var_cvar_parametric,  # ← VaR Normal (coincide con Excel)
     var_cvar_from_simulations,
     scale_var_cvar,
     gaussian_copula_simulation,
@@ -37,9 +37,17 @@ from quantitativeactuarial.credito import (
     TRADING_DAYS,
 )
 from utils import (
-    page_header, paso_a_paso, separador,
-    themed_info, themed_success, themed_warning, themed_error,
-    plotly_theme, plotly_colors, get_current_theme, plotly_color,
+    page_header,
+    paso_a_paso,
+    separador,
+    themed_info,
+    themed_success,
+    themed_warning,
+    themed_error,
+    plotly_theme,
+    plotly_colors,
+    get_current_theme,
+    plotly_color,
 )
 import app.domain as quact
 
@@ -60,21 +68,25 @@ css_paso = "text-align: center; font-size: 22px; font-weight: bold; padding: 4px
 
 # Variante para columnas estrechas (CreditMetrics)
 css_contenedor_col = "display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; padding: 8px 0;"
-css_titulo_col = "font-size: 16px; opacity: 0.85; font-weight: 500; margin-bottom: 4px; text-align: center;"
+css_titulo_col = (
+    "font-size: 16px; opacity: 0.85; font-weight: 500; margin-bottom: 4px; text-align: center;"
+)
 css_valor_col = "font-size: 24px; font-weight: bold; text-align: center;"
 
 page_header(
     titulo="9. Análisis de Riesgo",
-    subtitulo="Portafolios de Acciones (VaR/CVaR) · CreditMetrics para Bonos Corporativos"
+    subtitulo="Portafolios de Acciones (VaR/CVaR) · CreditMetrics para Bonos Corporativos",
 )
 
 # =============================================================================
 # TABS PRINCIPALES
 # =============================================================================
-tab_port, tab_cm = st.tabs([
-    "Riesgo de Portafolios (Acciones)",
-    "CreditMetrics — Riesgo de Bonos",
-])
+tab_port, tab_cm = st.tabs(
+    [
+        "Riesgo de Portafolios (Acciones)",
+        "CreditMetrics — Riesgo de Bonos",
+    ]
+)
 
 # ══════════════════════════════════════════════════════════════════════════════
 # TAB 1 — RIESGO DE PORTAFOLIOS (ACCIONES)
@@ -97,7 +109,8 @@ with tab_port:
         c1, c2 = st.columns([2, 1])
         with c1:
             tickers_str = st.text_input(
-                "Símbolos (separados por coma):", value="AAPL, MSFT, META",
+                "Símbolos (separados por coma):",
+                value="AAPL, MSFT, META",
                 help="Ejemplos: AAPL, CEMEXCPO.MX, SPY, AMZN",
             )
         with c2:
@@ -111,21 +124,27 @@ with tab_port:
     separador()
 
     st.markdown("#### Asignar Ponderaciones Manuales")
-    st.caption("Haz clic en las celdas de la columna **Peso (%)** para ajustar qué porcentaje de tu capital va a cada acción.")
+    st.caption(
+        "Haz clic en las celdas de la columna **Peso (%)** para ajustar qué porcentaje de tu capital va a cada acción."
+    )
 
     if len(tickers_list) > 0:
         peso_eq = round(100.0 / len(tickers_list), 4)
-        df_pesos_ini = pd.DataFrame({
-            "Ticker":   tickers_list,
-            "Peso (%)": [peso_eq] * len(tickers_list),
-        })
+        df_pesos_ini = pd.DataFrame(
+            {
+                "Ticker": tickers_list,
+                "Peso (%)": [peso_eq] * len(tickers_list),
+            }
+        )
         df_pesos_editado = st.data_editor(
-            df_pesos_ini, hide_index=True, use_container_width=True,
+            df_pesos_ini,
+            hide_index=True,
+            use_container_width=True,
             column_config={
-                "Ticker":   st.column_config.TextColumn("Ticker", disabled=True),
+                "Ticker": st.column_config.TextColumn("Ticker", disabled=True),
                 "Peso (%)": st.column_config.NumberColumn(
-                    "Peso (%)", min_value=0.0, max_value=100.0,
-                    step=0.01, format="%.4f%%"),
+                    "Peso (%)", min_value=0.0, max_value=100.0, step=0.01, format="%.4f%%"
+                ),
             },
         )
         suma_pesos = df_pesos_editado["Peso (%)"].sum()
@@ -148,11 +167,16 @@ with tab_port:
     col_r1, col_r2, col_r3 = st.columns(3)
     with col_r1:
         val_portafolio = st.number_input(
-            "Capital Total Invertido ($)", min_value=100.0,
-            value=100_000.0, step=10_000.0, key="riesgo_capital"
+            "Capital Total Invertido ($)",
+            min_value=100.0,
+            value=100_000.0,
+            step=10_000.0,
+            key="riesgo_capital",
         )
     with col_r2:
-        conf_str  = st.selectbox("Nivel de Confianza", ["95%", "99%"], index=1, key="riesgo_conf_sel")
+        conf_str = st.selectbox(
+            "Nivel de Confianza", ["95%", "99%"], index=1, key="riesgo_conf_sel"
+        )
         confianza = 0.95 if conf_str == "95%" else 0.99
     with col_r3:
         horizonte_str = st.selectbox(
@@ -163,57 +187,72 @@ with tab_port:
         dias_h = int(horizonte_str.split()[0])
 
     ejecutar_riesgo = st.button(
-        "Calcular Métricas de Riesgo", use_container_width=True, key="btn_riesgo",
+        "Calcular Métricas de Riesgo",
+        use_container_width=True,
+        key="btn_riesgo",
     )
     separador()
 
     if ejecutar_riesgo:
-        dict_pesos = dict(zip(
-            df_pesos_editado["Ticker"],
-            df_pesos_editado["Peso (%)"] / 100.0,
-        ))
+        dict_pesos = dict(
+            zip(
+                df_pesos_editado["Ticker"],
+                df_pesos_editado["Peso (%)"] / 100.0,
+            )
+        )
         with st.spinner("Descargando precios y simulando Monte Carlo..."):
             try:
-                data, rend_p, vol_p, pesos_reales, cols_reales = quact.evaluar_portafolio_personalizado(
-                    tickers_list, dict_pesos, fecha_inicio, hoy
+                data, rend_p, vol_p, pesos_reales, cols_reales = (
+                    quact.evaluar_portafolio_personalizado(
+                        tickers_list, dict_pesos, fecha_inicio, hoy
+                    )
                 )
-                st.session_state.update({
-                    "riesgo_data": data, "riesgo_rend": rend_p, "riesgo_vol": vol_p,
-                    "riesgo_pesos": pesos_reales, "riesgo_cols": list(cols_reales),
-                    "riesgo_capital_val": val_portafolio, "riesgo_confianza": confianza,
-                    "riesgo_horizonte": horizonte_str, "riesgo_dias": dias_h,
-                    "riesgo_hoy": hoy,
-                })
+                st.session_state.update(
+                    {
+                        "riesgo_data": data,
+                        "riesgo_rend": rend_p,
+                        "riesgo_vol": vol_p,
+                        "riesgo_pesos": pesos_reales,
+                        "riesgo_cols": list(cols_reales),
+                        "riesgo_capital_val": val_portafolio,
+                        "riesgo_confianza": confianza,
+                        "riesgo_horizonte": horizonte_str,
+                        "riesgo_dias": dias_h,
+                        "riesgo_hoy": hoy,
+                    }
+                )
                 themed_success("Simulación de riesgo completada.")
             except Exception as e:
                 themed_error(f"Error en el cálculo o descarga de datos: {e}")
 
     if "riesgo_rend" in st.session_state and "riesgo_cols" in st.session_state:
-        rend_p       = st.session_state["riesgo_rend"]
-        vol_p        = st.session_state["riesgo_vol"]
+        rend_p = st.session_state["riesgo_rend"]
+        vol_p = st.session_state["riesgo_vol"]
         pesos_reales = st.session_state["riesgo_pesos"]
-        cols_reales  = st.session_state["riesgo_cols"]
-        capital      = st.session_state["riesgo_capital_val"]
-        conf         = st.session_state["riesgo_confianza"]
-        h_str        = st.session_state["riesgo_horizonte"]
-        dias         = st.session_state["riesgo_dias"]
-        data         = st.session_state["riesgo_data"]
-        hoy_g        = st.session_state["riesgo_hoy"]
+        cols_reales = st.session_state["riesgo_cols"]
+        capital = st.session_state["riesgo_capital_val"]
+        conf = st.session_state["riesgo_confianza"]
+        h_str = st.session_state["riesgo_horizonte"]
+        dias = st.session_state["riesgo_dias"]
+        data = st.session_state["riesgo_data"]
+        hoy_g = st.session_state["riesgo_hoy"]
 
         st.markdown("### Perfil del Portafolio")
         c_m1, c_m2, c_m3 = st.columns(3)
-        c_m1.metric("Rendimiento Esperado Anual", f"{rend_p*100:.2f}%")
-        c_m2.metric("Volatilidad Anual (σ)",       f"{vol_p*100:.2f}%")
+        c_m1.metric("Rendimiento Esperado Anual", f"{rend_p * 100:.2f}%")
+        c_m2.metric("Volatilidad Anual (σ)", f"{vol_p * 100:.2f}%")
         sharpe_ref = (rend_p - 0.05) / vol_p if vol_p > 0 else 0.0
-        c_m3.metric("Ratio de Sharpe", f"{sharpe_ref:.4f}", help="Tasa libre de riesgo asumiendo 5% anual")
+        c_m3.metric(
+            "Ratio de Sharpe", f"{sharpe_ref:.4f}", help="Tasa libre de riesgo asumiendo 5% anual"
+        )
         separador()
 
-        var_p,  _, _, _ = quact.calcular_var_parametrico(rend_p, vol_p, capital, conf, dias)
+        var_p, _, _, _ = quact.calcular_var_parametrico(rend_p, vol_p, capital, conf, dias)
         var_mc, cvar_mc = quact.calcular_var_cvar_montecarlo(rend_p, vol_p, capital, conf, dias)
 
-        st.markdown(f"### VaR — Horizonte: **{h_str}** | Confianza: **{conf*100:.0f}%**")
+        st.markdown(f"### VaR — Horizonte: **{h_str}** | Confianza: **{conf * 100:.0f}%**")
         col_res1, col_res2, col_res3 = st.columns(3)
-        
+
         with col_res1:
             themed_warning(
                 f"<div style='{css_contenedor_col}'>"
@@ -237,37 +276,50 @@ with tab_port:
             )
 
         with paso_a_paso():
-            st.latex(r"VaR_{param} = V_0 \times \left(Z_{\alpha} \times \sigma_{anual} \times \sqrt{\frac{t}{252}} - \mu_{anual} \times \frac{t}{252}\right)")
+            st.latex(
+                r"VaR_{param} = V_0 \times \left(Z_{\alpha} \times \sigma_{anual} \times \sqrt{\frac{t}{252}} - \mu_{anual} \times \frac{t}{252}\right)"
+            )
             z_score = norm.ppf(conf)
             t_frac = dias / 252
-            st.latex(rf"VaR_{{param}} = {capital:,.2f} \left({z_score:.4f} \times {vol_p:.4f} \times \sqrt{{{t_frac:.4f}}} - {rend_p:.4f} \times {t_frac:.4f}\right)")
+            st.latex(
+                rf"VaR_{{param}} = {capital:,.2f} \left({z_score:.4f} \times {vol_p:.4f} \times \sqrt{{{t_frac:.4f}}} - {rend_p:.4f} \times {t_frac:.4f}\right)"
+            )
             factor_vol = z_score * vol_p * np.sqrt(t_frac)
             factor_ret = rend_p * t_frac
-            st.latex(rf"VaR_{{param}} = {capital:,.2f} ({factor_vol:.6f} - {factor_ret:.6f}) = {var_p:,.2f}")
-            
-            themed_warning(f"<div style='{css_paso}'><span style='{math_style}'>VaR<sub>param</sub></span> = ${var_p:,.2f}</div>")
-            
+            st.latex(
+                rf"VaR_{{param}} = {capital:,.2f} ({factor_vol:.6f} - {factor_ret:.6f}) = {var_p:,.2f}"
+            )
+
+            themed_warning(
+                f"<div style='{css_paso}'><span style='{math_style}'>VaR<sub>param</sub></span> = ${var_p:,.2f}</div>"
+            )
+
             st.write("---")
             st.latex(r"CVaR_{MC} = \mathbb{E}[L \mid L > VaR]")
-            
-            themed_error(f"<div style='{css_paso}'><span style='{math_style}'>CVaR<sub>MC</sub></span> = ${cvar_mc:,.2f}</div>")
+
+            themed_error(
+                f"<div style='{css_paso}'><span style='{math_style}'>CVaR<sub>MC</sub></span> = ${cvar_mc:,.2f}</div>"
+            )
 
         separador()
 
-        tab_hist_p, tab_dl_p = st.tabs([
-            "Precios Históricos", "Exportar Datos"
-        ])
+        tab_hist_p, tab_dl_p = st.tabs(["Precios Históricos", "Exportar Datos"])
         with tab_hist_p:
             precios_norm = (data / data.iloc[0]) * 100
-            fig_hist = px.line(precios_norm, x=precios_norm.index, y=precios_norm.columns,
-                               labels={"value": "Valor normalizado ($)", "Date": "Fecha"})
+            fig_hist = px.line(
+                precios_norm,
+                x=precios_norm.index,
+                y=precios_norm.columns,
+                labels={"value": "Valor normalizado ($)", "Date": "Fecha"},
+            )
             fig_hist.update_layout(hovermode="x unified", **plotly_theme())
             st.plotly_chart(fig_hist, use_container_width=True)
         with tab_dl_p:
             st.download_button(
                 "⬇️ Descargar Precios Históricos (.csv)",
                 data=data.to_csv().encode("utf-8"),
-                file_name=f"precios_{hoy_g}.csv", mime="text/csv",
+                file_name=f"precios_{hoy_g}.csv",
+                mime="text/csv",
                 use_container_width=True,
             )
 
@@ -296,6 +348,7 @@ with tab_cm:
     # SUB-TABS
     # ──────────────────────────────────────────────────────────────────────────
     from quantitativeactuarial.credito import NR_METHODS
+
     _NR_OPTS = ["raw_with_d", "redistribute"]
     col_opt1, col_opt2 = st.columns(2)
     with col_opt1:
@@ -309,31 +362,35 @@ with tab_cm:
         )
     with col_opt2:
         _mode_info = {
-            "raw_with_d":   "Probabilidades S&P crudas originales. NR se excluye del sistema.",
+            "raw_with_d": "Probabilidades S&P crudas originales. NR se excluye del sistema.",
             "redistribute": "Filas se normalizan a 1.0. NR redistribuido matemáticamente y de manera proporcional.",
         }
         themed_info(_mode_info[nr_mode])
 
-    if (st.session_state.get("cm_last_mode") != nr_mode or "cm_tm" not in st.session_state):
+    if st.session_state.get("cm_last_mode") != nr_mode or "cm_tm" not in st.session_state:
         from quantitativeactuarial.credito import _TM_RAW_17x19
+
         st.session_state["cm_tm"] = build_transition_matrix(_TM_RAW_17x19.copy(), nr_mode)
         st.session_state["cm_last_mode"] = nr_mode
-        _raw_d = np.zeros((1, 19)); _raw_d[0, 17] = 1.0
+        _raw_d = np.zeros((1, 19))
+        _raw_d[0, 17] = 1.0
         st.session_state["cm_tm_raw"] = np.vstack([_TM_RAW_17x19.copy(), _raw_d])
 
     _N_STATES = st.session_state["cm_tm"].shape[0]
     _RATINGS_WORK = RATINGS[:_N_STATES]
-    _INC_D = (nr_mode != "raw_no_d_nr")   # True para raw_with_d, redistribute, simple_normalize
+    _INC_D = nr_mode != "raw_no_d_nr"  # True para raw_with_d, redistribute, simple_normalize
     separador()
 
-    st1, st2, st3, st4, st5, st6 = st.tabs([
-        "Bonos del Portafolio",
-        "Matriz de Transición",
-        "Curva de Tasas",
-        "Caso Independiente",
-        "Caso Correlacionado",
-        "Exportar a Excel",
-    ])
+    st1, st2, st3, st4, st5, st6 = st.tabs(
+        [
+            "Bonos del Portafolio",
+            "Matriz de Transición",
+            "Curva de Tasas",
+            "Caso Independiente",
+            "Caso Correlacionado",
+            "Exportar a Excel",
+        ]
+    )
 
     # ── ST1: PARÁMETROS DE BONOS ──────────────────────────────────────────────
     with st1:
@@ -342,51 +399,97 @@ with tab_cm:
             "Ingresa los parámetros financieros y contractuales de cada bono emitido. "
             "El sistema utilizará estos datos para revaluar el bono si la empresa cambia de calificación."
         )
-        n_bonds = st.number_input("Número de bonos en el portafolio:", min_value=1, max_value=10,
-                                   value=2, step=1, key="cm_n")
+        n_bonds = st.number_input(
+            "Número de bonos en el portafolio:",
+            min_value=1,
+            max_value=10,
+            value=2,
+            step=1,
+            key="cm_n",
+        )
         _defs = [
-            {"n":"Nvidia",  "r":"AA-", "vn":100., "c":5.0,  "t":5, "p":1, "rec":43.18},
-            {"n":"Henkel",  "r":"A",   "vn":100., "c":5.0,  "t":5, "p":1, "rec":43.18},
-            {"n":"Bono C",  "r":"BBB", "vn":100., "c":6.0,  "t":3, "p":2, "rec":40.0},
-            {"n":"Bono D",  "r":"BB",  "vn":100., "c":7.0,  "t":3, "p":2, "rec":35.0},
-            {"n":"Bono E",  "r":"B+",  "vn":100., "c":8.0,  "t":3, "p":2, "rec":30.0},
-            {"n":"Bono F",  "r":"BBB+","vn":100., "c":5.5,  "t":4, "p":2, "rec":40.0},
-            {"n":"Bono G",  "r":"A+",  "vn":100., "c":4.5,  "t":4, "p":1, "rec":43.0},
-            {"n":"Bono H",  "r":"AA",  "vn":100., "c":4.0,  "t":3, "p":1, "rec":43.0},
-            {"n":"Bono I",  "r":"BBB-","vn":100., "c":6.5,  "t":5, "p":2, "rec":40.0},
-            {"n":"Bono J",  "r":"B",   "vn":100., "c":9.0,  "t":3, "p":4, "rec":35.0},
+            {"n": "Nvidia", "r": "AA-", "vn": 100.0, "c": 5.0, "t": 5, "p": 1, "rec": 43.18},
+            {"n": "Henkel", "r": "A", "vn": 100.0, "c": 5.0, "t": 5, "p": 1, "rec": 43.18},
+            {"n": "Bono C", "r": "BBB", "vn": 100.0, "c": 6.0, "t": 3, "p": 2, "rec": 40.0},
+            {"n": "Bono D", "r": "BB", "vn": 100.0, "c": 7.0, "t": 3, "p": 2, "rec": 35.0},
+            {"n": "Bono E", "r": "B+", "vn": 100.0, "c": 8.0, "t": 3, "p": 2, "rec": 30.0},
+            {"n": "Bono F", "r": "BBB+", "vn": 100.0, "c": 5.5, "t": 4, "p": 2, "rec": 40.0},
+            {"n": "Bono G", "r": "A+", "vn": 100.0, "c": 4.5, "t": 4, "p": 1, "rec": 43.0},
+            {"n": "Bono H", "r": "AA", "vn": 100.0, "c": 4.0, "t": 3, "p": 1, "rec": 43.0},
+            {"n": "Bono I", "r": "BBB-", "vn": 100.0, "c": 6.5, "t": 5, "p": 2, "rec": 40.0},
+            {"n": "Bono J", "r": "B", "vn": 100.0, "c": 9.0, "t": 3, "p": 4, "rec": 35.0},
         ]
         bond_params = []
         for i in range(int(n_bonds)):
             d = _defs[i]
-            st.markdown(f"##### Bono {i+1}")
+            st.markdown(f"##### Bono {i + 1}")
             co1, co2, co3, co4 = st.columns(4)
             with co1:
                 nom = st.text_input("Nombre de Emisora", value=d["n"], key=f"cm_nom_{i}")
-                rat = st.selectbox("Calificación S&P Actual", RATINGS[:-1],
-                                   index=RATINGS.index(d["r"]) if d["r"] in RATINGS else 0,
-                                   key=f"cm_r_{i}")
+                rat = st.selectbox(
+                    "Calificación S&P Actual",
+                    RATINGS[:-1],
+                    index=RATINGS.index(d["r"]) if d["r"] in RATINGS else 0,
+                    key=f"cm_r_{i}",
+                )
             with co2:
-                vn = st.number_input("Nominal ($)", min_value=1., value=d["vn"],
-                                      step=10., key=f"cm_vn_{i}")
-                cp = st.number_input("Cupón anual (%)", min_value=0., value=d["c"],
-                                      step=0.25, key=f"cm_c_{i}") / 100
+                vn = st.number_input(
+                    "Nominal ($)", min_value=1.0, value=d["vn"], step=10.0, key=f"cm_vn_{i}"
+                )
+                cp = (
+                    st.number_input(
+                        "Cupón anual (%)", min_value=0.0, value=d["c"], step=0.25, key=f"cm_c_{i}"
+                    )
+                    / 100
+                )
             with co3:
-                T  = st.number_input("Vencimiento (años)", min_value=1, max_value=10,
-                                      value=d["t"], step=1, key=f"cm_T_{i}")
-                pg = st.selectbox("Pagos/año", [1,2,4,12],
-                                   index=[1,2,4,12].index(d["p"]), key=f"cm_p_{i}",
-                                   format_func=lambda x: {1:"Anual",2:"Semestral",
-                                                           4:"Trimestral",12:"Mensual"}[x])
+                T = st.number_input(
+                    "Vencimiento (años)",
+                    min_value=1,
+                    max_value=10,
+                    value=d["t"],
+                    step=1,
+                    key=f"cm_T_{i}",
+                )
+                pg = st.selectbox(
+                    "Pagos/año",
+                    [1, 2, 4, 12],
+                    index=[1, 2, 4, 12].index(d["p"]),
+                    key=f"cm_p_{i}",
+                    format_func=lambda x: {
+                        1: "Anual",
+                        2: "Semestral",
+                        4: "Trimestral",
+                        12: "Mensual",
+                    }[x],
+                )
             with co4:
-                rc = st.number_input("Recuperación D (%)", min_value=0., max_value=100.,
-                                      value=d["rec"], step=1., key=f"cm_rc_{i}",
-                                      help="Porcentaje que se recupera si el bono cae en Default (D).") / 100
-            bond_params.append({
-                "nombre": nom, "rating": rat, "rating_idx": RATING_IDX[rat],
-                "VN": vn, "cupon_pct": cp, "T": int(T), "pagos": pg, "recov": rc,
-            })
-            if i < int(n_bonds) - 1: st.markdown("---")
+                rc = (
+                    st.number_input(
+                        "Recuperación D (%)",
+                        min_value=0.0,
+                        max_value=100.0,
+                        value=d["rec"],
+                        step=1.0,
+                        key=f"cm_rc_{i}",
+                        help="Porcentaje que se recupera si el bono cae en Default (D).",
+                    )
+                    / 100
+                )
+            bond_params.append(
+                {
+                    "nombre": nom,
+                    "rating": rat,
+                    "rating_idx": RATING_IDX[rat],
+                    "VN": vn,
+                    "cupon_pct": cp,
+                    "T": int(T),
+                    "pagos": pg,
+                    "recov": rc,
+                }
+            )
+            if i < int(n_bonds) - 1:
+                st.markdown("---")
         st.session_state["cm_bparams"] = bond_params
         themed_success(f"**{int(n_bonds)} bono(s)** cargados en la memoria del modelo.")
 
@@ -400,8 +503,10 @@ with tab_cm:
 
         if "cm_tm_raw" not in st.session_state:
             from quantitativeactuarial.credito import _TM_RAW_17x19, RATINGS_EMIT as _RE
+
             _raw = _TM_RAW_17x19.copy()
-            _d_row = np.zeros((1, 19)); _d_row[0, 17] = 1.0
+            _d_row = np.zeros((1, 19))
+            _d_row[0, 17] = 1.0
             st.session_state["cm_tm_raw"] = np.vstack([_raw, _d_row])
         if "cm_tm" not in st.session_state:
             st.session_state["cm_tm"] = DEFAULT_TM.copy()
@@ -410,22 +515,27 @@ with tab_cm:
         with col_tm2:
             if st.button("Restaurar S&P Original", key="cm_rst_tm"):
                 from quantitativeactuarial.credito import _TM_RAW_17x19
+
                 _raw = _TM_RAW_17x19.copy()
-                _d = np.zeros((1,19)); _d[0,17] = 1.0
+                _d = np.zeros((1, 19))
+                _d[0, 17] = 1.0
                 st.session_state["cm_tm_raw"] = np.vstack([_raw, _d])
                 st.session_state["cm_tm"] = DEFAULT_TM.copy()
                 st.rerun()
             row_sums = st.session_state["cm_tm_raw"].sum(axis=1)
-            df_sums = pd.DataFrame({
-                "Rating": RATINGS,
-                "Suma": [f"{s:.4f}" for s in row_sums],
-                "": ["✓" if abs(s-1)<0.002 else "⚠" for s in row_sums]
-            })
+            df_sums = pd.DataFrame(
+                {
+                    "Rating": RATINGS,
+                    "Suma": [f"{s:.4f}" for s in row_sums],
+                    "": ["✓" if abs(s - 1) < 0.002 else "⚠" for s in row_sums],
+                }
+            )
             st.caption("Verificación de filas (suman 1):")
             st.dataframe(df_sums, hide_index=True, use_container_width=True, height=460)
 
         with col_tm1:
             from quantitativeactuarial.credito import RATINGS_EMIT as _RALL
+
             _DEST_LABELS = _RALL[:17] + ["D", "NR"]
             df_tm_edit = pd.DataFrame(
                 st.session_state["cm_tm_raw"],
@@ -434,10 +544,16 @@ with tab_cm:
             )
             df_tm_edit.index.name = "From / To"
             ed = st.data_editor(
-                df_tm_edit.round(6), use_container_width=True, height=570, num_rows="fixed",
-                column_config={c: st.column_config.NumberColumn(
-                    c, format="%.4f", step=0.0001, min_value=0., max_value=1.)
-                    for c in _DEST_LABELS},
+                df_tm_edit.round(6),
+                use_container_width=True,
+                height=570,
+                num_rows="fixed",
+                column_config={
+                    c: st.column_config.NumberColumn(
+                        c, format="%.4f", step=0.0001, min_value=0.0, max_value=1.0
+                    )
+                    for c in _DEST_LABELS
+                },
             )
             raw_arr = ed.values.astype(float)
             st.session_state["cm_tm_raw"] = raw_arr
@@ -445,34 +561,42 @@ with tab_cm:
             st.session_state["cm_tm"] = build_transition_matrix(raw_arr[:17], _active_mode)
 
         c_th = get_current_theme()
-        _tm_plot = st.session_state.get('cm_tm', DEFAULT_TM)
-        fig_hm = go.Figure(go.Heatmap(
-            z=_tm_plot[:min(_N_STATES, N_R-1), :min(_N_STATES, N_R-1)],
-            x=list(_RATINGS_WORK[:min(_N_STATES, N_R-1)]),
-            y=list(_RATINGS_WORK[:min(_N_STATES, N_R-1)]),
-            colorscale=[[0,"#FFFFFF"],[1, c_th["primary"]]],
-            text=np.round(_tm_plot[:min(_N_STATES, N_R-1), :min(_N_STATES, N_R-1)]*100, 3),
-            texttemplate="%{text:.2f}%", showscale=True,
-        ))
+        _tm_plot = st.session_state.get("cm_tm", DEFAULT_TM)
+        fig_hm = go.Figure(
+            go.Heatmap(
+                z=_tm_plot[: min(_N_STATES, N_R - 1), : min(_N_STATES, N_R - 1)],
+                x=list(_RATINGS_WORK[: min(_N_STATES, N_R - 1)]),
+                y=list(_RATINGS_WORK[: min(_N_STATES, N_R - 1)]),
+                colorscale=[[0, "#FFFFFF"], [1, c_th["primary"]]],
+                text=np.round(
+                    _tm_plot[: min(_N_STATES, N_R - 1), : min(_N_STATES, N_R - 1)] * 100, 3
+                ),
+                texttemplate="%{text:.2f}%",
+                showscale=True,
+            )
+        )
         fig_hm.update_layout(
             title="Mapa de calor — Probabilidades de transición (%)",
-            xaxis_title="Rating destino", yaxis_title="Rating origen",
-            height=550, **plotly_theme(),
+            xaxis_title="Rating destino",
+            yaxis_title="Rating origen",
+            height=550,
+            **plotly_theme(),
         )
         st.plotly_chart(fig_hm, use_container_width=True)
-
 
     # ── HELPERS: curva de tasas automática ───────────────────────────────────
     _DEFAULT_SPREADS_FLAT = DEFAULT_SPREADS[:17, 0] - DEFAULT_TREASURY[0]
 
     def _default_tsy_anchors(max_t: int) -> np.ndarray:
         v = np.full(max_t, DEFAULT_TREASURY[-1])
-        v[:min(max_t, len(DEFAULT_TREASURY))] = DEFAULT_TREASURY[:min(max_t, len(DEFAULT_TREASURY))]
+        v[: min(max_t, len(DEFAULT_TREASURY))] = DEFAULT_TREASURY[
+            : min(max_t, len(DEFAULT_TREASURY))
+        ]
         return v
 
     def _build_allin_table(max_t: int) -> tuple:
-        tsy  = st.session_state.get("cm_tsy_anchors", _default_tsy_anchors(max_t))
-        spr  = st.session_state.get("cm_spreads_flat", _DEFAULT_SPREADS_FLAT.copy())
+        tsy = st.session_state.get("cm_tsy_anchors", _default_tsy_anchors(max_t))
+        spr = st.session_state.get("cm_spreads_flat", _DEFAULT_SPREADS_FLAT.copy())
         if len(tsy) < max_t:
             tsy = np.append(tsy, np.full(max_t - len(tsy), tsy[-1]))
         tenors = np.arange(0.5, max_t + 0.01, 0.5)
@@ -494,7 +618,7 @@ with tab_cm:
         )
 
         _bond_ps = st.session_state.get("cm_bparams", [])
-        _max_T   = min(max((b["T"] for b in _bond_ps), default=5), 10)
+        _max_T = min(max((b["T"] for b in _bond_ps), default=5), 10)
         _n_spr_rows = min(17, _N_STATES)
 
         if "cm_tsy_anchors" not in st.session_state:
@@ -503,7 +627,7 @@ with tab_cm:
             old_t = st.session_state["cm_tsy_anchors"]
             if len(old_t) != _max_T:
                 new_t = _default_tsy_anchors(_max_T)
-                new_t[:min(_max_T, len(old_t))] = old_t[:min(_max_T, len(old_t))]
+                new_t[: min(_max_T, len(old_t))] = old_t[: min(_max_T, len(old_t))]
                 st.session_state["cm_tsy_anchors"] = new_t
 
         if "cm_spreads_flat" not in st.session_state:
@@ -513,16 +637,21 @@ with tab_cm:
 
         with col3a:
             st.markdown("##### Tasa libre de riesgo (rf)")
-            df_tsy = pd.DataFrame({
-                "Año": list(range(1, _max_T + 1)),
-                "Tasa (%)": (st.session_state["cm_tsy_anchors"] * 100).round(4),
-            })
+            df_tsy = pd.DataFrame(
+                {
+                    "Año": list(range(1, _max_T + 1)),
+                    "Tasa (%)": (st.session_state["cm_tsy_anchors"] * 100).round(4),
+                }
+            )
             ed_tsy = st.data_editor(
-                df_tsy, hide_index=True, use_container_width=True,
+                df_tsy,
+                hide_index=True,
+                use_container_width=True,
                 column_config={
-                    "Año":      st.column_config.NumberColumn(disabled=True),
+                    "Año": st.column_config.NumberColumn(disabled=True),
                     "Tasa (%)": st.column_config.NumberColumn(
-                        format="%.4f%%", step=0.01, min_value=0.0),
+                        format="%.4f%%", step=0.01, min_value=0.0
+                    ),
                 },
             )
             st.session_state["cm_tsy_anchors"] = ed_tsy["Tasa (%)"].values / 100
@@ -534,17 +663,24 @@ with tab_cm:
 
         with col3b:
             st.markdown("##### Spread crediticio")
-            df_spr = pd.DataFrame({
-                "Rating":     RATINGS[:_n_spr_rows],
-                "Spread (%)": (st.session_state["cm_spreads_flat"][:_n_spr_rows] * 100).round(4),
-            })
+            df_spr = pd.DataFrame(
+                {
+                    "Rating": RATINGS[:_n_spr_rows],
+                    "Spread (%)": (st.session_state["cm_spreads_flat"][:_n_spr_rows] * 100).round(
+                        4
+                    ),
+                }
+            )
             ed_spr = st.data_editor(
-                df_spr, hide_index=True, use_container_width=True,
+                df_spr,
+                hide_index=True,
+                use_container_width=True,
                 height=min(38 + _n_spr_rows * 35, 630),
                 column_config={
-                    "Rating":     st.column_config.TextColumn(disabled=True),
+                    "Rating": st.column_config.TextColumn(disabled=True),
                     "Spread (%)": st.column_config.NumberColumn(
-                        format="%.4f%%", step=0.01, min_value=0.0),
+                        format="%.4f%%", step=0.01, min_value=0.0
+                    ),
                 },
             )
             new_spr = st.session_state["cm_spreads_flat"].copy()
@@ -568,7 +704,7 @@ with tab_cm:
                 height=min(38 + _n_spr_rows * 35, 560),
                 column_config={
                     "Rating": st.column_config.TextColumn(),
-                    **{c: st.column_config.NumberColumn(format="%.4f%%") for c in tenor_labels}
+                    **{c: st.column_config.NumberColumn(format="%.4f%%") for c in tenor_labels},
                 },
             )
 
@@ -576,20 +712,24 @@ with tab_cm:
         fig_yc = go.Figure()
 
         _tsy_anchors = st.session_state["cm_tsy_anchors"]
-        _spr_flat    = st.session_state["cm_spreads_flat"]
+        _spr_flat = st.session_state["cm_spreads_flat"]
 
         # Tenores densos desde t=1 (primer punto real de datos) hasta max_T
-        _t_dense     = np.arange(1.0, _max_T + 0.01, 0.25)
+        _t_dense = np.arange(1.0, _max_T + 0.01, 0.25)
         _tsy_anchor_x = np.array(list(range(1, _max_T + 1)), dtype=float)
-        _tsy_dense    = np.interp(_t_dense, _tsy_anchor_x, _tsy_anchors[:_max_T])
+        _tsy_dense = np.interp(_t_dense, _tsy_anchor_x, _tsy_anchors[:_max_T])
 
         # Línea de Tesoro (rf) — siempre visible
-        fig_yc.add_trace(go.Scatter(
-            x=_t_dense.tolist(), y=(_tsy_dense * 100).tolist(),
-            name="Tesoro (rf)", mode="lines+markers",
-            line=dict(color=c_th["primary"], width=2.5, dash="dash"),
-            marker=dict(size=6),
-        ))
+        fig_yc.add_trace(
+            go.Scatter(
+                x=_t_dense.tolist(),
+                y=(_tsy_dense * 100).tolist(),
+                name="Tesoro (rf)",
+                mode="lines+markers",
+                line=dict(color=c_th["primary"], width=2.5, dash="dash"),
+                marker=dict(size=6),
+            )
+        )
 
         # Ratings únicos de los bonos del portafolio
         _bond_ps_cur = st.session_state.get("cm_bparams", [])
@@ -604,26 +744,31 @@ with tab_cm:
             if _r_name not in list(RATINGS[:_n_spr_rows]):
                 continue
             _r_idx = list(RATINGS[:_n_spr_rows]).index(_r_name)
-            _spr   = _spr_flat[_r_idx]
+            _spr = _spr_flat[_r_idx]
             _ai_anchor_y = np.array([_tsy_anchors[y] + _spr for y in range(_max_T)])
-            _ai_dense    = np.interp(_t_dense, _tsy_anchor_x, _ai_anchor_y)
-            _bond_label  = next(
+            _ai_dense = np.interp(_t_dense, _tsy_anchor_x, _ai_anchor_y)
+            _bond_label = next(
                 (b["nombre"] for b in _bond_ps_cur if b["rating"] == _r_name),
                 _r_name,
             )
-            fig_yc.add_trace(go.Scatter(
-                x=_t_dense.tolist(), y=(_ai_dense * 100).tolist(),
-                name=f"{_bond_label} ({_r_name})" if _bond_label != _r_name else _r_name,
-                mode="lines+markers",
-                line=dict(width=2.5),
-                marker=dict(size=5),
-                opacity=0.9,
-            ))
+            fig_yc.add_trace(
+                go.Scatter(
+                    x=_t_dense.tolist(),
+                    y=(_ai_dense * 100).tolist(),
+                    name=f"{_bond_label} ({_r_name})" if _bond_label != _r_name else _r_name,
+                    mode="lines+markers",
+                    line=dict(width=2.5),
+                    marker=dict(size=5),
+                    opacity=0.9,
+                )
+            )
 
         fig_yc.update_layout(
             title="Curvas de rendimiento All-In — Bonos seleccionados",
-            xaxis_title="Plazo (años)", yaxis_title="Tasa all-in (%)",
-            height=420, **plotly_theme(),
+            xaxis_title="Plazo (años)",
+            yaxis_title="Tasa all-in (%)",
+            height=420,
+            **plotly_theme(),
         )
         fig_yc.update_xaxes(range=[1, _max_T], dtick=1)
 
@@ -639,12 +784,19 @@ with tab_cm:
         with _col_table:
             st.markdown("##### Bonos en el portafolio")
             if _bond_ps_cur:
-                _df_bonos = pd.DataFrame([{
-                    "Emisora":    b["nombre"],
-                    "Rating":     b["rating"],
-                    "Spread (%)": f"{_spr_flat[list(RATINGS[:_n_spr_rows]).index(b['rating'])] * 100:.4f}%" if b["rating"] in list(RATINGS[:_n_spr_rows]) else "—",
-                    "All-In t=1": f"{(_tsy_anchors[0] + (_spr_flat[list(RATINGS[:_n_spr_rows]).index(b['rating'])] if b['rating'] in list(RATINGS[:_n_spr_rows]) else 0)) * 100:.4f}%",
-                } for b in _bond_ps_cur])
+                _df_bonos = pd.DataFrame(
+                    [
+                        {
+                            "Emisora": b["nombre"],
+                            "Rating": b["rating"],
+                            "Spread (%)": f"{_spr_flat[list(RATINGS[:_n_spr_rows]).index(b['rating'])] * 100:.4f}%"
+                            if b["rating"] in list(RATINGS[:_n_spr_rows])
+                            else "—",
+                            "All-In t=1": f"{(_tsy_anchors[0] + (_spr_flat[list(RATINGS[:_n_spr_rows]).index(b['rating'])] if b['rating'] in list(RATINGS[:_n_spr_rows]) else 0)) * 100:.4f}%",
+                        }
+                        for b in _bond_ps_cur
+                    ]
+                )
                 st.dataframe(_df_bonos, hide_index=True, use_container_width=True)
             else:
                 st.caption("Carga bonos en la pestaña 'Bonos del Portafolio'.")
@@ -652,17 +804,21 @@ with tab_cm:
     # ── HELPER: datos de bonos con valores calculados ─────────────────────────
     def _get_bond_data():
         params = st.session_state.get("cm_bparams", [])
-        mode   = st.session_state.get("cm_nr_mode", "redistribute")
-        inc_d  = (mode != "raw_no_d_nr")
+        mode = st.session_state.get("cm_nr_mode", "redistribute")
+        inc_d = mode != "raw_no_d_nr"
         if not params:
             return []
-        max_t  = max(b["T"] for b in params)
+        max_t = max(b["T"] for b in params)
         allin, tenors = _build_allin_table(max_t)
         out = []
         for bp in params:
             vals = bond_values_per_rating(
-                bp["VN"], bp["cupon_pct"], bp["T"],
-                bp["pagos"], bp["recov"], allin,
+                bp["VN"],
+                bp["cupon_pct"],
+                bp["T"],
+                bp["pagos"],
+                bp["recov"],
+                allin,
                 include_d=inc_d,
                 spread_times=tenors,
             )
@@ -673,17 +829,19 @@ with tab_cm:
         rows = []
         for cf, lb in zip(conf_levels, conf_labels):
             r = scaled[cf]
-            rows.append({
-                "Confianza":         lb,
-                "VaR 1 año ($)":     f"${r['VaR_1y']:,.4f}",
-                "CVaR 1 año ($)":    f"${r['CVaR_1y']:,.4f}",
-                "VaR 1 día ($)":     f"${r['VaR_1d']:,.4f}",
-                "CVaR 1 día ($)":    f"${r['CVaR_1d']:,.4f}",
-                "VaR 10 días ($)":   f"${r['VaR_10d']:,.4f}",
-                "CVaR 10 días ($)":  f"${r['CVaR_10d']:,.4f}",
-                "Capital (3×VaR10d)":f"${r['Capital']:,.4f}",
-                "VaR 1y % E[V]":     f"{r['VaR_1y']/ev*100:.2f}%" if ev > 0 else "—",
-            })
+            rows.append(
+                {
+                    "Confianza": lb,
+                    "VaR 1 año ($)": f"${r['VaR_1y']:,.4f}",
+                    "CVaR 1 año ($)": f"${r['CVaR_1y']:,.4f}",
+                    "VaR 1 día ($)": f"${r['VaR_1d']:,.4f}",
+                    "CVaR 1 día ($)": f"${r['CVaR_1d']:,.4f}",
+                    "VaR 10 días ($)": f"${r['VaR_10d']:,.4f}",
+                    "CVaR 10 días ($)": f"${r['CVaR_10d']:,.4f}",
+                    "Capital (3×VaR10d)": f"${r['Capital']:,.4f}",
+                    "VaR 1y % E[V]": f"{r['VaR_1y'] / ev * 100:.2f}%" if ev > 0 else "—",
+                }
+            )
         return pd.DataFrame(rows)
 
     # ── ST4: CASO INDEPENDIENTE ───────────────────────────────────────────────
@@ -701,43 +859,46 @@ with tab_cm:
                 if not bd:
                     themed_error("Configura los bonos primero.")
                 else:
-                    tm      = st.session_state.get("cm_tm", DEFAULT_TM)
+                    tm = st.session_state.get("cm_tm", DEFAULT_TM)
                     mode_now = st.session_state.get("cm_nr_mode", "redistribute")
-                    do_normalize = (mode_now != "raw_with_d")
+                    do_normalize = mode_now != "raw_with_d"
 
-                    sdist  = independent_distribution(bd, tm)
-                    vr     = var_cvar_from_distribution(sdist, CONF_LEVELS,
-                                                        normalize=do_normalize)
+                    sdist = independent_distribution(bd, tm)
+                    vr = var_cvar_from_distribution(sdist, CONF_LEVELS, normalize=do_normalize)
                     scaled = scale_var_cvar(vr, CONF_LEVELS)
 
-                    ev_ex    = vr[CONF_LEVELS[0]]["EV"]
+                    ev_ex = vr[CONF_LEVELS[0]]["EV"]
                     sigma_ex = vr[CONF_LEVELS[0]]["sigma"]
-                    vr_p     = var_cvar_parametric(ev_ex, sigma_ex, CONF_LEVELS)
+                    vr_p = var_cvar_parametric(ev_ex, sigma_ex, CONF_LEVELS)
                     scaled_p = scale_var_cvar(vr_p, CONF_LEVELS)
 
-                    st.session_state.update({
-                        "cm_sdist":        sdist,
-                        "cm_ivars":        vr,
-                        "cm_iscaled":      scaled,
-                        "cm_ivars_param":  vr_p,
-                        "cm_iscaled_param":scaled_p,
-                        "cm_ibonds":       bd,
-                        "cm_ev":           vr[0.99]["EV"],
-                    })
-                    themed_success(f"La máquina probó matemáticamente **{len(sdist):,}** escenarios distintos.")
+                    st.session_state.update(
+                        {
+                            "cm_sdist": sdist,
+                            "cm_ivars": vr,
+                            "cm_iscaled": scaled,
+                            "cm_ivars_param": vr_p,
+                            "cm_iscaled_param": scaled_p,
+                            "cm_ibonds": bd,
+                            "cm_ev": vr[0.99]["EV"],
+                        }
+                    )
+                    themed_success(
+                        f"La máquina probó matemáticamente **{len(sdist):,}** escenarios distintos."
+                    )
 
         if "cm_ivars_param" in st.session_state:
-            bd_i  = st.session_state["cm_ibonds"]
+            bd_i = st.session_state["cm_ibonds"]
             sdist = st.session_state["cm_sdist"]
-            vr    = st.session_state["cm_ivars"]
-            sc_p  = st.session_state["cm_iscaled_param"]
-            ev    = vr[CONF_LEVELS[0]]["EV"]
+            vr = st.session_state["cm_ivars"]
+            sc_p = st.session_state["cm_iscaled_param"]
+            ev = vr[CONF_LEVELS[0]]["EV"]
             sigma = vr[CONF_LEVELS[0]]["sigma"]
-            c_th  = get_current_theme()
+            c_th = get_current_theme()
 
             col_ev1, col_ev2 = st.columns(2)
             col_ev1.metric("Valor Esperado (E[V])", f"${ev:,.4f}")
-            col_ev2.metric("Volatilidad (σ)",    f"${sigma:,.4f}")
+            col_ev2.metric("Volatilidad (σ)", f"${sigma:,.4f}")
             separador()
 
             st.markdown("##### Requerimientos Regulatorios y Extremos de Riesgo")
@@ -798,76 +959,111 @@ with tab_cm:
                     with col4a:
                         _n_states_b = len(b["values"])
                         _labels_b = list(_RATINGS_WORK[:_n_states_b])
-                        df_bv = pd.DataFrame({
-                            "Rating destino": _labels_b,
-                            "Probabilidad":   [f"{p:.4%}" for p in probs_b[:_n_states_b]],
-                            "Valor ($)":      [f"${v:.4f}" for v in b["values"]],
-                            "VxP ($)":        [f"${v*p:.6f}" for v,p in zip(b["values"],probs_b[:_n_states_b])],
-                        })
+                        df_bv = pd.DataFrame(
+                            {
+                                "Rating destino": _labels_b,
+                                "Probabilidad": [f"{p:.4%}" for p in probs_b[:_n_states_b]],
+                                "Valor ($)": [f"${v:.4f}" for v in b["values"]],
+                                "VxP ($)": [
+                                    f"${v * p:.6f}"
+                                    for v, p in zip(b["values"], probs_b[:_n_states_b])
+                                ],
+                            }
+                        )
                         st.dataframe(df_bv, hide_index=True, use_container_width=True, height=430)
-                        ev_b = sum(v*p for v,p in zip(b["values"],probs_b[:_n_states_b]))
-                        var_b= sum((v-ev_b)**2*p for v,p in zip(b["values"],probs_b[:_n_states_b]))
+                        ev_b = sum(v * p for v, p in zip(b["values"], probs_b[:_n_states_b]))
+                        var_b = sum(
+                            (v - ev_b) ** 2 * p for v, p in zip(b["values"], probs_b[:_n_states_b])
+                        )
                         st.metric("E[V] bono", f"${ev_b:.4f}")
                         st.metric("sigma bono", f"${var_b**0.5:.4f}")
                     with col4b:
                         fig_bv = go.Figure()
-                        colors_bv = [c_th["accent"] if r==b["rating"] else c_th["primary"]
-                                     for r in _labels_b]
-                        fig_bv.add_trace(go.Bar(
-                            x=_labels_b, y=probs_b[:_n_states_b]*100,
-                            text=[f"${v:.2f}" for v in b["values"]],
-                            textposition="outside",
-                            marker_color=colors_bv,
-                            name="Prob (%)",
-                        ))
+                        colors_bv = [
+                            c_th["accent"] if r == b["rating"] else c_th["primary"]
+                            for r in _labels_b
+                        ]
+                        fig_bv.add_trace(
+                            go.Bar(
+                                x=_labels_b,
+                                y=probs_b[:_n_states_b] * 100,
+                                text=[f"${v:.2f}" for v in b["values"]],
+                                textposition="outside",
+                                marker_color=colors_bv,
+                                name="Prob (%)",
+                            )
+                        )
                         fig_bv.add_hline(y=0, line_color=plotly_color(c_th["border"]))
                         fig_bv.update_layout(
                             title=f"{b['nombre']} — Rating actual: {b['rating']}",
-                            xaxis_title="Rating destino", yaxis_title="Probabilidad (%)",
-                            height=400, **plotly_theme(),
+                            xaxis_title="Rating destino",
+                            yaxis_title="Probabilidad (%)",
+                            height=400,
+                            **plotly_theme(),
                         )
                         st.plotly_chart(fig_bv, use_container_width=True)
 
             separador()
 
             st.markdown("##### Probabilidad Combinada (Portafolio Total)")
-            vr_p  = st.session_state["cm_ivars_param"]
-            vals_a  = np.array([d[0] for d in sdist])
-            probs_a = np.array([d[1] for d in sdist]); probs_a /= probs_a.sum()
-            cum_a   = np.cumsum(probs_a)
+            vr_p = st.session_state["cm_ivars_param"]
+            vals_a = np.array([d[0] for d in sdist])
+            probs_a = np.array([d[1] for d in sdist])
+            probs_a /= probs_a.sum()
+            cum_a = np.cumsum(probs_a)
 
             fig_d = go.Figure()
-            fig_d.add_trace(go.Bar(
-                x=vals_a, y=probs_a*100, name="P(V=v) (%)",
-                marker_color=c_th["primary"], opacity=0.65,
-            ))
-            fig_d.add_trace(go.Scatter(
-                x=vals_a, y=cum_a*100, name="CDF (%)",
-                line=dict(color=c_th["accent"], width=2), yaxis="y2",
-            ))
-            for cf, lb in zip(CONF_LEVELS, CONF_LABELS):
-                q_param = ev - vr_p[cf]["VaR"]   # cuantil paramétrico
-                fig_d.add_vline(
-                    x=q_param, line_dash="dot", line_color=c_th["danger"],
-                    annotation_text=f"VaR {lb}", annotation_position="top",
+            fig_d.add_trace(
+                go.Bar(
+                    x=vals_a,
+                    y=probs_a * 100,
+                    name="P(V=v) (%)",
+                    marker_color=c_th["primary"],
+                    opacity=0.65,
                 )
-            fig_d.add_vline(x=ev, line_color=c_th["success"],
-                            annotation_text=f"E[V]={ev:.2f}")
+            )
+            fig_d.add_trace(
+                go.Scatter(
+                    x=vals_a,
+                    y=cum_a * 100,
+                    name="CDF (%)",
+                    line=dict(color=c_th["accent"], width=2),
+                    yaxis="y2",
+                )
+            )
+            for cf, lb in zip(CONF_LEVELS, CONF_LABELS):
+                q_param = ev - vr_p[cf]["VaR"]  # cuantil paramétrico
+                fig_d.add_vline(
+                    x=q_param,
+                    line_dash="dot",
+                    line_color=c_th["danger"],
+                    annotation_text=f"VaR {lb}",
+                    annotation_position="top",
+                )
+            fig_d.add_vline(x=ev, line_color=c_th["success"], annotation_text=f"E[V]={ev:.2f}")
             fig_d.update_layout(
                 title="Distribución del valor del portafolio",
-                xaxis_title="Valor ($)", yaxis_title="Probabilidad (%)",
+                xaxis_title="Valor ($)",
+                yaxis_title="Probabilidad (%)",
                 yaxis2=dict(title="CDF (%)", overlaying="y", side="right"),
-                height=440, **plotly_theme(),
+                height=440,
+                **plotly_theme(),
             )
             st.plotly_chart(fig_d, use_container_width=True)
 
             st.markdown("##### Tabla de distribución completa")
-            df_fd = pd.DataFrame({
-                "Valor ($)":           vals_a,
-                "Probabilidad (%)":    probs_a * 100,
-                "CDF (%)":             cum_a * 100,
-                "Pérdida vs E[V] ($)": ev - vals_a,
-            }).sort_values("Valor ($)", ascending=False).reset_index(drop=True)
+            df_fd = (
+                pd.DataFrame(
+                    {
+                        "Valor ($)": vals_a,
+                        "Probabilidad (%)": probs_a * 100,
+                        "CDF (%)": cum_a * 100,
+                        "Pérdida vs E[V] ($)": ev - vals_a,
+                    }
+                )
+                .sort_values("Valor ($)", ascending=False)
+                .reset_index(drop=True)
+            )
 
             _MAX_ROWS_DISPLAY = 5_000
             df_show = df_fd.head(_MAX_ROWS_DISPLAY)
@@ -883,9 +1079,9 @@ with tab_cm:
                 height=400,
                 hide_index=True,
                 column_config={
-                    "Valor ($)":           st.column_config.NumberColumn(format="$%.4f"),
-                    "Probabilidad (%)":    st.column_config.NumberColumn(format="%.6f%%"),
-                    "CDF (%)":             st.column_config.NumberColumn(format="%.4f%%"),
+                    "Valor ($)": st.column_config.NumberColumn(format="$%.4f"),
+                    "Probabilidad (%)": st.column_config.NumberColumn(format="%.6f%%"),
+                    "CDF (%)": st.column_config.NumberColumn(format="%.4f%%"),
                     "Pérdida vs E[V] ($)": st.column_config.NumberColumn(format="$%.4f"),
                 },
             )
@@ -906,18 +1102,23 @@ with tab_cm:
         col5a, col5b = st.columns([2, 1])
         with col5a:
             st.markdown("##### Matriz de correlación entre empresas")
-            st.caption("Usa la relación que tienen sus acciones en la bolsa como 'proxy' de correlación.")
-            if ("cm_corrm" not in st.session_state or
-                    st.session_state["cm_corrm"].shape[0] != n_bc):
+            st.caption(
+                "Usa la relación que tienen sus acciones en la bolsa como 'proxy' de correlación."
+            )
+            if "cm_corrm" not in st.session_state or st.session_state["cm_corrm"].shape[0] != n_bc:
                 st.session_state["cm_corrm"] = np.eye(n_bc)
             noms_bc = [b["nombre"] for b in bd_c]
             df_cr = pd.DataFrame(st.session_state["cm_corrm"], index=noms_bc, columns=noms_bc)
             df_cr.index.name = "Bono"
             ed_cr = st.data_editor(
-                df_cr.round(4), use_container_width=True,
-                column_config={c: st.column_config.NumberColumn(
-                    c, format="%.4f", step=0.01, min_value=-1., max_value=1.)
-                    for c in noms_bc},
+                df_cr.round(4),
+                use_container_width=True,
+                column_config={
+                    c: st.column_config.NumberColumn(
+                        c, format="%.4f", step=0.01, min_value=-1.0, max_value=1.0
+                    )
+                    for c in noms_bc
+                },
             )
             cm_arr = ed_cr.values.astype(float)
             np.fill_diagonal(cm_arr, 1.0)
@@ -925,8 +1126,10 @@ with tab_cm:
 
         with col5b:
             n_sims5 = st.select_slider(
-                "Muestras Monte Carlo:", options=[10_000,50_000,100_000,200_000],
-                value=50_000, key="cm_sims5",
+                "Muestras Monte Carlo:",
+                options=[10_000, 50_000, 100_000, 200_000],
+                value=50_000,
+                key="cm_sims5",
             )
 
             st.markdown("##### Umbrales Límite")
@@ -935,13 +1138,16 @@ with tab_cm:
             for b in bd_c:
                 _n_th = st.session_state["cm_tm"].shape[0]
                 cum_p = np.cumsum(tm5[b["rating_idx"]])
-                with np.errstate(all='ignore'):
-                    thresh = norm.ppf(np.clip(cum_p, 1e-15, 1-1e-15))
+                with np.errstate(all="ignore"):
+                    thresh = norm.ppf(np.clip(cum_p, 1e-15, 1 - 1e-15))
                 thresh[-1] = np.inf
-                th_rows.append([b["nombre"], b["rating"]] +
-                               [f"{t:.3f}" if np.isfinite(t) else "∞" for t in thresh[:8]])
-            df_th = pd.DataFrame(th_rows,
-                                 columns=["Bono","Rating"]+[f"z({r})" for r in list(_RATINGS_WORK[:8])])
+                th_rows.append(
+                    [b["nombre"], b["rating"]]
+                    + [f"{t:.3f}" if np.isfinite(t) else "∞" for t in thresh[:8]]
+                )
+            df_th = pd.DataFrame(
+                th_rows, columns=["Bono", "Rating"] + [f"z({r})" for r in list(_RATINGS_WORK[:8])]
+            )
             st.dataframe(df_th, hide_index=True, use_container_width=True, height=280)
 
         separador()
@@ -949,32 +1155,34 @@ with tab_cm:
         if st.button("Ejecutar Simulación de Contagio", use_container_width=True, key="btn_corr5"):
             with st.spinner(f"Simulando {n_sims5:,} caminos usando la matriz Cholesky..."):
                 sims5 = gaussian_copula_simulation(
-                    bd_c, st.session_state.get("cm_tm", DEFAULT_TM),
+                    bd_c,
+                    st.session_state.get("cm_tm", DEFAULT_TM),
                     st.session_state["cm_corrm"],
-                    n_sims=n_sims5, seed=None,
+                    n_sims=n_sims5,
+                    seed=None,
                 )
                 vc5_raw = var_cvar_from_simulations(sims5, CONF_LEVELS)
-                ev5_c   = vc5_raw[CONF_LEVELS[0]]["EV"]
-                sg5_c   = vc5_raw[CONF_LEVELS[0]]["sigma"]
-                vc5     = var_cvar_parametric(ev5_c, sg5_c, CONF_LEVELS)
-                sc5     = scale_var_cvar(vc5, CONF_LEVELS)
-                st.session_state["cm_csims"]   = sims5
-                st.session_state["cm_cvars"]   = vc5
+                ev5_c = vc5_raw[CONF_LEVELS[0]]["EV"]
+                sg5_c = vc5_raw[CONF_LEVELS[0]]["sigma"]
+                vc5 = var_cvar_parametric(ev5_c, sg5_c, CONF_LEVELS)
+                sc5 = scale_var_cvar(vc5, CONF_LEVELS)
+                st.session_state["cm_csims"] = sims5
+                st.session_state["cm_cvars"] = vc5
                 st.session_state["cm_cscaled"] = sc5
             themed_success(f"Simulación masiva completada.")
 
         if "cm_cvars" in st.session_state:
-            vc5  = st.session_state["cm_cvars"]
-            sc5  = st.session_state.get("cm_cscaled", scale_var_cvar(vc5, CONF_LEVELS))
-            s5   = st.session_state["cm_csims"]
-            ev5  = vc5[0.95]["EV"]
-            sg5  = vc5[0.95]["sigma"]
+            vc5 = st.session_state["cm_cvars"]
+            sc5 = st.session_state.get("cm_cscaled", scale_var_cvar(vc5, CONF_LEVELS))
+            s5 = st.session_state["cm_csims"]
+            ev5 = vc5[0.95]["EV"]
+            sg5 = vc5[0.95]["sigma"]
             c_th = get_current_theme()
 
             col_ev5a, col_ev5b = st.columns(2)
-            col_ev5a.metric("E[V] simulado",  f"${ev5:,.4f}")
-            col_ev5b.metric("σ simulado",     f"${sg5:,.4f}")
-            
+            col_ev5a.metric("E[V] simulado", f"${ev5:,.4f}")
+            col_ev5b.metric("σ simulado", f"${sg5:,.4f}")
+
             with paso_a_paso():
                 st.latex(r"Z_i = \sqrt{\rho} M + \sqrt{1-\rho} \epsilon_i")
                 st.latex(r"\text{Threshold}_j = \Phi^{-1}\left(\sum_{k=1}^j p_k\right)")
@@ -1025,37 +1233,54 @@ with tab_cm:
                 vi_sc = st.session_state["cm_iscaled_param"]
                 comp = []
                 for cf, lb in zip(CONF_LEVELS, CONF_LABELS):
-                    ri = vi_sc[cf]; rc5 = sc5[cf]
+                    ri = vi_sc[cf]
+                    rc5 = sc5[cf]
                     delta_10d = rc5["VaR_10d"] - ri["VaR_10d"]
-                    comp.append({
-                        "Confianza":               lb,
-                        "VaR 1d Indep. ($)":       f"${ri['VaR_1d']:,.4f}",
-                        "VaR 1d Corr. ($)":        f"${rc5['VaR_1d']:,.4f}",
-                        "VaR 10d Indep. ($)":      f"${ri['VaR_10d']:,.4f}",
-                        "VaR 10d Corr. ($)":       f"${rc5['VaR_10d']:,.4f}",
-                        "Capital Indep. ($)":      f"${ri['Capital']:,.4f}",
-                        "Capital Corr. ($)":       f"${rc5['Capital']:,.4f}",
-                        "Δ VaR 10d ($)":           f"${delta_10d:+,.4f}",
-                        "Efecto correlación":      "Peligro Sistémico" if delta_10d > 0 else "Estabilidad",
-                    })
+                    comp.append(
+                        {
+                            "Confianza": lb,
+                            "VaR 1d Indep. ($)": f"${ri['VaR_1d']:,.4f}",
+                            "VaR 1d Corr. ($)": f"${rc5['VaR_1d']:,.4f}",
+                            "VaR 10d Indep. ($)": f"${ri['VaR_10d']:,.4f}",
+                            "VaR 10d Corr. ($)": f"${rc5['VaR_10d']:,.4f}",
+                            "Capital Indep. ($)": f"${ri['Capital']:,.4f}",
+                            "Capital Corr. ($)": f"${rc5['Capital']:,.4f}",
+                            "Δ VaR 10d ($)": f"${delta_10d:+,.4f}",
+                            "Efecto correlación": "Peligro Sistémico"
+                            if delta_10d > 0
+                            else "Estabilidad",
+                        }
+                    )
                 st.dataframe(pd.DataFrame(comp), hide_index=True, use_container_width=True)
 
             fig5 = go.Figure()
-            fig5.add_trace(go.Histogram(
-                x=s5, nbinsx=120, name="Distribución simulada",
-                marker_color=c_th["primary"], opacity=0.7,
-                histnorm="probability density",
-            ))
-            fig5.add_vline(x=ev5, line_color=c_th["success"], line_width=2,
-                           annotation_text=f"E[V]={ev5:.2f}")
-            for cf, lb in zip([0.95, 0.99, 0.999], ["95%","99%","99.9%"]):
-                q_param = ev5 - vc5[cf]["VaR"]   # cuantil paramétrico
-                fig5.add_vline(x=q_param, line_dash="dot", line_color=c_th["danger"],
-                               annotation_text=f"VaR {lb}")
+            fig5.add_trace(
+                go.Histogram(
+                    x=s5,
+                    nbinsx=120,
+                    name="Distribución simulada",
+                    marker_color=c_th["primary"],
+                    opacity=0.7,
+                    histnorm="probability density",
+                )
+            )
+            fig5.add_vline(
+                x=ev5, line_color=c_th["success"], line_width=2, annotation_text=f"E[V]={ev5:.2f}"
+            )
+            for cf, lb in zip([0.95, 0.99, 0.999], ["95%", "99%", "99.9%"]):
+                q_param = ev5 - vc5[cf]["VaR"]  # cuantil paramétrico
+                fig5.add_vline(
+                    x=q_param,
+                    line_dash="dot",
+                    line_color=c_th["danger"],
+                    annotation_text=f"VaR {lb}",
+                )
             fig5.update_layout(
                 title=f"Histograma de Cópula Gaussiana ({n_sims5:,} escenarios)",
-                xaxis_title="Valor del portafolio ($)", yaxis_title="Densidad Probabilística",
-                height=420, **plotly_theme(),
+                xaxis_title="Valor del portafolio ($)",
+                yaxis_title="Densidad Probabilística",
+                height=420,
+                **plotly_theme(),
             )
             st.plotly_chart(fig5, use_container_width=True)
 
@@ -1074,23 +1299,39 @@ with tab_cm:
                 from openpyxl.utils import get_column_letter
 
                 wb = openpyxl.Workbook()
-                HDR  = Font(bold=True, color="FFFFFF", size=10)
+                HDR = Font(bold=True, color="FFFFFF", size=10)
                 FIL1 = PatternFill("solid", start_color="203F9A")
                 FIL2 = PatternFill("solid", start_color="E84797")
                 FIL3 = PatternFill("solid", start_color="F2C8D8")
-                CTR  = Alignment(horizontal="center")
+                CTR = Alignment(horizontal="center")
 
                 def hdr(ws, r, c, v, fill=FIL1):
                     cell = ws.cell(row=r, column=c, value=v)
-                    cell.font = HDR; cell.fill = fill; cell.alignment = CTR
+                    cell.font = HDR
+                    cell.fill = fill
+                    cell.alignment = CTR
 
                 # Sheet 1: Bond params
-                ws1 = wb.active; ws1.title = "1 Parametros"
-                for j, h in enumerate(["Nombre","Rating","VN","Cupon%","T","Pagos/año","Recup%"], 1):
-                    hdr(ws1, 1, j, h); ws1.column_dimensions[get_column_letter(j)].width = 14
-                for i, b in enumerate(st.session_state.get("cm_bparams",[]), 2):
-                    for j, v in enumerate([b["nombre"],b["rating"],b["VN"],
-                                           b["cupon_pct"]*100,b["T"],b["pagos"],b["recov"]*100], 1):
+                ws1 = wb.active
+                ws1.title = "1 Parametros"
+                for j, h in enumerate(
+                    ["Nombre", "Rating", "VN", "Cupon%", "T", "Pagos/año", "Recup%"], 1
+                ):
+                    hdr(ws1, 1, j, h)
+                    ws1.column_dimensions[get_column_letter(j)].width = 14
+                for i, b in enumerate(st.session_state.get("cm_bparams", []), 2):
+                    for j, v in enumerate(
+                        [
+                            b["nombre"],
+                            b["rating"],
+                            b["VN"],
+                            b["cupon_pct"] * 100,
+                            b["T"],
+                            b["pagos"],
+                            b["recov"] * 100,
+                        ],
+                        1,
+                    ):
                         ws1.cell(row=i, column=j, value=v).fill = FIL3
 
                 # Sheet 2: Transition matrix
@@ -1098,21 +1339,24 @@ with tab_cm:
                 hdr(ws2, 1, 1, "From\\To", FIL2)
                 tm_x = st.session_state.get("cm_tm", DEFAULT_TM)
                 for j, r in enumerate(RATINGS, 2):
-                    hdr(ws2, 1, j, r); ws2.column_dimensions[get_column_letter(j)].width = 8
+                    hdr(ws2, 1, j, r)
+                    ws2.column_dimensions[get_column_letter(j)].width = 8
                 ws2.column_dimensions["A"].width = 8
                 for i, rf in enumerate(RATINGS):
-                    ws2.cell(row=i+2, column=1, value=rf).font = Font(bold=True)
+                    ws2.cell(row=i + 2, column=1, value=rf).font = Font(bold=True)
                     for j in range(N_R):
-                        c = ws2.cell(row=i+2, column=j+2, value=float(tm_x[i,j]))
-                        c.number_format = "0.0000%"; c.alignment = CTR
-                        if i == j: c.fill = FIL3
+                        c = ws2.cell(row=i + 2, column=j + 2, value=float(tm_x[i, j]))
+                        c.number_format = "0.0000%"
+                        c.alignment = CTR
+                        if i == j:
+                            c.fill = FIL3
 
                 # Sheet 3: Rates
                 ws3 = wb.create_sheet("3 Tasas")
-                _bp_x   = st.session_state.get("cm_bparams", [])
+                _bp_x = st.session_state.get("cm_bparams", [])
                 _maxT_x = min(max((b["T"] for b in _bp_x), default=5), 10) if _bp_x else 5
-                tsy_x   = st.session_state.get("cm_tsy_anchors", _default_tsy_anchors(_maxT_x))
-                spr_x   = st.session_state.get("cm_spreads_flat", _DEFAULT_SPREADS_FLAT.copy())
+                tsy_x = st.session_state.get("cm_tsy_anchors", _default_tsy_anchors(_maxT_x))
+                spr_x = st.session_state.get("cm_spreads_flat", _DEFAULT_SPREADS_FLAT.copy())
                 allin_x, tenors_x = _build_allin_table(_maxT_x)
 
                 # Treasury row
@@ -1140,7 +1384,8 @@ with tab_cm:
                     hdr(ws3, _t_start_row, j, lbl)
                     ws3.column_dimensions[get_column_letter(j)].width = 9
                 for i, (rn, row_vals) in enumerate(
-                        zip(RATINGS[:_n_spr_rows], allin_x[:_n_spr_rows]), _t_start_row + 1):
+                    zip(RATINGS[:_n_spr_rows], allin_x[:_n_spr_rows]), _t_start_row + 1
+                ):
                     ws3.cell(row=i, column=1, value=rn).font = Font(bold=True)
                     for j, v in enumerate(row_vals, 2):
                         ws3.cell(row=i, column=j, value=float(v)).number_format = "0.0000%"
@@ -1152,17 +1397,21 @@ with tab_cm:
                 col_off = 1
                 for b in bd_x:
                     hdr(ws4, 1, col_off, b["nombre"], FIL2)
-                    hdr(ws4, 1, col_off+1, "Prob")
-                    hdr(ws4, 1, col_off+2, "Valor ($)")
+                    hdr(ws4, 1, col_off + 1, "Prob")
+                    hdr(ws4, 1, col_off + 2, "Valor ($)")
                     for k in range(3):
-                        ws4.column_dimensions[get_column_letter(col_off+k)].width = 14
+                        ws4.column_dimensions[get_column_letter(col_off + k)].width = 14
                     pb = tm_x2[b["rating_idx"]]
                     _nv = len(b["values"])
                     _rl = list(_RATINGS_WORK[:_nv])
                     for ri, (rn, p, v) in enumerate(zip(_rl, pb[:_nv], b["values"]), 2):
                         ws4.cell(row=ri, column=col_off, value=rn)
-                        ws4.cell(row=ri, column=col_off+1, value=float(p)).number_format="0.0000%"
-                        ws4.cell(row=ri, column=col_off+2, value=float(v)).number_format="#,##0.0000"
+                        ws4.cell(
+                            row=ri, column=col_off + 1, value=float(p)
+                        ).number_format = "0.0000%"
+                        ws4.cell(
+                            row=ri, column=col_off + 2, value=float(v)
+                        ).number_format = "#,##0.0000"
                     col_off += 4
 
                 # Sheet 5: Joint distribution
@@ -1170,52 +1419,68 @@ with tab_cm:
                 if "cm_df_dist" in st.session_state:
                     df5 = st.session_state["cm_df_dist"].reset_index(drop=True)
                     for j, h in enumerate(df5.columns, 1):
-                        hdr(ws5, 1, j, h); ws5.column_dimensions[get_column_letter(j)].width = 24
+                        hdr(ws5, 1, j, h)
+                        ws5.column_dimensions[get_column_letter(j)].width = 24
                     for ri, row in df5.iterrows():
                         for j, v in enumerate(row, 1):
-                            c = ws5.cell(row=ri+2, column=j, value=float(v))
-                            c.number_format = "#,##0.0000" if j in (1,4) else "0.000000%"
+                            c = ws5.cell(row=ri + 2, column=j, value=float(v))
+                            c.number_format = "#,##0.0000" if j in (1, 4) else "0.000000%"
                             c.fill = FIL3
                 else:
-                    ws5.cell(row=1,column=1, value="Calcula el caso independiente primero.")
+                    ws5.cell(row=1, column=1, value="Calcula el caso independiente primero.")
 
                 # Sheet 6: VaR / CVaR anual
                 ws6 = wb.create_sheet("6 VaR CVaR Anual")
-                hdrs6 = ["Conf","Método","VaR 1y ($)","CVaR 1y ($)","E[V] ($)","σ ($)"]
+                hdrs6 = ["Conf", "Método", "VaR 1y ($)", "CVaR 1y ($)", "E[V] ($)", "σ ($)"]
                 for j, h in enumerate(hdrs6, 1):
-                    hdr(ws6, 1, j, h); ws6.column_dimensions[get_column_letter(j)].width = 20
+                    hdr(ws6, 1, j, h)
+                    ws6.column_dimensions[get_column_letter(j)].width = 20
                 rw = 2
                 for cf, lb in zip(CONF_LEVELS, CONF_LABELS):
                     if "cm_ivars_param" in st.session_state:
                         r = st.session_state["cm_ivars_param"][cf]
-                        for j, v in enumerate([lb,"Independiente",r["VaR"],r["CVaR"],r["EV"],r["sigma"]], 1):
+                        for j, v in enumerate(
+                            [lb, "Independiente", r["VaR"], r["CVaR"], r["EV"], r["sigma"]], 1
+                        ):
                             c = ws6.cell(row=rw, column=j, value=v)
                             c.fill = FIL3
-                            if j >= 3: c.number_format = "#,##0.0000"
+                            if j >= 3:
+                                c.number_format = "#,##0.0000"
                         rw += 1
                     if "cm_cvars" in st.session_state:
                         r = st.session_state["cm_cvars"][cf]
-                        for j, v in enumerate([lb,"Correlacionado",r["VaR"],r["CVaR"],r["EV"],r["sigma"]], 1):
+                        for j, v in enumerate(
+                            [lb, "Correlacionado", r["VaR"], r["CVaR"], r["EV"], r["sigma"]], 1
+                        ):
                             c = ws6.cell(row=rw, column=j, value=v)
-                            if j >= 3: c.number_format = "#,##0.0000"
+                            if j >= 3:
+                                c.number_format = "#,##0.0000"
                         rw += 1
 
                 # Sheet 7: Métricas escaladas (1d · 10d · Capital)
                 ws7 = wb.create_sheet("7 Metricas Escaladas")
-                ws7.cell(row=1, column=1,
-                         value=f"Escala: VaR_1d = VaR_1y ÷ √{TRADING_DAYS}  |  "
-                               f"VaR_10d = VaR_1d × √10  |  Capital = 3 × VaR_10d"
-                         ).font = Font(italic=True, color="555555")
-                hdrs7 = ["Conf","Método",
-                         "VaR 1d ($)","CVaR 1d ($)",
-                         "VaR 10d ($)","CVaR 10d ($)",
-                         "Capital ($)","E[V] ($)"]
+                ws7.cell(
+                    row=1,
+                    column=1,
+                    value=f"Escala: VaR_1d = VaR_1y ÷ √{TRADING_DAYS}  |  "
+                    f"VaR_10d = VaR_1d × √10  |  Capital = 3 × VaR_10d",
+                ).font = Font(italic=True, color="555555")
+                hdrs7 = [
+                    "Conf",
+                    "Método",
+                    "VaR 1d ($)",
+                    "CVaR 1d ($)",
+                    "VaR 10d ($)",
+                    "CVaR 10d ($)",
+                    "Capital ($)",
+                    "E[V] ($)",
+                ]
                 for j, h in enumerate(hdrs7, 1):
                     hdr(ws7, 2, j, h)
                     ws7.column_dimensions[get_column_letter(j)].width = 18
                 rw7 = 3
                 for metodo, sc_data, fill in [
-                    ("Independiente",  st.session_state.get("cm_iscaled_param"), FIL3),
+                    ("Independiente", st.session_state.get("cm_iscaled_param"), FIL3),
                     ("Correlacionado", st.session_state.get("cm_cscaled"), None),
                 ]:
                     if sc_data is None:
@@ -1223,18 +1488,26 @@ with tab_cm:
                     for cf, lb in zip(CONF_LEVELS, CONF_LABELS):
                         r = sc_data[cf]
                         vals_row = [
-                            lb, metodo,
-                            r["VaR_1d"],  r["CVaR_1d"],
-                            r["VaR_10d"], r["CVaR_10d"],
-                            r["Capital"], r["EV"],
+                            lb,
+                            metodo,
+                            r["VaR_1d"],
+                            r["CVaR_1d"],
+                            r["VaR_10d"],
+                            r["CVaR_10d"],
+                            r["Capital"],
+                            r["EV"],
                         ]
                         for j, v in enumerate(vals_row, 1):
                             cell = ws7.cell(row=rw7, column=j, value=v)
-                            if fill: cell.fill = fill
-                            if j >= 3: cell.number_format = "#,##0.0000"
+                            if fill:
+                                cell.fill = fill
+                            if j >= 3:
+                                cell.number_format = "#,##0.0000"
                         rw7 += 1
 
-                buf = io.BytesIO(); wb.save(buf); buf.seek(0)
+                buf = io.BytesIO()
+                wb.save(buf)
+                buf.seek(0)
                 st.session_state["cm_excel"] = buf.getvalue()
                 themed_success("Exportación a Excel creada con éxito.")
             except Exception as e:

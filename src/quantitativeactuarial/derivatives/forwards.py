@@ -35,14 +35,28 @@ def forward_price(
     """
     if _is_continuous(capitalizacion):
         return float(spot * np.exp((rate - carry) * maturity))
-    return float(spot * _growth_factor(rate, maturity, capitalizacion) / _growth_factor(carry, maturity, capitalizacion))
+    return float(
+        spot
+        * _growth_factor(rate, maturity, capitalizacion)
+        / _growth_factor(carry, maturity, capitalizacion)
+    )
 
 
-def forward_calculo(S: float, r: float, delta: float, T: float, capitalizacion: str = "Continua") -> float:
+def forward_calculo(
+    S: float, r: float, delta: float, T: float, capitalizacion: str = "Continua"
+) -> float:
     return forward_price(S, r, T, carry=delta, capitalizacion=capitalizacion)
 
 
-def valor_forward_calculo(S: float, K: float, r: float, delta: float, T: float, posicion: str = "Larga", capitalizacion: str = "Continua") -> float:
+def valor_forward_calculo(
+    S: float,
+    K: float,
+    r: float,
+    delta: float,
+    T: float,
+    posicion: str = "Larga",
+    capitalizacion: str = "Continua",
+) -> float:
     val_largo = valor_forward_en_vida(S, K, r, delta, T, capitalizacion=capitalizacion)
     return val_largo if posicion == "Larga" else -val_largo
 
@@ -52,34 +66,55 @@ def precio_forward(S0: float, r: float, T: float, capitalizacion: str = "Continu
     return forward_price(S0, r, T, capitalizacion=capitalizacion)
 
 
-def precio_forward_dividendo_continuo(S0: float, r: float, q: float, T: float, capitalizacion: str = "Continua") -> float:
+def precio_forward_dividendo_continuo(
+    S0: float, r: float, q: float, T: float, capitalizacion: str = "Continua"
+) -> float:
     """Precio forward con dividendo continuo o tasa extranjera q."""
     return forward_price(S0, r, T, carry=q, capitalizacion=capitalizacion)
 
 
-def precio_forward_dividendos_discretos(S0: float, r: float, T: float, I: float, capitalizacion: str = "Continua") -> float:
+def precio_forward_dividendos_discretos(
+    S0: float, r: float, T: float, I: float, capitalizacion: str = "Continua"
+) -> float:
     """Precio forward descontando VP de dividendos discretos I."""
     return float((S0 - I) * _growth_factor(r, T, capitalizacion))
 
 
-def precio_forward_commodity(S0: float, r: float, u: float, T: float, capitalizacion: str = "Continua") -> float:
+def precio_forward_commodity(
+    S0: float, r: float, u: float, T: float, capitalizacion: str = "Continua"
+) -> float:
     """Precio forward de commodity con costo de almacenamiento continuo u."""
     if _is_continuous(capitalizacion):
         return float(S0 * np.exp((r + u) * T))
     return float(S0 * _growth_factor(r, T, capitalizacion) * _growth_factor(u, T, capitalizacion))
 
 
-def precio_forward_divisa(S0: float, r_d: float, r_f: float, T: float, capitalizacion: str = "Continua") -> float:
+def precio_forward_divisa(
+    S0: float, r_d: float, r_f: float, T: float, capitalizacion: str = "Continua"
+) -> float:
     """Tipo de cambio forward (Paridad Cubierta de Tasas de Interés)."""
     return forward_price(S0, r_d, T, carry=r_f, capitalizacion=capitalizacion)
 
 
-def valor_forward_en_vida(St: float, F0: float, r: float, q: float, tau: float, capitalizacion: str = "Continua") -> float:
+def valor_forward_en_vida(
+    St: float, F0: float, r: float, q: float, tau: float, capitalizacion: str = "Continua"
+) -> float:
     """Valor de mercado de un forward largo en t < T. tau = T - t."""
-    return float(St * _discount_factor(q, tau, capitalizacion) - F0 * _discount_factor(r, tau, capitalizacion))
+    return float(
+        St * _discount_factor(q, tau, capitalizacion)
+        - F0 * _discount_factor(r, tau, capitalizacion)
+    )
 
 
-def fra(r1: float, r2: float, t1: float, t2: float, nocional: float, R_K: float, capitalizacion: str = "Continua") -> tuple[float, float]:
+def fra(
+    r1: float,
+    r2: float,
+    t1: float,
+    t2: float,
+    nocional: float,
+    R_K: float,
+    capitalizacion: str = "Continua",
+) -> tuple[float, float]:
     """
     Forward Rate Agreement.
     Devuelve (tasa_forward_implicita, valor_fra).
@@ -89,9 +124,12 @@ def fra(r1: float, r2: float, t1: float, t2: float, nocional: float, R_K: float,
     if _is_continuous(capitalizacion):
         R_F = (r2 * t2 - r1 * t1) / tau
     else:
-        R_F = (_growth_factor(r2, t2, capitalizacion) / _growth_factor(r1, t1, capitalizacion)) ** (1 / tau) - 1
+        R_F = (_growth_factor(r2, t2, capitalizacion) / _growth_factor(r1, t1, capitalizacion)) ** (
+            1 / tau
+        ) - 1
     valor = nocional * (R_F - R_K) * tau * _discount_factor(r2, t2, capitalizacion)
     return float(R_F), float(valor)
+
 
 __all__ = [
     "forward_price",

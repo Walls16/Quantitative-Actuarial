@@ -1,5 +1,5 @@
 Quantitative Actuarial
-=====================
+======================
 
 Pure actuarial and quantitative-finance routines packaged as
 ``quantitativeactuarial`` and commonly imported as ``quact``.
@@ -10,8 +10,12 @@ The library is organized as small, stateless function modules:
   equity, cash-flow discounting, and market-risk helpers.
 * ``derivatives`` for forwards, vanilla option pricing, trees, exotics, and
   payoff strategy utilities.
+* ``derivados_avanzados`` for BSM, CRR, Heston, Merton jump-diffusion, SABR,
+  Variance Gamma, NIG, Bachelier, calibration, and Monte Carlo pricing engines.
 * ``creditrisk`` for transition matrices, bond migration valuation, portfolio
   distributions, Gaussian copula simulation, and credit VaR/CVaR.
+* ``portafolioopt`` for portfolio optimization, risk metrics, efficient
+  frontiers, walk-forward backtesting, and historical stress testing.
 
 Installation
 ------------

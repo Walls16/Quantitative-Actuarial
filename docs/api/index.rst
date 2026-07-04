@@ -7,5 +7,7 @@ API Reference
    public
    financial_math
    derivatives
+   derivados_avanzados
    creditrisk
+   portafolioopt
    compatibility

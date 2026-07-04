@@ -18,9 +18,14 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 from utils import (
-    page_header, separador,
-    themed_info, themed_success, themed_warning, themed_error,
-    apply_plotly_theme, get_current_theme,
+    page_header,
+    separador,
+    themed_info,
+    themed_success,
+    themed_warning,
+    themed_error,
+    apply_plotly_theme,
+    get_current_theme,
 )
 import app.domain as quact
 
@@ -34,23 +39,23 @@ st.set_page_config(
 )
 page_header(
     titulo="7. Teoría de Portafolios — Comparativa de Estrategias",
-    subtitulo="5 métodos de ponderación · pypfopt · SciPy · Datos reales de Yahoo Finance"
+    subtitulo="5 métodos de ponderación · SciPy · Datos reales de Yahoo Finance",
 )
 
 # ─── Paleta fija por estrategia ───────────────────────────────────────────────
 ESTRATEGIA_COLORES = {
-    "Máx. Sharpe":       "#FF4B4B",   # Rojo
-    "Mín. Varianza":     "#00E5FF",   # Cian
-    "1/N Equiponderado": "#FFD700",   # Amarillo
-    "Paridad de Riesgo": "#7CFC00",   # Verde lima
-    "MVSK":              "#FF8C00",   # Naranja
+    "Máx. Sharpe": "#FF4B4B",  # Rojo
+    "Mín. Varianza": "#00E5FF",  # Cian
+    "1/N Equiponderado": "#FFD700",  # Amarillo
+    "Paridad de Riesgo": "#7CFC00",  # Verde lima
+    "MVSK": "#FF8C00",  # Naranja
 }
 ESTRATEGIA_SIMBOLOS = {
-    "Máx. Sharpe":       "star",
-    "Mín. Varianza":     "star",
+    "Máx. Sharpe": "star",
+    "Mín. Varianza": "star",
     "1/N Equiponderado": "diamond",
     "Paridad de Riesgo": "circle",
-    "MVSK":              "pentagon",
+    "MVSK": "pentagon",
 }
 
 # =============================================================================
@@ -73,16 +78,16 @@ with st.expander("Configuración del Portafolio y Mercado", expanded=True):
         )
 
     with c_in2:
-        hoy          = datetime.date.today()
+        hoy = datetime.date.today()
         hace_3_anios = hoy - datetime.timedelta(days=365 * 3)
         fecha_inicio = st.date_input("Fecha de Inicio", value=hace_3_anios)
-        fecha_fin    = st.date_input("Fecha de Fin",    value=hoy)
+        fecha_fin = st.date_input("Fecha de Fin", value=hoy)
 
     with c_in3:
-        tasa_libre = st.number_input(
-            "Tasa Libre de Riesgo ($r_f$) %",
-            value=5.0, step=0.1, key="pf_rf"
-        ) / 100
+        tasa_libre = (
+            st.number_input("Tasa Libre de Riesgo ($r_f$) %", value=5.0, step=0.1, key="pf_rf")
+            / 100
+        )
         st.write("")
         ejecutar = st.button("Optimizar Portafolio", use_container_width=True)
 
@@ -95,14 +100,16 @@ if ejecutar:
     if len(tickers) < 2:
         themed_error("Necesitas al menos 2 activos para generar una frontera eficiente.")
     else:
-        with st.spinner(f"Descargando datos y resolviendo 5 optimizaciones para {len(tickers)} activos..."):
+        with st.spinner(
+            f"Descargando datos y resolviendo 5 optimizaciones para {len(tickers)} activos..."
+        ):
             try:
                 resultado = quact.optimizacion_portafolios(
                     tickers, fecha_inicio, fecha_fin, tasa_libre
                 )
-                st.session_state["datos_portafolio"]  = resultado
+                st.session_state["datos_portafolio"] = resultado
                 st.session_state["tickers_guardados"] = tickers_input
-                st.session_state["fecha_hoy_pf"]      = hoy
+                st.session_state["fecha_hoy_pf"] = hoy
                 themed_success("¡Optimización de las 5 estrategias completada exitosamente!")
             except Exception as e:
                 themed_error(f"Ocurrió un error al procesar los datos: {e}")
@@ -115,11 +122,9 @@ if ejecutar:
 # FASE 2 — VISUALIZACIÓN
 # =============================================================================
 if "datos_portafolio" in st.session_state:
-
     if st.session_state.get("tickers_guardados") != tickers_input:
         themed_warning(
-            "Detectamos cambios en los símbolos. "
-            "Presiona **Optimizar Portafolio** para recalcular."
+            "Detectamos cambios en los símbolos. Presiona **Optimizar Portafolio** para recalcular."
         )
 
     data, mu, S, resultados, nube = st.session_state["datos_portafolio"]
@@ -137,26 +142,30 @@ if "datos_portafolio" in st.session_state:
 
     filas_resumen = []
     for nombre, (ret, vol, sharpe, pesos) in resultados.items():
-        filas_resumen.append({
-            "Estrategia":              nombre,
-            "Rendimiento Anual (E[R])": f"{ret*100:.2f}%",
-            "Volatilidad Anual (σ)":    f"{vol*100:.2f}%",
-            "Ratio de Sharpe":          f"{sharpe:.4f}",
-        })
+        filas_resumen.append(
+            {
+                "Estrategia": nombre,
+                "Rendimiento Anual (E[R])": f"{ret * 100:.2f}%",
+                "Volatilidad Anual (σ)": f"{vol * 100:.2f}%",
+                "Ratio de Sharpe": f"{sharpe:.4f}",
+            }
+        )
     df_resumen = pd.DataFrame(filas_resumen).set_index("Estrategia")
     st.dataframe(df_resumen, use_container_width=True)
 
     separador()
 
     # ── Pestañas ──────────────────────────────────────────────────────────────
-    tab_front, tab_pesos, tab_hist, tab_var, tab_teoria, tab_dl = st.tabs([
-        "Frontera Eficiente",
-        "Composición (wᵢ)",
-        "Desempeño Histórico",
-        "Análisis de Riesgo (VaR)",
-        "Marco Teórico",
-        "Exportar Datos",
-    ])
+    tab_front, tab_pesos, tab_hist, tab_var, tab_teoria, tab_dl = st.tabs(
+        [
+            "Frontera Eficiente",
+            "Composición (wᵢ)",
+            "Desempeño Histórico",
+            "Análisis de Riesgo (VaR)",
+            "Marco Teórico",
+            "Exportar Datos",
+        ]
+    )
 
     # ─────────────────────────────────────────────────────────────────────────
     # TAB 1 — FRONTERA EFICIENTE
@@ -172,46 +181,52 @@ if "datos_portafolio" in st.session_state:
         fig_ef = go.Figure()
 
         # Nube Monte Carlo
-        fig_ef.add_trace(go.Scatter(
-            x=vol_sim, y=ret_sim,
-            mode="markers",
-            marker=dict(
-                size=4,
-                color=sharpe_sim,
-                colorscale="Viridis",
-                showscale=True,
-                colorbar=dict(title="Sharpe Ratio"),
-            ),
-            text=[
-                f"Rendimiento: {r*100:.2f}%<br>Riesgo: {v*100:.2f}%<br>Sharpe: {s:.2f}"
-                for r, v, s in zip(ret_sim, vol_sim, sharpe_sim)
-            ],
-            hoverinfo="text",
-            name="Portafolios Posibles (Monte Carlo)",
-        ))
+        fig_ef.add_trace(
+            go.Scatter(
+                x=vol_sim,
+                y=ret_sim,
+                mode="markers",
+                marker=dict(
+                    size=4,
+                    color=sharpe_sim,
+                    colorscale="Viridis",
+                    showscale=True,
+                    colorbar=dict(title="Sharpe Ratio"),
+                ),
+                text=[
+                    f"Rendimiento: {r * 100:.2f}%<br>Riesgo: {v * 100:.2f}%<br>Sharpe: {s:.2f}"
+                    for r, v, s in zip(ret_sim, vol_sim, sharpe_sim)
+                ],
+                hoverinfo="text",
+                name="Portafolios Posibles (Monte Carlo)",
+            )
+        )
 
         # Puntos de estrategias
         for nombre, (ret, vol, sharpe, _) in resultados.items():
-            fig_ef.add_trace(go.Scatter(
-                x=[vol], y=[ret],
-                mode="markers+text",
-                marker=dict(
-                    symbol=ESTRATEGIA_SIMBOLOS[nombre],
-                    size=20,
-                    color=ESTRATEGIA_COLORES[nombre],
-                    line=dict(width=1.5, color="black"),
-                ),
-                text=[nombre],
-                textposition="top center",
-                textfont=dict(size=11, color=ESTRATEGIA_COLORES[nombre]),
-                name=f"{nombre} (σ={vol*100:.1f}%, E[R]={ret*100:.1f}%)",
-                hovertemplate=(
-                    f"<b>{nombre}</b><br>"
-                    f"Rendimiento: {ret*100:.2f}%<br>"
-                    f"Volatilidad: {vol*100:.2f}%<br>"
-                    f"Sharpe: {sharpe:.4f}<extra></extra>"
-                ),
-            ))
+            fig_ef.add_trace(
+                go.Scatter(
+                    x=[vol],
+                    y=[ret],
+                    mode="markers+text",
+                    marker=dict(
+                        symbol=ESTRATEGIA_SIMBOLOS[nombre],
+                        size=20,
+                        color=ESTRATEGIA_COLORES[nombre],
+                        line=dict(width=1.5, color="black"),
+                    ),
+                    text=[nombre],
+                    textposition="top center",
+                    textfont=dict(size=11, color=ESTRATEGIA_COLORES[nombre]),
+                    name=f"{nombre} (σ={vol * 100:.1f}%, E[R]={ret * 100:.1f}%)",
+                    hovertemplate=(
+                        f"<b>{nombre}</b><br>"
+                        f"Rendimiento: {ret * 100:.2f}%<br>"
+                        f"Volatilidad: {vol * 100:.2f}%<br>"
+                        f"Sharpe: {sharpe:.4f}<extra></extra>"
+                    ),
+                )
+            )
 
         fig_ef.update_layout(
             xaxis_title="Riesgo / Volatilidad Anualizada (σ)",
@@ -249,7 +264,9 @@ if "datos_portafolio" in st.session_state:
 
         fig_pesos = px.bar(
             df_melted,
-            y="Estrategia", x="Peso", color="Activo",
+            y="Estrategia",
+            x="Peso",
+            color="Activo",
             orientation="h",
             text_auto=".1%",
             color_discrete_sequence=px.colors.qualitative.Vivid,
@@ -265,8 +282,10 @@ if "datos_portafolio" in st.session_state:
             barmode="stack",
         )
         fig_pesos.update_traces(
-            textfont_size=12, textangle=0,
-            textposition="inside", cliponaxis=False,
+            textfont_size=12,
+            textangle=0,
+            textposition="inside",
+            cliponaxis=False,
         )
         fig_pesos = apply_plotly_theme(fig_pesos)
         st.plotly_chart(fig_pesos, use_container_width=True)
@@ -298,33 +317,37 @@ if "datos_portafolio" in st.session_state:
         # Primero: líneas individuales (punteadas, más tenues)
         precios_norm = (data / data.iloc[0]) * 100
         for col in precios_norm.columns:
-            fig_hist.add_trace(go.Scatter(
-                x=precios_norm.index,
-                y=precios_norm[col],
-                mode="lines",
-                name=col,
-                line=dict(width=1, dash="dot"),
-                opacity=0.45,
-            ))
+            fig_hist.add_trace(
+                go.Scatter(
+                    x=precios_norm.index,
+                    y=precios_norm[col],
+                    mode="lines",
+                    name=col,
+                    line=dict(width=1, dash="dot"),
+                    opacity=0.45,
+                )
+            )
 
         # Luego: líneas de portafolios (sólidas, gruesas)
         for nombre, (_, _, _, pesos) in resultados.items():
             w_vec = np.array([pesos.get(t, 0.0) for t in data.columns])
-            ret_port = retornos.values @ w_vec          # retorno diario del portafolio
+            ret_port = retornos.values @ w_vec  # retorno diario del portafolio
             valor_port = 100 * np.cumprod(1 + ret_port)
             valor_series = pd.Series(valor_port, index=retornos.index)
 
-            fig_hist.add_trace(go.Scatter(
-                x=valor_series.index,
-                y=valor_series.values,
-                mode="lines",
-                name=nombre,
-                line=dict(
-                    color=ESTRATEGIA_COLORES[nombre],
-                    width=2.8,
-                ),
-                hovertemplate=f"<b>{nombre}</b><br>Fecha: %{{x|%Y-%m-%d}}<br>Valor: $%{{y:.2f}}<extra></extra>",
-            ))
+            fig_hist.add_trace(
+                go.Scatter(
+                    x=valor_series.index,
+                    y=valor_series.values,
+                    mode="lines",
+                    name=nombre,
+                    line=dict(
+                        color=ESTRATEGIA_COLORES[nombre],
+                        width=2.8,
+                    ),
+                    hovertemplate=f"<b>{nombre}</b><br>Fecha: %{{x|%Y-%m-%d}}<br>Valor: $%{{y:.2f}}<extra></extra>",
+                )
+            )
 
         fig_hist.update_layout(
             xaxis_title="Fecha",
@@ -345,8 +368,14 @@ if "datos_portafolio" in st.session_state:
             w_vec = np.array([pesos.get(t, 0.0) for t in data.columns])
             ret_port = retornos.values @ w_vec
             valor_final = 100 * np.prod(1 + ret_port)
-            retorno_total = (valor_final / 100 - 1)
-            filas_rt.append({"Estrategia": nombre, "Valor Final ($)": f"${valor_final:.2f}", "Retorno Total": f"{retorno_total*100:.2f}%"})
+            retorno_total = valor_final / 100 - 1
+            filas_rt.append(
+                {
+                    "Estrategia": nombre,
+                    "Valor Final ($)": f"${valor_final:.2f}",
+                    "Retorno Total": f"{retorno_total * 100:.2f}%",
+                }
+            )
         st.dataframe(pd.DataFrame(filas_rt).set_index("Estrategia"), use_container_width=True)
 
     # ─────────────────────────────────────────────────────────────────────────
@@ -363,16 +392,18 @@ if "datos_portafolio" in st.session_state:
         with col_v1:
             val_port = st.number_input(
                 "Capital Total Invertido ($)",
-                min_value=100.0, value=100_000.0,
-                step=10_000.0, key="pf_var_capital"
+                min_value=100.0,
+                value=100_000.0,
+                step=10_000.0,
+                key="pf_var_capital",
             )
         with col_v2:
-            conf_str  = st.selectbox("Nivel de Confianza", ["95%", "99%"], key="pf_conf")
+            conf_str = st.selectbox("Nivel de Confianza", ["95%", "99%"], key="pf_conf")
             confianza = 0.95 if conf_str == "95%" else 0.99
 
         separador()
 
-        horizontes  = [1, 10, 21]
+        horizontes = [1, 10, 21]
         nombres_hor = ["1 Día", "10 Días (Basilea)", "21 Días (1 Mes)"]
 
         estrat_sel = st.selectbox(
@@ -386,20 +417,22 @@ if "datos_portafolio" in st.session_state:
         def _tabla_var(rend, vol, capital, conf):
             filas = []
             for h, nom in zip(horizontes, nombres_hor):
-                var_p, _, _, _  = quact.calcular_var_parametrico(rend, vol, capital, conf, h)
+                var_p, _, _, _ = quact.calcular_var_parametrico(rend, vol, capital, conf, h)
                 var_mc, cvar_mc = quact.calcular_var_cvar_montecarlo(rend, vol, capital, conf, h)
-                filas.append({
-                    "Horizonte":        nom,
-                    "VaR Paramétrico":  f"${var_p:,.2f}",
-                    "VaR Monte Carlo":  f"${var_mc:,.2f}",
-                    "CVaR (ES)":        f"${cvar_mc:,.2f}",
-                })
+                filas.append(
+                    {
+                        "Horizonte": nom,
+                        "VaR Paramétrico": f"${var_p:,.2f}",
+                        "VaR Monte Carlo": f"${var_mc:,.2f}",
+                        "CVaR (ES)": f"${cvar_mc:,.2f}",
+                    }
+                )
             return pd.DataFrame(filas).set_index("Horizonte")
 
         themed_success(
             f"<div style='display:flex;justify-content:space-between;align-items:center;'>"
             f"<span style='font-size:18px;font-weight:bold;'>{estrat_sel}</span>"
-            f"<span style='font-size:16px;'>Rendimiento Anual: {ret_sel*100:.2f}% · Volatilidad: {vol_sel*100:.2f}%</span>"
+            f"<span style='font-size:16px;'>Rendimiento Anual: {ret_sel * 100:.2f}% · Volatilidad: {vol_sel * 100:.2f}%</span>"
             f"</div>"
         )
         st.dataframe(_tabla_var(ret_sel, vol_sel, val_port, confianza), use_container_width=True)
@@ -429,25 +462,43 @@ if "datos_portafolio" in st.session_state:
 
         with col_t1:
             themed_success("**1. Máximo Sharpe Ratio (Markowitz)**")
-            st.write("Maximiza el rendimiento excedente por unidad de riesgo. Requiere estimación de retornos esperados.")
-            st.latex(r"\max_{\mathbf{w}} \; S = \frac{E[R_p] - r_f}{\sigma_p} \quad \text{s.a.} \; \sum w_i = 1,\; w_i \ge 0")
+            st.write(
+                "Maximiza el rendimiento excedente por unidad de riesgo. Requiere estimación de retornos esperados."
+            )
+            st.latex(
+                r"\max_{\mathbf{w}} \; S = \frac{E[R_p] - r_f}{\sigma_p} \quad \text{s.a.} \; \sum w_i = 1,\; w_i \ge 0"
+            )
 
             themed_info("**2. Mínima Varianza Global (Markowitz)**")
-            st.write("Solo optimiza la covarianza; no requiere pronósticos de retornos (más robusto al error de estimación).")
-            st.latex(r"\min_{\mathbf{w}} \; \sigma_p^2 = \mathbf{w}^T \Sigma \mathbf{w} \quad \text{s.a.} \; \sum w_i = 1,\; w_i \ge 0")
+            st.write(
+                "Solo optimiza la covarianza; no requiere pronósticos de retornos (más robusto al error de estimación)."
+            )
+            st.latex(
+                r"\min_{\mathbf{w}} \; \sigma_p^2 = \mathbf{w}^T \Sigma \mathbf{w} \quad \text{s.a.} \; \sum w_i = 1,\; w_i \ge 0"
+            )
 
             themed_warning("**3. 1/N Equiponderación**")
-            st.write("Asigna el mismo peso a cada activo. Extremadamente robusto; estudios empíricos (DeMiguel et al. 2009) muestran que supera a Markowitz fuera de muestra en muchos casos.")
+            st.write(
+                "Asigna el mismo peso a cada activo. Extremadamente robusto; estudios empíricos (DeMiguel et al. 2009) muestran que supera a Markowitz fuera de muestra en muchos casos."
+            )
             st.latex(r"w_i = \frac{1}{N} \quad \forall \; i")
 
         with col_t2:
             themed_success("**4. Paridad de Riesgo (Risk Parity)**")
-            st.write("Cada activo contribuye *igual* al riesgo total del portafolio, sin importar el tamaño de la posición. Popularizado por el fondo Bridgewater All Weather.")
-            st.latex(r"RC_i = w_i \cdot \frac{(\Sigma \mathbf{w})_i}{\sigma_p} = \frac{\sigma_p}{N} \quad \forall \; i")
+            st.write(
+                "Cada activo contribuye *igual* al riesgo total del portafolio, sin importar el tamaño de la posición. Popularizado por el fondo Bridgewater All Weather."
+            )
+            st.latex(
+                r"RC_i = w_i \cdot \frac{(\Sigma \mathbf{w})_i}{\sigma_p} = \frac{\sigma_p}{N} \quad \forall \; i"
+            )
 
             themed_info("**5. MVSK — Momentos de Orden Superior**")
-            st.write("Extiende Markowitz para incorporar asimetría (skewness) y curtosis (kurtosis), capturando eventos de cola y distribuciones no normales. Maximiza una función de utilidad:")
-            st.latex(r"U = E[R_p] - \lambda_2 \sigma_p^2 + \lambda_3 \text{Skew}_p - \lambda_4 \text{Kurt}_p")
+            st.write(
+                "Extiende Markowitz para incorporar asimetría (skewness) y curtosis (kurtosis), capturando eventos de cola y distribuciones no normales. Maximiza una función de utilidad:"
+            )
+            st.latex(
+                r"U = E[R_p] - \lambda_2 \sigma_p^2 + \lambda_3 \text{Skew}_p - \lambda_4 \text{Kurt}_p"
+            )
             st.caption("Pesos estándar usados: λ₂=1, λ₃=0.5, λ₄=0.5 (Harvey et al. 2010)")
 
         separador()
@@ -465,9 +516,7 @@ if "datos_portafolio" in st.session_state:
     # ─────────────────────────────────────────────────────────────────────────
     with tab_dl:
         st.markdown("#### Descarga de Datos para Réplica")
-        themed_info(
-            "Exporta los precios históricos y los vectores de pesos de las 5 estrategias."
-        )
+        themed_info("Exporta los precios históricos y los vectores de pesos de las 5 estrategias.")
 
         col_d1, col_d2 = st.columns(2)
 
@@ -475,8 +524,10 @@ if "datos_portafolio" in st.session_state:
 
         # Construir DF de pesos con las 5 estrategias
         df_pesos_export = pd.DataFrame(
-            {nombre: {t: pesos.get(t, 0.0) for t in data.columns}
-             for nombre, (_, _, _, pesos) in resultados.items()}
+            {
+                nombre: {t: pesos.get(t, 0.0) for t in data.columns}
+                for nombre, (_, _, _, pesos) in resultados.items()
+            }
         )
         df_pesos_export.index.name = "Ticker"
         csv_pesos = df_pesos_export.to_csv().encode("utf-8")

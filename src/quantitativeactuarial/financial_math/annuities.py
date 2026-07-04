@@ -14,7 +14,7 @@ def vf_anualidad_efectiva(R: float, i_m: float, n_m: float, anticipada: bool = F
         return R * n_m
     factor = ((1 + i_m) ** n_m - 1) / i_m
     if anticipada:
-        factor *= (1 + i_m)
+        factor *= 1 + i_m
     return R * factor
 
 
@@ -44,7 +44,7 @@ def vp_anualidad_efectiva(R: float, i_m: float, n_m: float, anticipada: bool = F
         return R * n_m
     factor = (1 - (1 + i_m) ** (-n_m)) / i_m
     if anticipada:
-        factor *= (1 + i_m)
+        factor *= 1 + i_m
     return R * factor
 
 
@@ -107,7 +107,7 @@ def nper_gradiente_geo_vf(VF: float, R1: float, i_m: float, q_m: float) -> float
     else:
         f = lambda n: R1 * (((1 + i_m) ** n - (1 + q_m) ** n) / (i_m - q_m)) - VF
     try:
-        res = root_scalar(f, bracket=[0.0001, 2000], method='brentq')
+        res = root_scalar(f, bracket=[0.0001, 2000], method="brentq")
         return res.root
     except Exception:
         return np.nan
@@ -120,7 +120,7 @@ def nper_gradiente_geo_vp(VP: float, R1: float, i_m: float, q_m: float) -> float
     else:
         f = lambda n: R1 * (1 - ((1 + q_m) / (1 + i_m)) ** n) / (i_m - q_m) - VP
     try:
-        res = root_scalar(f, bracket=[0.0001, 2000], method='brentq')
+        res = root_scalar(f, bracket=[0.0001, 2000], method="brentq")
         return res.root
     except Exception:
         return np.nan
@@ -145,7 +145,7 @@ def vf_gradiente_aritmetico(R1: float, G: float, i_m: float, n_m: float) -> floa
 def nper_gradiente_arit_vf(VF: float, R1: float, G: float, i_m: float) -> float:
     f = lambda n: vf_gradiente_aritmetico(R1, G, i_m, n) - VF
     try:
-        res = root_scalar(f, bracket=[0.0001, 2000], method='brentq')
+        res = root_scalar(f, bracket=[0.0001, 2000], method="brentq")
         return res.root
     except Exception:
         return np.nan
@@ -154,10 +154,11 @@ def nper_gradiente_arit_vf(VF: float, R1: float, G: float, i_m: float) -> float:
 def nper_gradiente_arit_vp(VP: float, R1: float, G: float, i_m: float) -> float:
     f = lambda n: vp_gradiente_aritmetico(R1, G, i_m, n) - VP
     try:
-        res = root_scalar(f, bracket=[0.0001, 2000], method='brentq')
+        res = root_scalar(f, bracket=[0.0001, 2000], method="brentq")
         return res.root
     except Exception:
         return np.nan
+
 
 __all__ = [
     "vf_anualidad_efectiva",

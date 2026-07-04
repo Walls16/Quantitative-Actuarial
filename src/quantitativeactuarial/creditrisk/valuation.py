@@ -5,11 +5,16 @@ from __future__ import annotations
 import numpy as np
 
 
-def bond_values_per_rating(VN: float, cupon_pct: float, T: int,
-                            pagos_ano: int, recovery_pct: float,
-                            spreads: np.ndarray,
-                            include_d: bool = True,
-                            spread_times: np.ndarray | None = None) -> np.ndarray:
+def bond_values_per_rating(
+    VN: float,
+    cupon_pct: float,
+    T: int,
+    pagos_ano: int,
+    recovery_pct: float,
+    spreads: np.ndarray,
+    include_d: bool = True,
+    spread_times: np.ndarray | None = None,
+) -> np.ndarray:
     """
     Value a bond under each possible destination rating.
 
@@ -39,15 +44,15 @@ def bond_values_per_rating(VN: float, cupon_pct: float, T: int,
         Values by rating destination.
     """
     n_rated = 17
-    n_cols  = spreads.shape[1]
+    n_cols = spreads.shape[1]
 
     # Construct time grid for the yield curve columns
     if spread_times is None:
-        times = np.arange(1, n_cols + 1, dtype=float)   # [1,2,…,n_cols]
+        times = np.arange(1, n_cols + 1, dtype=float)  # [1,2,…,n_cols]
     else:
         times = np.asarray(spread_times, dtype=float)
 
-    vals  = np.zeros(n_rated + (1 if include_d else 0))
+    vals = np.zeros(n_rated + (1 if include_d else 0))
     cupon = VN * cupon_pct / pagos_ano
     # Cash flow times
     cf_times = np.array([(t + 1) / pagos_ano for t in range(T * pagos_ano)])
@@ -74,5 +79,6 @@ def bond_values_per_rating(VN: float, cupon_pct: float, T: int,
         vals[17] = recovery_pct * VN
 
     return vals
+
 
 __all__ = ["bond_values_per_rating"]
