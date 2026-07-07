@@ -12,9 +12,9 @@ Financial Math
 
 .. code-block:: python
 
-   quact.valor_presente(1100, 0.10, 1)
-   quact.vp_anualidad_efectiva(100, 0.01, 12)
-   quact.precio_bono(1000, 0.08, 40, 0.09, 10)
+   quact.present_value(1100, 0.10, 1)
+   quact.effective_annuity_present_value(100, 0.01, 12)
+   quact.bond_price(1000, 0.08, 40, 0.09, 10)
 
 Derivatives
 -----------
@@ -23,7 +23,7 @@ Derivatives
 
    quact.forward_price(100, 0.05, 1, carry=0.02)
    quact.black_scholes(100, 100, 0.05, 0.2, 1)
-   quact.arbol_binomial_crr(100, 100, 0.05, 0.2, 1, 100)
+   quact.crr_binomial_tree(100, 100, 0.05, 0.2, 1, 100)
 
 Credit Risk
 -----------

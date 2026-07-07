@@ -128,8 +128,8 @@ with tabs[1]:
         )
 
     with c2:
-        i_eff = quact.tasa_nominal_a_efectiva(j, m)
-        delta = quact.tasa_nominal_a_instantanea(j, m)
+        i_eff = quact.nominal_to_effective_rate(j, m)
+        delta = quact.nominal_to_continuous_rate(j, m)
 
         themed_success(
             f"<div style='{css_contenedor}'>"
@@ -182,7 +182,7 @@ with tabs[2]:
         d2 = st.number_input("Tasa Instantánea δ %", value=18.0, step=0.1, key="t2_d") / 100
 
     with c2:
-        i2 = quact.tasa_instantanea_a_efectiva(d2)
+        i2 = quact.continuous_to_effective_rate(d2)
 
         themed_success(
             f"<div style='{css_contenedor}'>"
@@ -227,7 +227,7 @@ with tabs[3]:
         )
 
     with c2:
-        i3 = quact.tasa_instantanea_a_nominal(d3, m3)
+        i3 = quact.continuous_to_nominal_rate(d3, m3)
 
         themed_success(
             f"<div style='{css_contenedor}'>"
@@ -275,7 +275,7 @@ with tabs[4]:
         )
 
     with c2:
-        i_p = quact.tasa_nominal_m_a_nominal_p(i_orig, m_orig, p_dest)
+        i_p = quact.convert_nominal_frequency(i_orig, m_orig, p_dest)
 
         themed_success(
             f"<div style='{css_contenedor}'>"
@@ -330,7 +330,7 @@ with tabs[5]:
 
     col_t, col_g = st.columns([1, 2])
 
-    df_reinv = quact.generar_tabla_reinversion(C0, tasa_ref, n_anios)
+    df_reinv = quact.reinvestment_table(C0, tasa_ref, n_anios)
 
     with col_t:
         st.markdown("##### Tabla de Acumulación")

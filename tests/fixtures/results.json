@@ -1,56 +1,51 @@
 {
+  "amortization_schedule": {
+    "columns": [
+      "Period",
+      "Opening balance",
+      "Interest",
+      "Amortization",
+      "Outstanding balance"
+    ],
+    "records": [
+      {
+        "Period": 1,
+        "Opening balance": 1000.0,
+        "Interest": 10.0,
+        "Amortization": 330.022111481469,
+        "Outstanding balance": 669.977888518531
+      },
+      {
+        "Period": 2,
+        "Opening balance": 669.977888518531,
+        "Interest": 6.69977888518531,
+        "Amortization": 333.3223325962837,
+        "Outstanding balance": 336.65555592224734
+      },
+      {
+        "Period": 3,
+        "Opening balance": 336.65555592224734,
+        "Interest": 3.3665555592224736,
+        "Amortization": 336.65555592224734,
+        "Outstanding balance": 0.0
+      }
+    ]
+  },
   "annualized_return": 3.6569414686689763,
   "annualized_volatility": 0.06564257945927669,
-  "arbol_binomial_crr": [
-    11.043871091951113,
-    [
-      [
-        100.0
-      ],
-      [
-        112.24009024456676,
-        89.09472522884107
-      ],
-      [
-        125.9783785810849,
-        100.0,
-        79.37870063602689
-      ],
-      [
-        141.39824580805166,
-        112.24009024456676,
-        89.09472522884107,
-        70.72223522189248
-      ]
-    ],
-    [
-      [
-        11.043871091951113
-      ],
-      [
-        17.713888236329915,
-        3.5006537850880637
-      ],
-      [
-        27.631233198923148,
-        6.545862681454761,
-        0.0
-      ],
-      [
-        41.398245808051655,
-        12.240090244566758,
-        0.0,
-        0.0
-      ]
-    ]
-  ],
-  "barrera_down_and_out": 12.447188496210245,
+  "arithmetic_asian_options": 5.78283833805301,
+  "arithmetic_gradient_future_value": 691.2090360600081,
+  "arithmetic_gradient_present_value": 651.1501789849781,
+  "asset_or_nothing_options": 63.68306511756191,
   "beta_alpha_from_returns": {
     "alpha": -0.033646881171565744,
     "beta": 1.2768496420047737,
-    "ke": 2.4298551225876652,
     "ret_a": 2.7416969273006813,
     "ret_m": 1.91168092778361,
+    "vol_a": 0.12115692303785204,
+    "vol_m": 0.09380298502713012,
+    "ke": 2.4298551225876652,
+    "rf": 0.04,
     "returns": {
       "columns": [
         "Accion",
@@ -61,33 +56,30 @@
       "records": [
         {
           "Accion": 0.01,
+          "Mercado": 0.008,
           "Exc_A": 0.009844350137208737,
-          "Exc_M": 0.007844350137208737,
-          "Mercado": 0.008
+          "Exc_M": 0.007844350137208737
         },
         {
           "Accion": -0.005,
+          "Mercado": -0.003,
           "Exc_A": -0.005155649862791263,
-          "Exc_M": -0.003155649862791263,
-          "Mercado": -0.003
+          "Exc_M": -0.003155649862791263
         },
         {
           "Accion": 0.012,
+          "Mercado": 0.01,
           "Exc_A": 0.011844350137208737,
-          "Exc_M": 0.009844350137208737,
-          "Mercado": 0.01
+          "Exc_M": 0.009844350137208737
         },
         {
           "Accion": 0.004,
+          "Mercado": 0.002,
           "Exc_A": 0.0038443501372087373,
-          "Exc_M": 0.0018443501372087372,
-          "Mercado": 0.002
+          "Exc_M": 0.0018443501372087372
         }
       ]
-    },
-    "rf": 0.04,
-    "vol_a": 0.12115692303785204,
-    "vol_m": 0.09380298502713012
+    }
   },
   "binomial_probabilities_log": [
     [
@@ -150,6 +142,17 @@
   ],
   "black_76": 7.57708214642728,
   "black_scholes": 10.450583572185565,
+  "bond_price": [
+    530.3090483685486,
+    80.0,
+    513.412616092721,
+    16.896432275827557
+  ],
+  "bond_risk": [
+    2.4817593083123017,
+    2.2768434021213775,
+    8.023531677232961
+  ],
   "bond_values_per_rating": [
     1020.1314490793235,
     1017.8956135186104,
@@ -170,6 +173,7 @@
     810.2717429466034,
     400.0
   ],
+  "bond_yield": -0.020968248246502095,
   "bsm_d1_d2": [
     0.3,
     0.09999999999999998
@@ -178,6 +182,22 @@
     "d1": 0.3,
     "d2": 0.09999999999999998
   },
+  "bsm_greeks": [
+    0.6117631008098845,
+    -0.3782867329392836,
+    0.01887964716453252,
+    0.3775929432906503,
+    -0.015703197115093385,
+    -0.005385122351382695,
+    0.5135001229824934,
+    -0.43772930151822065
+  ],
+  "bsm_option_prices": [
+    9.826297782739111,
+    5.944256857893713,
+    0.3,
+    0.09999999999999998
+  ],
   "build_transition_matrix": [
     [
       0.8987616099071208,
@@ -540,50 +560,196 @@
       1.0
     ]
   ],
-  "calcular_griegas": {
-    "delta": 0.6368306511756191,
-    "gamma": 0.018762017345846895,
-    "rho": 0.5323248154537634,
-    "theta": -0.01757267820941972,
-    "vega": 0.3752403469169379
+  "calculate_greeks": {
+    "delta": 0.6117631008098845,
+    "gamma": 0.01887964716453252,
+    "theta": -0.015703197115093385,
+    "vega": 0.3775929432906503,
+    "rho": 0.5135001229824934
   },
-  "calcular_payoff_leg": [
-    -2,
-    -2,
-    8
-  ],
-  "calcular_var_cvar_montecarlo": [
-    61.655759670329225,
-    75.84165793508254
-  ],
-  "calcular_var_parametrico": [
-    61.564283135074085,
-    1.6448536269514722,
-    0.003968253968253968,
-    0.03984095364447979
-  ],
-  "calcular_vp_dividendos": 38.05868992429963,
-  "calcular_vp_flujos_irregulares": 536.3453498824229,
   "calibrate_heston": {
     "kappa": 2.0000068905456,
-    "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT",
+    "theta": 0.05106647360691748,
+    "xi": 0.2998592831458719,
     "rho": -0.5000132264969627,
+    "v0": 0.048285796897727516,
     "rmse": 0.013829477727592772,
     "success": false,
-    "theta": 0.05106647360691748,
-    "v0": 0.048285796897727516,
-    "xi": 0.2998592831458719
+    "message": "STOP: TOTAL NO. OF ITERATIONS REACHED LIMIT"
   },
   "calibrate_sabr": {
     "alpha": 3.4562483074947306,
     "beta": 0.5,
-    "nu": 0.5351922306585012,
     "rho": 0.15291231741153205,
+    "nu": 0.5351922306585012,
     "rmse": 0.13707734747653386,
     "success": false
   },
   "calmar_ratio": 1708.4585342254397,
   "capm_cost_of_equity": 0.11200000000000002,
+  "cash_or_nothing_options": 5.323248154537634,
+  "cds_accrued_premium_table": {
+    "columns": [
+      "Tiempo (años)",
+      "Prob. Incumplimiento Marginal q(t)",
+      "Pago Prorrateado (×s)",
+      "Pago Prorrateado Esperado (×s)",
+      "Factor VP  e^{-rt_mid}",
+      "VP Pago Prorrateado Esperado (×s)"
+    ],
+    "records": [
+      {
+        "Tiempo (años)": 0.5,
+        "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
+        "Pago Prorrateado (×s)": 0.5,
+        "Pago Prorrateado Esperado (×s)": 0.009900663346622374,
+        "Factor VP  e^{-rt_mid}": 0.9753099120283326,
+        "VP Pago Prorrateado Esperado (×s)": 0.009656215097616404
+      },
+      {
+        "Tiempo (años)": 1.5,
+        "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
+        "Pago Prorrateado (×s)": 0.5,
+        "Pago Prorrateado Esperado (×s)": 0.009704617077216038,
+        "Factor VP  e^{-rt_mid}": 0.9277434863285529,
+        "VP Pago Prorrateado Esperado (×s)": 0.009003395280700018
+      },
+      {
+        "Tiempo (años)": 2.5,
+        "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
+        "Pago Prorrateado (×s)": 0.5,
+        "Pago Prorrateado Esperado (×s)": 0.009512452784037229,
+        "Factor VP  e^{-rt_mid}": 0.8824969025845955,
+        "VP Pago Prorrateado Esperado (×s)": 0.008394710117895067
+      },
+      {
+        "Tiempo (años)": "NaN",
+        "Prob. Incumplimiento Marginal q(t)": "NaN",
+        "Pago Prorrateado (×s)": "NaN",
+        "Pago Prorrateado Esperado (×s)": "NaN",
+        "Factor VP  e^{-rt_mid}": "NaN",
+        "VP Pago Prorrateado Esperado (×s)": 0.02705432049621149
+      }
+    ]
+  },
+  "cds_contingent_leg_table": {
+    "columns": [
+      "Tiempo (años)",
+      "Prob. Incumplimiento Marginal q(t)",
+      "Tasa Recuperación (RR)",
+      "LGD (1-RR)",
+      "Pago Parcial Esperado",
+      "Factor VP  e^{-rt_mid}",
+      "VP Pago Parcial Esperado"
+    ],
+    "records": [
+      {
+        "Tiempo (años)": 0.5,
+        "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
+        "Tasa Recuperación (RR)": 0.4,
+        "LGD (1-RR)": 0.6,
+        "Pago Parcial Esperado": 0.011880796015946849,
+        "Factor VP  e^{-rt_mid}": 0.9753099120283326,
+        "VP Pago Parcial Esperado": 0.011587458117139685
+      },
+      {
+        "Tiempo (años)": 1.5,
+        "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
+        "Tasa Recuperación (RR)": 0.4,
+        "LGD (1-RR)": 0.6,
+        "Pago Parcial Esperado": 0.011645540492659244,
+        "Factor VP  e^{-rt_mid}": 0.9277434863285529,
+        "VP Pago Parcial Esperado": 0.01080407433684002
+      },
+      {
+        "Tiempo (años)": 2.5,
+        "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
+        "Tasa Recuperación (RR)": 0.4,
+        "LGD (1-RR)": 0.6,
+        "Pago Parcial Esperado": 0.011414943340844674,
+        "Factor VP  e^{-rt_mid}": 0.8824969025845955,
+        "VP Pago Parcial Esperado": 0.01007365214147408
+      },
+      {
+        "Tiempo (años)": "NaN",
+        "Prob. Incumplimiento Marginal q(t)": "NaN",
+        "Tasa Recuperación (RR)": "NaN",
+        "LGD (1-RR)": "NaN",
+        "Pago Parcial Esperado": "NaN",
+        "Factor VP  e^{-rt_mid}": "NaN",
+        "VP Pago Parcial Esperado": 0.032465184595453785
+      }
+    ]
+  },
+  "cds_fair_spread": 0.08333333333333333,
+  "cds_premium_leg_table": {
+    "columns": [
+      "Tiempo (años)",
+      "Prob. Sobrevivencia S(t)",
+      "Pago Esperado (×s)",
+      "Factor VP  e^{-rt}",
+      "VP Pago Esperado (×s)"
+    ],
+    "records": [
+      {
+        "Tiempo (años)": 1.0,
+        "Prob. Sobrevivencia S(t)": 0.9801986733067553,
+        "Pago Esperado (×s)": 0.9801986733067553,
+        "Factor VP  e^{-rt}": 0.951229424500714,
+        "VP Pago Esperado (×s)": 0.9323938199059482
+      },
+      {
+        "Tiempo (años)": 2.0,
+        "Prob. Sobrevivencia S(t)": 0.9607894391523232,
+        "Pago Esperado (×s)": 0.9607894391523232,
+        "Factor VP  e^{-rt}": 0.9048374180359595,
+        "VP Pago Esperado (×s)": 0.8693582353988057
+      },
+      {
+        "Tiempo (años)": 3.0,
+        "Prob. Sobrevivencia S(t)": 0.9417645335842487,
+        "Pago Esperado (×s)": 0.9417645335842487,
+        "Factor VP  e^{-rt}": 0.8607079764250578,
+        "VP Pago Esperado (×s)": 0.8105842459701871
+      },
+      {
+        "Tiempo (años)": "NaN",
+        "Prob. Sobrevivencia S(t)": "NaN",
+        "Pago Esperado (×s)": "NaN",
+        "Factor VP  e^{-rt}": "NaN",
+        "VP Pago Esperado (×s)": 2.612336301274941
+      }
+    ]
+  },
+  "cds_probability_table": {
+    "columns": [
+      "t (años)",
+      "S(t) Sobrevivencia",
+      "F(t) Incump. Acumulada",
+      "q(t) Incump. Marginal"
+    ],
+    "records": [
+      {
+        "t (años)": 1,
+        "S(t) Sobrevivencia": 0.9801986733067553,
+        "F(t) Incump. Acumulada": 0.019801326693244747,
+        "q(t) Incump. Marginal": 0.019801326693244747
+      },
+      {
+        "t (años)": 2,
+        "S(t) Sobrevivencia": 0.9607894391523232,
+        "F(t) Incump. Acumulada": 0.03921056084767682,
+        "q(t) Incump. Marginal": 0.019409234154432076
+      },
+      {
+        "t (años)": 3,
+        "S(t) Sobrevivencia": 0.9417645335842487,
+        "F(t) Incump. Acumulada": 0.05823546641575128,
+        "q(t) Incump. Marginal": 0.019024905568074457
+      }
+    ]
+  },
+  "commodity_forward_price": 106.18365465453596,
   "compare_all_models": {
     "BSM": {
       "call": 10.450583572185565,
@@ -602,15 +768,16 @@
       "put": 7.287145645664687
     }
   },
+  "compound_options": 6.014727111649032,
   "compute_all_metrics": {
-    "CVaR 95% (diario)": -0.002140491791524101,
-    "Calmar Ratio": 1708.4585342254397,
-    "Max Drawdown": -0.0021404917915241743,
     "Retorno Anualizado": 3.6569414686689763,
+    "Volatilidad Anualizada": 0.06564257945927669,
     "Sharpe Ratio": 55.25287852100718,
     "Sortino Ratio": 101.19421190472865,
+    "Max Drawdown": -0.0021404917915241743,
+    "Calmar Ratio": 1708.4585342254397,
     "VaR 95% (diario)": -0.0001691944240610273,
-    "Volatilidad Anualizada": 0.06564257945927669
+    "CVaR 95% (diario)": -0.002140491791524101
   },
   "conditional_default_probability": [
     0.035539614757417626,
@@ -618,12 +785,62 @@
     0.0009219774261780947
   ],
   "conditional_drawdown_at_risk": 0.0021404917915241743,
+  "continuous_annuity_future_value": 4068.737254821071,
+  "continuous_annuity_present_value": 3200.582084001698,
+  "continuous_future_value": 1491.8246976412704,
+  "continuous_present_value": 1005.480069053459,
+  "continuous_to_effective_rate": 0.12749685157937574,
+  "continuous_to_nominal_rate": 0.12060200501001539,
+  "convert_nominal_frequency": 0.12120400000000053,
+  "crr_binomial_tree": [
+    11.043871091951113,
+    [
+      [
+        100.0
+      ],
+      [
+        112.24009024456676,
+        89.09472522884107
+      ],
+      [
+        125.9783785810849,
+        100.0,
+        79.37870063602689
+      ],
+      [
+        141.39824580805166,
+        112.24009024456676,
+        89.09472522884107,
+        70.72223522189248
+      ]
+    ],
+    [
+      [
+        11.043871091951113
+      ],
+      [
+        17.713888236329915,
+        3.5006537850880637
+      ],
+      [
+        27.631233198923148,
+        6.545862681454761,
+        0.0
+      ],
+      [
+        41.398245808051655,
+        12.240090244566758,
+        0.0,
+        0.0
+      ]
+    ]
+  ],
   "crr_tree_parameters": {
-    "d": 0.9859573946337119,
-    "disc": 0.999750031247396,
     "dt": 0.005,
+    "u": 1.0142426086996437,
+    "d": 0.9859573946337119,
     "p": 0.5035360642639131,
-    "u": 1.0142426086996437
+    "disc": 0.999750031247396
   },
   "cumulative_returns": {
     "2024-01-03 00:00:00": 1.00495,
@@ -648,13 +865,22 @@
     ]
   ],
   "dcf_valuation": {
-    "enterprise_value": 2487.8257887517148,
-    "equity_value": 2437.8257887517148,
     "fcfs": [
       110.00000000000001,
       121.00000000000001,
       133.10000000000005
     ],
+    "pv_fcfs": [
+      101.85185185185186,
+      103.73799725651578,
+      105.65907127978461
+    ],
+    "terminal_fcf": 137.09300000000005,
+    "terminal_value": 2741.8600000000006,
+    "pv_terminal_value": 2176.5768683635624,
+    "pv_fcf_total": 311.24892038815227,
+    "enterprise_value": 2487.8257887517148,
+    "equity_value": 2437.8257887517148,
     "price_per_share": 243.78257887517148,
     "projection_table": {
       "columns": [
@@ -683,43 +909,35 @@
           "Valor Presente": 105.65907127978461
         }
       ]
-    },
-    "pv_fcf_total": 311.24892038815227,
-    "pv_fcfs": [
-      101.85185185185186,
-      103.73799725651578,
-      105.65907127978461
-    ],
-    "pv_terminal_value": 2176.5768683635624,
-    "terminal_fcf": 137.09300000000005,
-    "terminal_value": 2741.8600000000006
+    }
   },
-  "desglosar_periodos": {
+  "decompose_periods": {
     "columns": [
-      "Años",
-      "Meses",
-      "Días",
-      "Horas",
-      "Minutos",
-      "Segundos"
+      "Years",
+      "Months",
+      "Days",
+      "Hours",
+      "Minutes",
+      "Seconds"
     ],
     "records": [
       {
-        "Años": 2,
-        "Días": 4,
-        "Horas": 6,
-        "Meses": 4,
-        "Minutos": 12,
-        "Segundos": 0
+        "Years": 2,
+        "Months": 4,
+        "Days": 4,
+        "Hours": 6,
+        "Minutes": 12,
+        "Seconds": 0
       }
     ]
   },
   "distribution_moments": {
-    "kurt": -1.426601551278368,
     "mean": 0.002499999999999999,
+    "std": 0.01920286436967152,
     "skew": 0.2780305556539629,
-    "std": 0.01920286436967152
+    "kurt": -1.426601551278368
   },
+  "down_and_out_barrier_option": 12.447188496210245,
   "downside_deviation": 0.03397925378248731,
   "drawdown_series": {
     "2024-01-03 00:00:00": 0.0,
@@ -732,6 +950,9 @@
     "2024-01-12 00:00:00": 0.0,
     "2024-01-15 00:00:00": 0.0
   },
+  "effective_annuity_future_value": 1268.2503013196977,
+  "effective_annuity_present_value": 1125.5077473484641,
+  "effective_to_nominal_rate": 0.1200000000000001,
   "equal_weight_portfolio": [
     0.1,
     0.19364916731037085,
@@ -768,6 +989,12 @@
     ]
   ],
   "excess_kurtosis": -1.426601551278368,
+  "exchange_options": 12.387633040517485,
+  "exotic_payoff_leg": [
+    -2.0,
+    -2.0,
+    13.0
+  ],
   "expected_tranche_survival_given_factor": [
     0.6963762307804837,
     0.9325951187978458,
@@ -776,13 +1003,13 @@
   "expected_value_and_sigma": [
     [
       {
-        "EV": 99.77721119407515,
         "nombre": "A",
+        "EV": 99.77721119407515,
         "sigma": 0.9782290342840486
       },
       {
-        "EV": 71.06884906143293,
         "nombre": "B",
+        "EV": 71.06884906143293,
         "sigma": 1.9338618671581684
       }
     ],
@@ -791,13 +1018,20 @@
       "sigma_port": 2.1671995212173663
     }
   ],
-  "forward_calculo": 103.0454533953517,
+  "floating_lookback_options": 18.69009790506791,
+  "forward_contract_value": -0.47662765197311785,
   "forward_price": 103.0454533953517,
   "forward_price_continuous": 104.08107741923882,
+  "forward_price_with_continuous_dividend": 103.0454533953517,
+  "forward_price_with_discrete_dividends": 101.97329634847434,
+  "forward_price_with_yield": 103.0454533953517,
   "fra": [
     0.060000000000000005,
     4524.187090179802
   ],
+  "future_value": 1469.3280768000006,
+  "fx_forward_price": 20.816215483847763,
+  "gap_options": 12.39379839765158,
   "gauss_hermite_normal": [
     [
       -1.7320508075688772,
@@ -817,88 +1051,9 @@
     0.0,
     0.0
   ],
-  "generar_tabla_reinversion": {
-    "columns": [
-      "Periodo de reinversión",
-      "m = Veces al año",
-      "Monto acumulado",
-      "Rendimiento Acumulado"
-    ],
-    "records": [
-      {
-        "Monto acumulado": 1216.5525060596437,
-        "Periodo de reinversión": "Cada 4 años",
-        "Rendimiento Acumulado": 0.21655250605964382,
-        "m = Veces al año": "0.25"
-      },
-      {
-        "Monto acumulado": 1240.0,
-        "Periodo de reinversión": "Cada 2 años",
-        "Rendimiento Acumulado": 0.24,
-        "m = Veces al año": "0.5"
-      },
-      {
-        "Monto acumulado": 1254.4,
-        "Periodo de reinversión": "Anual",
-        "Rendimiento Acumulado": 0.2544000000000002,
-        "m = Veces al año": "1"
-      },
-      {
-        "Monto acumulado": 1262.4769600000004,
-        "Periodo de reinversión": "Semestral",
-        "Rendimiento Acumulado": 0.2624769600000003,
-        "m = Veces al año": "2"
-      },
-      {
-        "Monto acumulado": 1266.7700813876163,
-        "Periodo de reinversión": "Trimestral",
-        "Rendimiento Acumulado": 0.2667700813876164,
-        "m = Veces al año": "4"
-      },
-      {
-        "Monto acumulado": 1269.7346485319147,
-        "Periodo de reinversión": "Mensual",
-        "Rendimiento Acumulado": 0.26973464853191476,
-        "m = Veces al año": "12"
-      },
-      {
-        "Monto acumulado": 1270.8977013464544,
-        "Periodo de reinversión": "Semanal",
-        "Rendimiento Acumulado": 0.2708977013464544,
-        "m = Veces al año": "52"
-      },
-      {
-        "Monto acumulado": 1271.1990089089581,
-        "Periodo de reinversión": "Diaria",
-        "Rendimiento Acumulado": 0.2711990089089582,
-        "m = Veces al año": "365"
-      },
-      {
-        "Monto acumulado": 1271.2470606155098,
-        "Periodo de reinversión": "Cada hora",
-        "Rendimiento Acumulado": 0.27124706061550974,
-        "m = Veces al año": "8760"
-      },
-      {
-        "Monto acumulado": 1271.2491154906006,
-        "Periodo de reinversión": "Cada minuto",
-        "Rendimiento Acumulado": 0.2712491154906007,
-        "m = Veces al año": "525600"
-      },
-      {
-        "Monto acumulado": 1271.2491518159447,
-        "Periodo de reinversión": "Cada segundo",
-        "Rendimiento Acumulado": 0.2712491518159448,
-        "m = Veces al año": "31536000"
-      },
-      {
-        "Monto acumulado": 1271.2491503214048,
-        "Periodo de reinversión": "Instantánea",
-        "Rendimiento Acumulado": 0.27124915032140473,
-        "m = Veces al año": "∞"
-      }
-    ]
-  },
+  "geometric_asian_options": 5.546818633789201,
+  "geometric_gradient_future_value": 646.4226866299994,
+  "geometric_gradient_present_value": 574.0048465233505,
   "get_returns": {
     "columns": [
       "AAA",
@@ -953,23 +1108,7 @@
       }
     ]
   },
-  "griegas_bsm": [
-    0.6117631008098845,
-    -0.3782867329392836,
-    0.01887964716453252,
-    0.3775929432906503,
-    -0.015703197115093385,
-    -0.005385122351382695,
-    0.5135001229824934,
-    -0.43772930151822065
-  ],
-  "griegas_segundo_orden": {
-    "charm": -0.00013841454927533892,
-    "color_val": -2.870740870223438e-05,
-    "speed": -0.000471991179113313,
-    "vanna": -0.18879647164532512,
-    "vomma": 0.05663894149359752
-  },
+  "gordon_shapiro_valuation": 55.55555555555556,
   "historical_mean_returns": {
     "AAA": 1.9050388911105305,
     "BBB": 1.3747389233144252,
@@ -1291,15 +1430,16 @@
     "time_value": 7.0
   },
   "iv_rv_spread": {
-    "mean_spread": 0.033333333333333326,
-    "pct_positive": 100.0,
     "spread": [
       0.04000000000000001,
       0.03999999999999998,
       0.01999999999999999
     ],
-    "std_spread": 0.009428090415820637
+    "mean_spread": 0.033333333333333326,
+    "std_spread": 0.009428090415820637,
+    "pct_positive": 100.0
   },
+  "live_forward_value": -0.47662765197311785,
   "log_binomial_coefficient": 4.787491742782047,
   "log_return_volatility": 0.08796820815704588,
   "markowitz_frontier": {
@@ -1313,44 +1453,44 @@
     ],
     "records": [
       {
+        "Retorno": 1.4025946801930007,
+        "Volatilidad": 0.05358609684448809,
         "AAA": 0.4718473957866999,
         "BBB": 0.05961001743234168,
         "CCC": 0.4685425867809585,
-        "Retorno": 1.4025946801930007,
-        "Sharpe": 26.174600554757006,
-        "Volatilidad": 0.05358609684448809
+        "Sharpe": 26.174600554757006
       },
       {
+        "Retorno": 1.151372574734236,
+        "Volatilidad": 0.05876177867568461,
         "AAA": 0.16506036472953795,
         "BBB": 0.17985025828541212,
         "CCC": 0.65508937698505,
-        "Retorno": 1.151372574734236,
-        "Sharpe": 19.593902715042717,
-        "Volatilidad": 0.05876177867568461
+        "Sharpe": 19.593902715042717
       },
       {
+        "Retorno": 1.6538167856517658,
+        "Volatilidad": 0.06521899422824853,
         "AAA": 0.75,
         "BBB": 0.0,
         "CCC": 0.25000000000000017,
-        "Retorno": 1.6538167856517658,
-        "Sharpe": 25.357900795953125,
-        "Volatilidad": 0.06521899422824853
+        "Sharpe": 25.357900795953125
       },
       {
+        "Retorno": 0.9001504692754709,
+        "Volatilidad": 0.08261054884158855,
         "AAA": 0.0,
         "BBB": 1.0453789136564711e-16,
         "CCC": 0.9999999999999999,
-        "Retorno": 0.9001504692754709,
-        "Sharpe": 10.896313871507763,
-        "Volatilidad": 0.08261054884158855
+        "Sharpe": 10.896313871507763
       },
       {
+        "Retorno": 1.9050388911105305,
+        "Volatilidad": 0.08835498328247889,
         "AAA": 1.0,
         "BBB": 0.0,
         "CCC": 0.0,
-        "Retorno": 1.9050388911105305,
-        "Sharpe": 21.561193498503062,
-        "Volatilidad": 0.08835498328247889
+        "Sharpe": 21.561193498503062
       }
     ]
   },
@@ -1366,10 +1506,10 @@
     }
   ],
   "merton_jump_statistics": {
-    "bsm_total_sigma": 0.26551836094703507,
     "kappa_j": -0.07688365361336424,
+    "mean_jump_pct": -7.688365361336425,
     "lambda_adjusted": 1.107739615663963,
-    "mean_jump_pct": -7.688365361336425
+    "bsm_total_sigma": 0.26551836094703507
   },
   "min_variance_portfolio": [
     1.352737411196914,
@@ -1382,13 +1522,13 @@
     }
   ],
   "monte_carlo_bsm": {
-    "bsm_price": 10.450583572185565,
-    "ci_95_hi": 10.502331505674999,
-    "ci_95_lo": 9.817062665843128,
-    "error_vs_bsm": 0.2908864864265013,
-    "n_paths": 1000,
     "price": 10.159697085759063,
-    "std_error": 0.17481347954894672
+    "std_error": 0.17481347954894672,
+    "ci_95_lo": 9.817062665843128,
+    "ci_95_hi": 10.502331505674999,
+    "n_paths": 1000,
+    "bsm_price": 10.450583572185565,
+    "error_vs_bsm": 0.2908864864265013
   },
   "monte_carlo_portfolio_cloud": [
     [
@@ -1446,55 +1586,60 @@
     ],
     "records": [
       {
+        "Retorno": 1.1573515671211247,
+        "Volatilidad": 0.05939590137257482,
+        "Sharpe": 18.980292260395977,
         "AAA": 0.12145774030291094,
         "BBB": 0.28477224787671734,
-        "CCC": 0.5937700118203717,
-        "Retorno": 1.1573515671211247,
-        "Sharpe": 18.980292260395977,
-        "Volatilidad": 0.05939590137257482
+        "CCC": 0.5937700118203717
       },
       {
+        "Retorno": 0.9257877793325406,
+        "Volatilidad": 0.07910036682369319,
+        "Sharpe": 11.324698168962504,
         "AAA": 0.011584676553326637,
         "BBB": 0.029490820096476175,
-        "CCC": 0.9589245033501973,
-        "Retorno": 0.9257877793325406,
-        "Sharpe": 11.324698168962504,
-        "Volatilidad": 0.07910036682369319
+        "CCC": 0.9589245033501973
       },
       {
+        "Retorno": 1.1923603986447175,
+        "Volatilidad": 0.05951438440956646,
+        "Sharpe": 19.530747233233203,
         "AAA": 0.1293537479835835,
         "BBB": 0.34182004285813966,
-        "CCC": 0.5288262091582767,
-        "Retorno": 1.1923603986447175,
-        "Sharpe": 19.530747233233203,
-        "Volatilidad": 0.05951438440956646
+        "CCC": 0.5288262091582767
       },
       {
+        "Retorno": 1.367468834220215,
+        "Volatilidad": 0.0543214244974072,
+        "Sharpe": 24.621387354892605,
         "AAA": 0.37740216115939684,
         "BBB": 0.18557405278323116,
-        "CCC": 0.43702378605737197,
-        "Retorno": 1.367468834220215,
-        "Sharpe": 24.621387354892605,
-        "Volatilidad": 0.0543214244974072
+        "CCC": 0.43702378605737197
       },
       {
+        "Retorno": 1.3139739204297254,
+        "Volatilidad": 0.05369191663598359,
+        "Sharpe": 23.913728562433615,
         "AAA": 0.38841881141028384,
         "BBB": 0.04952898568239368,
-        "CCC": 0.5620522029073225,
-        "Retorno": 1.3139739204297254,
-        "Sharpe": 23.913728562433615,
-        "Volatilidad": 0.05369191663598359
+        "CCC": 0.5620522029073225
       },
       {
+        "Retorno": 1.2780050003822352,
+        "Volatilidad": 0.06008266003868535,
+        "Sharpe": 20.77146716837576,
         "AAA": 0.19277849193440652,
         "BBB": 0.3879859592368884,
-        "CCC": 0.4192355488287052,
-        "Retorno": 1.2780050003822352,
-        "Sharpe": 20.77146716837576,
-        "Volatilidad": 0.06008266003868535
+        "CCC": 0.4192355488287052
       }
     ]
   },
+  "monte_carlo_var_cvar": [
+    61.655759670329225,
+    75.84165793508254
+  ],
+  "multiples_valuation": 96,
   "mvsk_neg_utility": 0.9501701435930674,
   "mvsk_portfolio": [
     0.11964020468034961,
@@ -1505,29 +1650,11 @@
       "B": 0.9910051170087406
     }
   ],
-  "nper_anualidad_vf": 11.999999999999993,
-  "nper_anualidad_vp": 12.000000000000004,
-  "nper_gradiente_arit_vf": 5.765362112634052,
-  "nper_gradiente_arit_vp": 5.2285929846398576,
-  "nper_gradiente_geo_vf": 6.453466199011658,
-  "nper_gradiente_geo_vp": 5.849307638069883,
-  "numero_periodos": 4.999999999999995,
-  "opcion_chooser_simple": 13.573986591680471,
-  "opcion_perpetua": 33.396805168955105,
-  "opciones_asiaticas_aritmeticas": 5.78283833805301,
-  "opciones_asiaticas_geometricas": 5.546818633789201,
-  "opciones_asset_or_nothing": 63.68306511756191,
-  "opciones_bsm": [
-    9.826297782739111,
-    5.944256857893713,
-    0.3,
-    0.09999999999999998
-  ],
-  "opciones_cash_or_nothing": 5.323248154537634,
-  "opciones_compuestas": 6.014727111649032,
-  "opciones_gap": 12.39379839765158,
-  "opciones_intercambio_uxv": 12.387633040517485,
-  "opciones_lookback_flotante": 18.69009790506791,
+  "nominal_annuity_future_value": 2413.313327122482,
+  "nominal_annuity_present_value": 619.4374225455086,
+  "nominal_to_continuous_rate": 0.1194039702380171,
+  "nominal_to_effective_rate": 0.12682503013196977,
+  "number_of_periods": 4.999999999999995,
   "optimize_portfolio_strategies": [
     {
       "AAA": 1.9050388911105305,
@@ -1559,26 +1686,6 @@
       ]
     },
     {
-      "1/N Equiponderado": [
-        1.3933094279001421,
-        0.05960288345830599,
-        22.873212650086266,
-        {
-          "AAA": 0.3333333333333333,
-          "BBB": 0.3333333333333333,
-          "CCC": 0.3333333333333333
-        }
-      ],
-      "MVSK": [
-        1.2378965879758317,
-        0.06457487228228447,
-        18.705365497210703,
-        {
-          "AAA": 0.10807242199558541,
-          "BBB": 0.4828296836284094,
-          "CCC": 0.4090978943760053
-        }
-      ],
       "Máx. Sharpe": [
         1.4929571812861808,
         0.055980941824551315,
@@ -1599,6 +1706,16 @@
           "CCC": 0.5055645602175219
         }
       ],
+      "1/N Equiponderado": [
+        1.3933094279001421,
+        0.05960288345830599,
+        22.873212650086266,
+        {
+          "AAA": 0.3333333333333333,
+          "BBB": 0.3333333333333333,
+          "CCC": 0.3333333333333333
+        }
+      ],
       "Paridad de Riesgo": [
         1.3493084947864475,
         0.055404572929249433,
@@ -1607,6 +1724,16 @@
           "AAA": 0.33260780900598075,
           "BBB": 0.2421556787799701,
           "CCC": 0.42523651221404907
+        }
+      ],
+      "MVSK": [
+        1.2378965879758317,
+        0.06457487228228447,
+        18.705365497210703,
+        {
+          "AAA": 0.10807242199558541,
+          "BBB": 0.4828296836284094,
+          "CCC": 0.4090978943760053
         }
       ]
     },
@@ -1634,50 +1761,30 @@
       ]
     ]
   ],
+  "option_payoff_leg": [
+    -2,
+    -2,
+    8
+  ],
+  "parametric_var": [
+    61.564283135074085,
+    1.6448536269514722,
+    0.003968253968253968,
+    0.03984095364447979
+  ],
   "parity_check": {
     "lhs": 4.877057549928594,
-    "residual": 0.0,
-    "rhs": 4.877057549928594
+    "rhs": 4.877057549928594,
+    "residual": 0.0
   },
-  "payoff_leg_exotica": [
-    -2.0,
-    -2.0,
-    13.0
-  ],
-  "perfil_estrategia": {
-    "columns": [
-      "S_T",
-      "Long Call K=100",
-      "Payoff Neto"
-    ],
-    "records": [
-      {
-        "Long Call K=100": -2.0,
-        "Payoff Neto": -2.0,
-        "S_T": 50.0
-      },
-      {
-        "Long Call K=100": -2.0,
-        "Payoff Neto": -2.0,
-        "S_T": 75.0
-      },
-      {
-        "Long Call K=100": -2.0,
-        "Payoff Neto": -2.0,
-        "S_T": 100.0
-      },
-      {
-        "Long Call K=100": 23.0,
-        "Payoff Neto": 23.0,
-        "S_T": 125.0
-      },
-      {
-        "Long Call K=100": 48.0,
-        "Payoff Neto": 48.0,
-        "S_T": 150.0
-      }
-    ]
-  },
+  "periods_for_annuity_future_value": 11.999999999999993,
+  "periods_for_annuity_present_value": 12.000000000000004,
+  "periods_for_arithmetic_gradient_future_value": 5.765362112634052,
+  "periods_for_arithmetic_gradient_present_value": 5.2285929846398576,
+  "periods_for_geometric_gradient_future_value": 6.453466199011658,
+  "periods_for_geometric_gradient_present_value": 5.849307638069883,
+  "perpetual_option": 33.396805168955105,
+  "perpetuity_present_value": 2000.0,
   "portfolio_return": 0.096,
   "portfolio_returns": {
     "2024-01-03 00:00:00": 0.00495000000000001,
@@ -1692,18 +1799,10 @@
   },
   "portfolio_sharpe": 0.35000000000000003,
   "portfolio_volatility": 0.1833030277982336,
-  "precio_bono": [
-    530.3090483685486,
-    80.0,
-    513.412616092721,
-    16.896432275827557
-  ],
-  "precio_forward": 105.12710963760242,
-  "precio_forward_commodity": 106.18365465453596,
-  "precio_forward_dividendo_continuo": 103.0454533953517,
-  "precio_forward_dividendos_discretos": 101.97329634847434,
-  "precio_forward_divisa": 20.816215483847763,
-  "prima_cds": 0.08333333333333333,
+  "present_value": 999.9999999999995,
+  "present_value_of_dividends": 38.05868992429963,
+  "present_value_of_irregular_cashflows": 536.3453498824229,
+  "rate_of_return": 0.08000000000000007,
   "realized_vol": [
     "NaN",
     "NaN",
@@ -1712,12 +1811,89 @@
     0.16310427030433636,
     0.16224631453230173
   ],
-  "rendimiento_requerido_accion": 0.08,
-  "riesgo_bono": [
-    2.4817593083123017,
-    2.2768434021213775,
-    8.023531677232961
-  ],
+  "reinvestment_table": {
+    "columns": [
+      "Reinvestment period",
+      "m = Times per year",
+      "Accumulated amount",
+      "Cumulative return"
+    ],
+    "records": [
+      {
+        "Reinvestment period": "Every 4 years",
+        "m = Times per year": "0.25",
+        "Accumulated amount": 1216.5525060596437,
+        "Cumulative return": 0.21655250605964382
+      },
+      {
+        "Reinvestment period": "Every 2 years",
+        "m = Times per year": "0.5",
+        "Accumulated amount": 1240.0,
+        "Cumulative return": 0.24
+      },
+      {
+        "Reinvestment period": "Annual",
+        "m = Times per year": "1",
+        "Accumulated amount": 1254.4,
+        "Cumulative return": 0.2544000000000002
+      },
+      {
+        "Reinvestment period": "Semiannual",
+        "m = Times per year": "2",
+        "Accumulated amount": 1262.4769600000004,
+        "Cumulative return": 0.2624769600000003
+      },
+      {
+        "Reinvestment period": "Quarterly",
+        "m = Times per year": "4",
+        "Accumulated amount": 1266.7700813876163,
+        "Cumulative return": 0.2667700813876164
+      },
+      {
+        "Reinvestment period": "Monthly",
+        "m = Times per year": "12",
+        "Accumulated amount": 1269.7346485319147,
+        "Cumulative return": 0.26973464853191476
+      },
+      {
+        "Reinvestment period": "Weekly",
+        "m = Times per year": "52",
+        "Accumulated amount": 1270.8977013464544,
+        "Cumulative return": 0.2708977013464544
+      },
+      {
+        "Reinvestment period": "Daily",
+        "m = Times per year": "365",
+        "Accumulated amount": 1271.1990089089581,
+        "Cumulative return": 0.2711990089089582
+      },
+      {
+        "Reinvestment period": "Hourly",
+        "m = Times per year": "8760",
+        "Accumulated amount": 1271.2470606155098,
+        "Cumulative return": 0.27124706061550974
+      },
+      {
+        "Reinvestment period": "Every minute",
+        "m = Times per year": "525600",
+        "Accumulated amount": 1271.2491154906006,
+        "Cumulative return": 0.2712491154906007
+      },
+      {
+        "Reinvestment period": "Every second",
+        "m = Times per year": "31536000",
+        "Accumulated amount": 1271.2491518159447,
+        "Cumulative return": 0.2712491518159448
+      },
+      {
+        "Reinvestment period": "Continuous",
+        "m = Times per year": "infinity",
+        "Accumulated amount": 1271.2491503214048,
+        "Cumulative return": 0.27124915032140473
+      }
+    ]
+  },
+  "required_equity_return": 0.08,
   "risk_parity_objective": 0.002083333333333332,
   "risk_parity_portfolio": [
     0.09599999977793343,
@@ -1729,175 +1905,12 @@
     }
   ],
   "run_all_scenarios": {
-    "Burbuja Dot-com (2000-2002)": null,
+    "Crisis Financiera 2008": null,
     "COVID-19 (2020)": {
-      "benchmark_cumulative": {
-        "2020-02-20 00:00:00": 0.9864999999999999,
-        "2020-02-21 00:00:00": 0.9729984586612959,
-        "2020-02-24 00:00:00": 0.9594953112162375,
-        "2020-02-25 00:00:00": 0.9459904892002511,
-        "2020-02-26 00:00:00": 0.9324839201830195,
-        "2020-02-27 00:00:00": 0.9189755274757506,
-        "2020-02-28 00:00:00": 0.905465229812003,
-        "2020-03-02 00:00:00": 0.8919529409992233,
-        "2020-03-03 00:00:00": 0.8784385695378005,
-        "2020-03-04 00:00:00": 0.8649220182040267,
-        "2020-03-05 00:00:00": 0.8514031835928905,
-        "2020-03-06 00:00:00": 0.8378819556160928,
-        "2020-03-09 00:00:00": 0.8243582169500535,
-        "2020-03-10 00:00:00": 0.8108318424279661,
-        "2020-03-11 00:00:00": 0.7973026983691303,
-        "2020-03-12 00:00:00": 0.7837706418378345,
-        "2020-03-13 00:00:00": 0.7891846906437894,
-        "2020-03-16 00:00:00": 0.794598247303517,
-        "2020-03-17 00:00:00": 0.8000113218574753,
-        "2020-03-18 00:00:00": 0.8054239240731377,
-        "2020-03-19 00:00:00": 0.8108360634542632,
-        "2020-03-20 00:00:00": 0.8162477492497908,
-        "2020-03-23 00:00:00": 0.8216589904623731,
-        "2020-03-24 00:00:00": 0.8270697958565676,
-        "2020-03-25 00:00:00": 0.8324801739667016,
-        "2020-03-26 00:00:00": 0.8378901331044261,
-        "2020-03-27 00:00:00": 0.8432996813659709,
-        "2020-03-30 00:00:00": 0.8487088266391187,
-        "2020-03-31 00:00:00": 0.8541175766099063,
-        "2020-04-01 00:00:00": 0.8595259387690698,
-        "2020-04-02 00:00:00": 0.8649339204182405,
-        "2020-04-03 00:00:00": 0.8703415286759077,
-        "2020-04-06 00:00:00": 0.8757487704831545,
-        "2020-04-07 00:00:00": 0.8811556526091783,
-        "2020-04-08 00:00:00": 0.8865621816566066,
-        "2020-04-09 00:00:00": 0.8919683640666151,
-        "2020-04-10 00:00:00": 0.897374206123856,
-        "2020-04-13 00:00:00": 0.902779713961209,
-        "2020-04-14 00:00:00": 0.9081848935643565,
-        "2020-04-15 00:00:00": 0.913589750776195,
-        "2020-04-16 00:00:00": 0.918994291301088,
-        "2020-04-17 00:00:00": 0.9243985207089664,
-        "2020-04-20 00:00:00": 0.9298024444392847,
-        "2020-04-21 00:00:00": 0.9352060678048364,
-        "2020-04-22 00:00:00": 0.9406093959954356,
-        "2020-04-23 00:00:00": 0.9460124340814725,
-        "2020-04-24 00:00:00": 0.9514151870173432,
-        "2020-04-27 00:00:00": 0.956817659644762,
-        "2020-04-28 00:00:00": 0.9622198566959617,
-        "2020-04-29 00:00:00": 0.9676217827967837,
-        "2020-04-30 00:00:00": 0.973023442469664
-      },
-      "benchmark_max_drawdown": -0.20550365753894115,
-      "benchmark_returns": {
-        "2020-02-20 00:00:00": -0.01350000000000003,
-        "2020-02-21 00:00:00": -0.013686306476131855,
-        "2020-02-24 00:00:00": -0.013877871362341788,
-        "2020-02-25 00:00:00": -0.014074922366080137,
-        "2020-02-26 00:00:00": -0.01427770064437983,
-        "2020-02-27 00:00:00": -0.014486461819757174,
-        "2020-02-28 00:00:00": -0.01470147709031803,
-        "2020-03-02 00:00:00": -0.014923034444497829,
-        "2020-03-03 00:00:00": -0.015151439992207508,
-        "2020-03-04 00:00:00": -0.015387019425713225,
-        "2020-03-05 00:00:00": -0.01563011962535939,
-        "2020-03-06 00:00:00": -0.01588111042730485,
-        "2020-03-09 00:00:00": -0.01614038657282616,
-        "2020-03-10 00:00:00": -0.01640836986150514,
-        "2020-03-11 00:00:00": -0.016685511533839126,
-        "2020-03-12 00:00:00": -0.016972294912553733,
-        "2020-03-13 00:00:00": 0.006907695334517294,
-        "2020-03-16 00:00:00": 0.006859682814312373,
-        "2020-03-17 00:00:00": 0.006812341422005004,
-        "2020-03-18 00:00:00": 0.006765657019822383,
-        "2020-03-19 00:00:00": 0.0067196158685671,
-        "2020-03-20 00:00:00": 0.0066742046135356645,
-        "2020-03-23 00:00:00": 0.0066294102710306255,
-        "2020-03-24 00:00:00": 0.006585220215444387,
-        "2020-03-25 00:00:00": 0.006541622166882218,
-        "2020-03-26 00:00:00": 0.006498604179300038,
-        "2020-03-27 00:00:00": 0.006456154629130332,
-        "2020-03-30 00:00:00": 0.006414262204375612,
-        "2020-03-31 00:00:00": 0.006372915894142572,
-        "2020-04-01 00:00:00": 0.006332104978602407,
-        "2020-04-02 00:00:00": 0.006291819019348684,
-        "2020-04-03 00:00:00": 0.006252047850143697,
-        "2020-04-06 00:00:00": 0.006212781568027662,
-        "2020-04-07 00:00:00": 0.006174010524777321,
-        "2020-04-08 00:00:00": 0.006135725318698436,
-        "2020-04-09 00:00:00": 0.006097916786735287,
-        "2020-04-10 00:00:00": 0.006060575996882885,
-        "2020-04-13 00:00:00": 0.006023694240891849,
-        "2020-04-14 00:00:00": 0.0059872630272458,
-        "2020-04-15 00:00:00": 0.005951274074407949,
-        "2020-04-16 00:00:00": 0.005915719304317038,
-        "2020-04-17 00:00:00": 0.005880590836127242,
-        "2020-04-20 00:00:00": 0.0058458809801790555,
-        "2020-04-21 00:00:00": 0.0058115822321915065,
-        "2020-04-22 00:00:00": 0.005777687267665144,
-        "2020-04-23 00:00:00": 0.005744188936491607,
-        "2020-04-24 00:00:00": 0.005711080257751947,
-        "2020-04-27 00:00:00": 0.005678354414706543,
-        "2020-04-28 00:00:00": 0.005646004749959799,
-        "2020-04-29 00:00:00": 0.005614024760797494,
-        "2020-04-30 00:00:00": 0.00558240809468713
-      },
-      "benchmark_total_return": -0.02697655753033601,
-      "cumulative_returns": {
-        "2020-02-20 00:00:00": 0.98605,
-        "2020-02-21 00:00:00": 0.9720985893586933,
-        "2020-02-24 00:00:00": 0.958145708802608,
-        "2020-02-25 00:00:00": 0.9441912956753247,
-        "2020-02-26 00:00:00": 0.930235283691541,
-        "2020-02-27 00:00:00": 0.9162776026692648,
-        "2020-02-28 00:00:00": 0.9023181782378269,
-        "2020-03-02 00:00:00": 0.8883569315191095,
-        "2020-03-03 00:00:00": 0.8743937787790721,
-        "2020-03-04 00:00:00": 0.8604286310462744,
-        "2020-03-05 00:00:00": 0.8464613936936748,
-        "2020-03-06 00:00:00": 0.83249196597949,
-        "2020-03-09 00:00:00": 0.8185202405423389,
-        "2020-03-10 00:00:00": 0.8045461028452396,
-        "2020-03-11 00:00:00": 0.7905694305622778,
-        "2020-03-12 00:00:00": 0.7765900929008871,
-        "2020-03-13 00:00:00": 0.7821829501205743,
-        "2020-03-16 00:00:00": 0.7877753571821581,
-        "2020-03-17 00:00:00": 0.7933673232650621,
-        "2020-03-18 00:00:00": 0.7989588572993106,
-        "2020-03-19 00:00:00": 0.8045499679739905,
-        "2020-03-20 00:00:00": 0.8101406637453691,
-        "2020-03-23 00:00:00": 0.8157309528446841,
-        "2020-03-24 00:00:00": 0.8213208432856217,
-        "2020-03-25 00:00:00": 0.8269103428714956,
-        "2020-03-26 00:00:00": 0.8324994592021437,
-        "2020-03-27 00:00:00": 0.8380881996805525,
-        "2020-03-30 00:00:00": 0.8436765715192237,
-        "2020-03-31 00:00:00": 0.8492645817462942,
-        "2020-04-01 00:00:00": 0.85485223721142,
-        "2020-04-02 00:00:00": 0.8604395445914351,
-        "2020-04-03 00:00:00": 0.866026510395796,
-        "2020-04-06 00:00:00": 0.8716131409718195,
-        "2020-04-07 00:00:00": 0.8771994425097256,
-        "2020-04-08 00:00:00": 0.882785421047491,
-        "2020-04-09 00:00:00": 0.8883710824755244,
-        "2020-04-10 00:00:00": 0.893956432541168,
-        "2020-04-13 00:00:00": 0.899541476853036,
-        "2020-04-14 00:00:00": 0.9051262208851946,
-        "2020-04-15 00:00:00": 0.9107106699811918,
-        "2020-04-16 00:00:00": 0.9162948293579414,
-        "2020-04-17 00:00:00": 0.9218787041094697,
-        "2020-04-20 00:00:00": 0.9274622992105289,
-        "2020-04-21 00:00:00": 0.9330456195200834,
-        "2020-04-22 00:00:00": 0.9386286697846729,
-        "2020-04-23 00:00:00": 0.9442114546416607,
-        "2020-04-24 00:00:00": 0.9497939786223673,
-        "2020-04-27 00:00:00": 0.9553762461550975,
-        "2020-04-28 00:00:00": 0.9609582615680639,
-        "2020-04-29 00:00:00": 0.9665400290922102,
-        "2020-04-30 00:00:00": 0.9721215528639398
-      },
-      "cvar_95": -0.0173757265245623,
+      "scenario": "COVID-19 (2020)",
       "descripcion": "Caída abrupta de los mercados por la pandemia global y posterior recuperación impulsada por estímulos monetarios.",
-      "excluded_assets": [],
-      "max_drawdown": -0.21242321089104294,
-      "period_end": "2020-04-30T00:00:00",
       "period_start": "2020-02-19T00:00:00",
+      "period_end": "2020-04-30T00:00:00",
       "returns": {
         "2020-02-20 00:00:00": -0.013950000000000028,
         "2020-02-21 00:00:00": -0.014148786208921071,
@@ -1951,24 +1964,356 @@
         "2020-04-29 00:00:00": 0.005808543146336165,
         "2020-04-30 00:00:00": 0.00577474662582973
       },
-      "scenario": "COVID-19 (2020)",
+      "cumulative_returns": {
+        "2020-02-20 00:00:00": 0.98605,
+        "2020-02-21 00:00:00": 0.9720985893586933,
+        "2020-02-24 00:00:00": 0.958145708802608,
+        "2020-02-25 00:00:00": 0.9441912956753247,
+        "2020-02-26 00:00:00": 0.930235283691541,
+        "2020-02-27 00:00:00": 0.9162776026692648,
+        "2020-02-28 00:00:00": 0.9023181782378269,
+        "2020-03-02 00:00:00": 0.8883569315191095,
+        "2020-03-03 00:00:00": 0.8743937787790721,
+        "2020-03-04 00:00:00": 0.8604286310462744,
+        "2020-03-05 00:00:00": 0.8464613936936748,
+        "2020-03-06 00:00:00": 0.83249196597949,
+        "2020-03-09 00:00:00": 0.8185202405423389,
+        "2020-03-10 00:00:00": 0.8045461028452396,
+        "2020-03-11 00:00:00": 0.7905694305622778,
+        "2020-03-12 00:00:00": 0.7765900929008871,
+        "2020-03-13 00:00:00": 0.7821829501205743,
+        "2020-03-16 00:00:00": 0.7877753571821581,
+        "2020-03-17 00:00:00": 0.7933673232650621,
+        "2020-03-18 00:00:00": 0.7989588572993106,
+        "2020-03-19 00:00:00": 0.8045499679739905,
+        "2020-03-20 00:00:00": 0.8101406637453691,
+        "2020-03-23 00:00:00": 0.8157309528446841,
+        "2020-03-24 00:00:00": 0.8213208432856217,
+        "2020-03-25 00:00:00": 0.8269103428714956,
+        "2020-03-26 00:00:00": 0.8324994592021437,
+        "2020-03-27 00:00:00": 0.8380881996805525,
+        "2020-03-30 00:00:00": 0.8436765715192237,
+        "2020-03-31 00:00:00": 0.8492645817462942,
+        "2020-04-01 00:00:00": 0.85485223721142,
+        "2020-04-02 00:00:00": 0.8604395445914351,
+        "2020-04-03 00:00:00": 0.866026510395796,
+        "2020-04-06 00:00:00": 0.8716131409718195,
+        "2020-04-07 00:00:00": 0.8771994425097256,
+        "2020-04-08 00:00:00": 0.882785421047491,
+        "2020-04-09 00:00:00": 0.8883710824755244,
+        "2020-04-10 00:00:00": 0.893956432541168,
+        "2020-04-13 00:00:00": 0.899541476853036,
+        "2020-04-14 00:00:00": 0.9051262208851946,
+        "2020-04-15 00:00:00": 0.9107106699811918,
+        "2020-04-16 00:00:00": 0.9162948293579414,
+        "2020-04-17 00:00:00": 0.9218787041094697,
+        "2020-04-20 00:00:00": 0.9274622992105289,
+        "2020-04-21 00:00:00": 0.9330456195200834,
+        "2020-04-22 00:00:00": 0.9386286697846729,
+        "2020-04-23 00:00:00": 0.9442114546416607,
+        "2020-04-24 00:00:00": 0.9497939786223673,
+        "2020-04-27 00:00:00": 0.9553762461550975,
+        "2020-04-28 00:00:00": 0.9609582615680639,
+        "2020-04-29 00:00:00": 0.9665400290922102,
+        "2020-04-30 00:00:00": 0.9721215528639398
+      },
       "total_return": -0.027878447136060247,
+      "max_drawdown": -0.21242321089104294,
+      "volatility": 0.1649313614965421,
+      "cvar_95": -0.0173757265245623,
+      "benchmark_returns": {
+        "2020-02-20 00:00:00": -0.01350000000000003,
+        "2020-02-21 00:00:00": -0.013686306476131855,
+        "2020-02-24 00:00:00": -0.013877871362341788,
+        "2020-02-25 00:00:00": -0.014074922366080137,
+        "2020-02-26 00:00:00": -0.01427770064437983,
+        "2020-02-27 00:00:00": -0.014486461819757174,
+        "2020-02-28 00:00:00": -0.01470147709031803,
+        "2020-03-02 00:00:00": -0.014923034444497829,
+        "2020-03-03 00:00:00": -0.015151439992207508,
+        "2020-03-04 00:00:00": -0.015387019425713225,
+        "2020-03-05 00:00:00": -0.01563011962535939,
+        "2020-03-06 00:00:00": -0.01588111042730485,
+        "2020-03-09 00:00:00": -0.01614038657282616,
+        "2020-03-10 00:00:00": -0.01640836986150514,
+        "2020-03-11 00:00:00": -0.016685511533839126,
+        "2020-03-12 00:00:00": -0.016972294912553733,
+        "2020-03-13 00:00:00": 0.006907695334517294,
+        "2020-03-16 00:00:00": 0.006859682814312373,
+        "2020-03-17 00:00:00": 0.006812341422005004,
+        "2020-03-18 00:00:00": 0.006765657019822383,
+        "2020-03-19 00:00:00": 0.0067196158685671,
+        "2020-03-20 00:00:00": 0.0066742046135356645,
+        "2020-03-23 00:00:00": 0.0066294102710306255,
+        "2020-03-24 00:00:00": 0.006585220215444387,
+        "2020-03-25 00:00:00": 0.006541622166882218,
+        "2020-03-26 00:00:00": 0.006498604179300038,
+        "2020-03-27 00:00:00": 0.006456154629130332,
+        "2020-03-30 00:00:00": 0.006414262204375612,
+        "2020-03-31 00:00:00": 0.006372915894142572,
+        "2020-04-01 00:00:00": 0.006332104978602407,
+        "2020-04-02 00:00:00": 0.006291819019348684,
+        "2020-04-03 00:00:00": 0.006252047850143697,
+        "2020-04-06 00:00:00": 0.006212781568027662,
+        "2020-04-07 00:00:00": 0.006174010524777321,
+        "2020-04-08 00:00:00": 0.006135725318698436,
+        "2020-04-09 00:00:00": 0.006097916786735287,
+        "2020-04-10 00:00:00": 0.006060575996882885,
+        "2020-04-13 00:00:00": 0.006023694240891849,
+        "2020-04-14 00:00:00": 0.0059872630272458,
+        "2020-04-15 00:00:00": 0.005951274074407949,
+        "2020-04-16 00:00:00": 0.005915719304317038,
+        "2020-04-17 00:00:00": 0.005880590836127242,
+        "2020-04-20 00:00:00": 0.0058458809801790555,
+        "2020-04-21 00:00:00": 0.0058115822321915065,
+        "2020-04-22 00:00:00": 0.005777687267665144,
+        "2020-04-23 00:00:00": 0.005744188936491607,
+        "2020-04-24 00:00:00": 0.005711080257751947,
+        "2020-04-27 00:00:00": 0.005678354414706543,
+        "2020-04-28 00:00:00": 0.005646004749959799,
+        "2020-04-29 00:00:00": 0.005614024760797494,
+        "2020-04-30 00:00:00": 0.00558240809468713
+      },
+      "benchmark_cumulative": {
+        "2020-02-20 00:00:00": 0.9864999999999999,
+        "2020-02-21 00:00:00": 0.9729984586612959,
+        "2020-02-24 00:00:00": 0.9594953112162375,
+        "2020-02-25 00:00:00": 0.9459904892002511,
+        "2020-02-26 00:00:00": 0.9324839201830195,
+        "2020-02-27 00:00:00": 0.9189755274757506,
+        "2020-02-28 00:00:00": 0.905465229812003,
+        "2020-03-02 00:00:00": 0.8919529409992233,
+        "2020-03-03 00:00:00": 0.8784385695378005,
+        "2020-03-04 00:00:00": 0.8649220182040267,
+        "2020-03-05 00:00:00": 0.8514031835928905,
+        "2020-03-06 00:00:00": 0.8378819556160928,
+        "2020-03-09 00:00:00": 0.8243582169500535,
+        "2020-03-10 00:00:00": 0.8108318424279661,
+        "2020-03-11 00:00:00": 0.7973026983691303,
+        "2020-03-12 00:00:00": 0.7837706418378345,
+        "2020-03-13 00:00:00": 0.7891846906437894,
+        "2020-03-16 00:00:00": 0.794598247303517,
+        "2020-03-17 00:00:00": 0.8000113218574753,
+        "2020-03-18 00:00:00": 0.8054239240731377,
+        "2020-03-19 00:00:00": 0.8108360634542632,
+        "2020-03-20 00:00:00": 0.8162477492497908,
+        "2020-03-23 00:00:00": 0.8216589904623731,
+        "2020-03-24 00:00:00": 0.8270697958565676,
+        "2020-03-25 00:00:00": 0.8324801739667016,
+        "2020-03-26 00:00:00": 0.8378901331044261,
+        "2020-03-27 00:00:00": 0.8432996813659709,
+        "2020-03-30 00:00:00": 0.8487088266391187,
+        "2020-03-31 00:00:00": 0.8541175766099063,
+        "2020-04-01 00:00:00": 0.8595259387690698,
+        "2020-04-02 00:00:00": 0.8649339204182405,
+        "2020-04-03 00:00:00": 0.8703415286759077,
+        "2020-04-06 00:00:00": 0.8757487704831545,
+        "2020-04-07 00:00:00": 0.8811556526091783,
+        "2020-04-08 00:00:00": 0.8865621816566066,
+        "2020-04-09 00:00:00": 0.8919683640666151,
+        "2020-04-10 00:00:00": 0.897374206123856,
+        "2020-04-13 00:00:00": 0.902779713961209,
+        "2020-04-14 00:00:00": 0.9081848935643565,
+        "2020-04-15 00:00:00": 0.913589750776195,
+        "2020-04-16 00:00:00": 0.918994291301088,
+        "2020-04-17 00:00:00": 0.9243985207089664,
+        "2020-04-20 00:00:00": 0.9298024444392847,
+        "2020-04-21 00:00:00": 0.9352060678048364,
+        "2020-04-22 00:00:00": 0.9406093959954356,
+        "2020-04-23 00:00:00": 0.9460124340814725,
+        "2020-04-24 00:00:00": 0.9514151870173432,
+        "2020-04-27 00:00:00": 0.956817659644762,
+        "2020-04-28 00:00:00": 0.9622198566959617,
+        "2020-04-29 00:00:00": 0.9676217827967837,
+        "2020-04-30 00:00:00": 0.973023442469664
+      },
+      "benchmark_total_return": -0.02697655753033601,
+      "benchmark_max_drawdown": -0.20550365753894115,
       "valid_assets": [
         "AAA",
         "BBB",
         "CCC"
       ],
-      "volatility": 0.1649313614965421,
+      "excluded_assets": [],
       "weights_used": {
         "AAA": 0.5,
         "BBB": 0.3,
         "CCC": 0.2
       }
     },
-    "Crisis Financiera 2008": null,
+    "Burbuja Dot-com (2000-2002)": null,
     "Subida de Tasas Fed 2022": null
   },
   "run_backtest": {
+    "equity_curve": {
+      "2023-02-01 00:00:00": 998.9258873013621,
+      "2023-02-02 00:00:00": 997.7528737186692,
+      "2023-02-03 00:00:00": 996.5490245712906,
+      "2023-02-06 00:00:00": 995.3819012477488,
+      "2023-02-07 00:00:00": 994.3161845785296,
+      "2023-02-08 00:00:00": 993.411512910903,
+      "2023-02-09 00:00:00": 992.7205934107328,
+      "2023-02-10 00:00:00": 992.2876230912068,
+      "2023-02-13 00:00:00": 992.14703788645,
+      "2023-02-14 00:00:00": 992.3225951708109,
+      "2023-02-15 00:00:00": 992.8267878106203,
+      "2023-02-16 00:00:00": 993.6605854710169,
+      "2023-02-17 00:00:00": 994.813500049045,
+      "2023-02-20 00:00:00": 996.2639748224077,
+      "2023-02-21 00:00:00": 997.9800990490453,
+      "2023-02-22 00:00:00": 999.9206492959911,
+      "2023-02-23 00:00:00": 1002.0364540935432,
+      "2023-02-24 00:00:00": 1004.2720686482592,
+      "2023-02-27 00:00:00": 1006.5677312254215,
+      "2023-02-28 00:00:00": 1008.8615533406833,
+      "2023-03-01 00:00:00": 1011.0813839213815,
+      "2023-03-02 00:00:00": 1013.1808030580821,
+      "2023-03-03 00:00:00": 1015.1062189697845,
+      "2023-03-06 00:00:00": 1016.8112198457152,
+      "2023-03-07 00:00:00": 1018.2585087280927,
+      "2023-03-08 00:00:00": 1019.421448869034,
+      "2023-03-09 00:00:00": 1020.285127218016,
+      "2023-03-10 00:00:00": 1020.8468734961484,
+      "2023-03-13 00:00:00": 1021.116208731421,
+      "2023-03-14 00:00:00": 1021.1142360750107,
+      "2023-03-15 00:00:00": 1020.8725236894777,
+      "2023-03-16 00:00:00": 1020.431560338361,
+      "2023-03-17 00:00:00": 1019.8388858930573,
+      "2023-03-20 00:00:00": 1019.1470096973947,
+      "2023-03-21 00:00:00": 1018.4112296601413,
+      "2023-03-22 00:00:00": 1017.6874556672029,
+      "2023-03-23 00:00:00": 1017.0301251037929,
+      "2023-03-24 00:00:00": 1016.4902791661859,
+      "2023-03-27 00:00:00": 1016.1138493747433,
+      "2023-03-28 00:00:00": 1015.9401868681537,
+      "2023-03-29 00:00:00": 1016.0008543681106,
+      "2023-03-30 00:00:00": 1016.3186928311858,
+      "2023-03-31 00:00:00": 1016.907171436127,
+      "2023-04-03 00:00:00": 1017.7964936739284,
+      "2023-04-04 00:00:00": 1018.9573391839054,
+      "2023-04-05 00:00:00": 1020.3734236094658,
+      "2023-04-06 00:00:00": 1022.0194214898725,
+      "2023-04-07 00:00:00": 1023.8619014484564,
+      "2023-04-10 00:00:00": 1025.860590907631,
+      "2023-04-11 00:00:00": 1027.9699507273301,
+      "2023-04-12 00:00:00": 1030.1410202526517,
+      "2023-04-13 00:00:00": 1032.3234703963758,
+      "2023-04-14 00:00:00": 1034.467779148831,
+      "2023-04-17 00:00:00": 1036.5274234965573,
+      "2023-04-18 00:00:00": 1038.4609675239058,
+      "2023-04-19 00:00:00": 1040.23392148777,
+      "2023-04-20 00:00:00": 1041.8202529762489,
+      "2023-04-21 00:00:00": 1043.2034495410255,
+      "2023-04-24 00:00:00": 1044.3770613755937,
+      "2023-04-25 00:00:00": 1045.3446899502899,
+      "2023-04-26 00:00:00": 1046.1194299173812,
+      "2023-04-27 00:00:00": 1046.7228122538877,
+      "2023-04-28 00:00:00": 1047.1833317768767,
+      "2023-05-01 00:00:00": 1047.5847630699873,
+      "2023-05-02 00:00:00": 1047.917790150892,
+      "2023-05-03 00:00:00": 1048.218884221307,
+      "2023-05-04 00:00:00": 1048.523719149497,
+      "2023-05-05 00:00:00": 1048.86540851348
+    },
+    "returns": {
+      "2023-02-01 00:00:00": -0.0010741126986378857,
+      "2023-02-02 00:00:00": -0.001174274886259874,
+      "2023-02-03 00:00:00": -0.0012065604410557151,
+      "2023-02-06 00:00:00": -0.00117116498512837,
+      "2023-02-07 00:00:00": -0.001070661087853142,
+      "2023-02-08 00:00:00": -0.0009098430475715791,
+      "2023-02-09 00:00:00": -0.0006955018048316886,
+      "2023-02-10 00:00:00": -0.00043614519775236893,
+      "2023-02-13 00:00:00": -0.00014167787795116293,
+      "2023-02-14 00:00:00": 0.00017694684120095339,
+      "2023-02-15 00:00:00": 0.0005080934791397151,
+      "2023-02-16 00:00:00": 0.000839821880949998,
+      "2023-02-17 00:00:00": 0.0011602700105908248,
+      "2023-02-20 00:00:00": 0.001458036881577529,
+      "2023-02-21 00:00:00": 0.001722559753245534,
+      "2023-02-22 00:00:00": 0.001944477899704422,
+      "2023-02-23 00:00:00": 0.002115972701475677,
+      "2023-02-24 00:00:00": 0.002231071080880387,
+      "2023-02-27 00:00:00": 0.0022858970679651147,
+      "2023-02-28 00:00:00": 0.002278855206762076,
+      "2023-03-01 00:00:00": 0.0022003322193691055,
+      "2023-03-02 00:00:00": 0.0020764096442544844,
+      "2023-03-03 00:00:00": 0.0019003675414013266,
+      "2023-03-06 00:00:00": 0.0016796280468669433,
+      "2023-03-07 00:00:00": 0.0014233604568183456,
+      "2023-03-08 00:00:00": 0.0011420873294678557,
+      "2023-03-09 00:00:00": 0.000847224030787519,
+      "2023-03-10 00:00:00": 0.0005505777386602961,
+      "2023-03-13 00:00:00": 0.00026383509835348207,
+      "2023-03-14 00:00:00": -1.931862792403649e-06,
+      "2023-03-15 00:00:00": -0.00023671434301231198,
+      "2023-03-16 00:00:00": -0.0004319475163491182,
+      "2023-03-17 00:00:00": -0.0005808076389828276,
+      "2023-03-20 00:00:00": -0.000678417155134059,
+      "2023-03-21 00:00:00": -0.0007219567248416547,
+      "2023-03-22 00:00:00": -0.000710689328494496,
+      "2023-03-23 00:00:00": -0.0006459061274162181,
+      "2023-03-24 00:00:00": -0.0005308062409182801,
+      "2023-03-27 00:00:00": -0.0003703230607885466,
+      "2023-03-28 00:00:00": -0.00017090851256129636,
+      "2023-03-29 00:00:00": 5.971562178674894e-05,
+      "2023-03-30 00:00:00": 0.00031283286988270653,
+      "2023-03-31 00:00:00": 0.0005790295987786465,
+      "2023-04-03 00:00:00": 0.0008745363026061437,
+      "2023-04-04 00:00:00": 0.0011405477589991886,
+      "2023-04-05 00:00:00": 0.001389738678063246,
+      "2023-04-06 00:00:00": 0.001613132841684628,
+      "2023-04-07 00:00:00": 0.0018027837043428363,
+      "2023-04-10 00:00:00": 0.001952108439963407,
+      "2023-04-11 00:00:00": 0.0020561856439313964,
+      "2023-04-12 00:00:00": 0.0021119970713010527,
+      "2023-04-13 00:00:00": 0.002118593571964311,
+      "2023-04-14 00:00:00": 0.0020771674905655235,
+      "2023-04-17 00:00:00": 0.001991018366392261,
+      "2023-04-18 00:00:00": 0.0018654055681672777,
+      "2023-04-19 00:00:00": 0.0017072899408936415,
+      "2023-04-20 00:00:00": 0.00152497573450594,
+      "2023-04-21 00:00:00": 0.0013276729462929904,
+      "2023-04-24 00:00:00": 0.0011250076244326834,
+      "2023-04-25 00:00:00": 0.0009265126652835409,
+      "2023-04-26 00:00:00": 0.0007411334983948858,
+      "2023-04-27 00:00:00": 0.0005767815024275702,
+      "2023-04-28 00:00:00": 0.0004399632047737967,
+      "2023-05-01 00:00:00": 0.00038334385291394213,
+      "2023-05-02 00:00:00": 0.00031789988996089313,
+      "2023-05-03 00:00:00": 0.0002873260414557599,
+      "2023-05-04 00:00:00": 0.00029081228432215056,
+      "2023-05-05 00:00:00": 0.0003258766184708328
+    },
+    "weights_history": {
+      "columns": [
+        "AAA",
+        "BBB",
+        "CCC"
+      ],
+      "records": [
+        {
+          "AAA": 0.3333333333333333,
+          "BBB": 0.3333333333333333,
+          "CCC": 0.3333333333333333
+        },
+        {
+          "AAA": 0.3333333333333333,
+          "BBB": 0.3333333333333333,
+          "CCC": 0.3333333333333333
+        },
+        {
+          "AAA": 0.3333333333333333,
+          "BBB": 0.3333333333333333,
+          "CCC": 0.3333333333333333
+        },
+        {
+          "AAA": 0.3333333333333333,
+          "BBB": 0.3333333333333333,
+          "CCC": 0.3333333333333333
+        }
+      ]
+    },
     "benchmark_equity": {
       "2023-02-01 00:00:00": 998.9258873013622,
       "2023-02-02 00:00:00": 997.7479759091431,
@@ -2109,350 +2454,18 @@
       "2023-05-04 00:00:00": 0.00027105174025843226,
       "2023-05-05 00:00:00": 0.00030105895116916415
     },
-    "equity_curve": {
-      "2023-02-01 00:00:00": 998.9258873013621,
-      "2023-02-02 00:00:00": 997.7528737186692,
-      "2023-02-03 00:00:00": 996.5490245712906,
-      "2023-02-06 00:00:00": 995.3819012477488,
-      "2023-02-07 00:00:00": 994.3161845785296,
-      "2023-02-08 00:00:00": 993.411512910903,
-      "2023-02-09 00:00:00": 992.7205934107328,
-      "2023-02-10 00:00:00": 992.2876230912068,
-      "2023-02-13 00:00:00": 992.14703788645,
-      "2023-02-14 00:00:00": 992.3225951708109,
-      "2023-02-15 00:00:00": 992.8267878106203,
-      "2023-02-16 00:00:00": 993.6605854710169,
-      "2023-02-17 00:00:00": 994.813500049045,
-      "2023-02-20 00:00:00": 996.2639748224077,
-      "2023-02-21 00:00:00": 997.9800990490453,
-      "2023-02-22 00:00:00": 999.9206492959911,
-      "2023-02-23 00:00:00": 1002.0364540935432,
-      "2023-02-24 00:00:00": 1004.2720686482592,
-      "2023-02-27 00:00:00": 1006.5677312254215,
-      "2023-02-28 00:00:00": 1008.8615533406833,
-      "2023-03-01 00:00:00": 1011.0813839213815,
-      "2023-03-02 00:00:00": 1013.1808030580821,
-      "2023-03-03 00:00:00": 1015.1062189697845,
-      "2023-03-06 00:00:00": 1016.8112198457152,
-      "2023-03-07 00:00:00": 1018.2585087280927,
-      "2023-03-08 00:00:00": 1019.421448869034,
-      "2023-03-09 00:00:00": 1020.285127218016,
-      "2023-03-10 00:00:00": 1020.8468734961484,
-      "2023-03-13 00:00:00": 1021.116208731421,
-      "2023-03-14 00:00:00": 1021.1142360750107,
-      "2023-03-15 00:00:00": 1020.8725236894777,
-      "2023-03-16 00:00:00": 1020.431560338361,
-      "2023-03-17 00:00:00": 1019.8388858930573,
-      "2023-03-20 00:00:00": 1019.1470096973947,
-      "2023-03-21 00:00:00": 1018.4112296601413,
-      "2023-03-22 00:00:00": 1017.6874556672029,
-      "2023-03-23 00:00:00": 1017.0301251037929,
-      "2023-03-24 00:00:00": 1016.4902791661859,
-      "2023-03-27 00:00:00": 1016.1138493747433,
-      "2023-03-28 00:00:00": 1015.9401868681537,
-      "2023-03-29 00:00:00": 1016.0008543681106,
-      "2023-03-30 00:00:00": 1016.3186928311858,
-      "2023-03-31 00:00:00": 1016.907171436127,
-      "2023-04-03 00:00:00": 1017.7964936739284,
-      "2023-04-04 00:00:00": 1018.9573391839054,
-      "2023-04-05 00:00:00": 1020.3734236094658,
-      "2023-04-06 00:00:00": 1022.0194214898725,
-      "2023-04-07 00:00:00": 1023.8619014484564,
-      "2023-04-10 00:00:00": 1025.860590907631,
-      "2023-04-11 00:00:00": 1027.9699507273301,
-      "2023-04-12 00:00:00": 1030.1410202526517,
-      "2023-04-13 00:00:00": 1032.3234703963758,
-      "2023-04-14 00:00:00": 1034.467779148831,
-      "2023-04-17 00:00:00": 1036.5274234965573,
-      "2023-04-18 00:00:00": 1038.4609675239058,
-      "2023-04-19 00:00:00": 1040.23392148777,
-      "2023-04-20 00:00:00": 1041.8202529762489,
-      "2023-04-21 00:00:00": 1043.2034495410255,
-      "2023-04-24 00:00:00": 1044.3770613755937,
-      "2023-04-25 00:00:00": 1045.3446899502899,
-      "2023-04-26 00:00:00": 1046.1194299173812,
-      "2023-04-27 00:00:00": 1046.7228122538877,
-      "2023-04-28 00:00:00": 1047.1833317768767,
-      "2023-05-01 00:00:00": 1047.5847630699873,
-      "2023-05-02 00:00:00": 1047.917790150892,
-      "2023-05-03 00:00:00": 1048.218884221307,
-      "2023-05-04 00:00:00": 1048.523719149497,
-      "2023-05-05 00:00:00": 1048.86540851348
-    },
     "rebalance_dates": [
       "2023-02-01T00:00:00",
       "2023-03-01T00:00:00",
       "2023-04-03T00:00:00",
       "2023-05-01T00:00:00"
-    ],
-    "returns": {
-      "2023-02-01 00:00:00": -0.0010741126986378857,
-      "2023-02-02 00:00:00": -0.001174274886259874,
-      "2023-02-03 00:00:00": -0.0012065604410557151,
-      "2023-02-06 00:00:00": -0.00117116498512837,
-      "2023-02-07 00:00:00": -0.001070661087853142,
-      "2023-02-08 00:00:00": -0.0009098430475715791,
-      "2023-02-09 00:00:00": -0.0006955018048316886,
-      "2023-02-10 00:00:00": -0.00043614519775236893,
-      "2023-02-13 00:00:00": -0.00014167787795116293,
-      "2023-02-14 00:00:00": 0.00017694684120095339,
-      "2023-02-15 00:00:00": 0.0005080934791397151,
-      "2023-02-16 00:00:00": 0.000839821880949998,
-      "2023-02-17 00:00:00": 0.0011602700105908248,
-      "2023-02-20 00:00:00": 0.001458036881577529,
-      "2023-02-21 00:00:00": 0.001722559753245534,
-      "2023-02-22 00:00:00": 0.001944477899704422,
-      "2023-02-23 00:00:00": 0.002115972701475677,
-      "2023-02-24 00:00:00": 0.002231071080880387,
-      "2023-02-27 00:00:00": 0.0022858970679651147,
-      "2023-02-28 00:00:00": 0.002278855206762076,
-      "2023-03-01 00:00:00": 0.0022003322193691055,
-      "2023-03-02 00:00:00": 0.0020764096442544844,
-      "2023-03-03 00:00:00": 0.0019003675414013266,
-      "2023-03-06 00:00:00": 0.0016796280468669433,
-      "2023-03-07 00:00:00": 0.0014233604568183456,
-      "2023-03-08 00:00:00": 0.0011420873294678557,
-      "2023-03-09 00:00:00": 0.000847224030787519,
-      "2023-03-10 00:00:00": 0.0005505777386602961,
-      "2023-03-13 00:00:00": 0.00026383509835348207,
-      "2023-03-14 00:00:00": -1.931862792403649e-06,
-      "2023-03-15 00:00:00": -0.00023671434301231198,
-      "2023-03-16 00:00:00": -0.0004319475163491182,
-      "2023-03-17 00:00:00": -0.0005808076389828276,
-      "2023-03-20 00:00:00": -0.000678417155134059,
-      "2023-03-21 00:00:00": -0.0007219567248416547,
-      "2023-03-22 00:00:00": -0.000710689328494496,
-      "2023-03-23 00:00:00": -0.0006459061274162181,
-      "2023-03-24 00:00:00": -0.0005308062409182801,
-      "2023-03-27 00:00:00": -0.0003703230607885466,
-      "2023-03-28 00:00:00": -0.00017090851256129636,
-      "2023-03-29 00:00:00": 5.971562178674894e-05,
-      "2023-03-30 00:00:00": 0.00031283286988270653,
-      "2023-03-31 00:00:00": 0.0005790295987786465,
-      "2023-04-03 00:00:00": 0.0008745363026061437,
-      "2023-04-04 00:00:00": 0.0011405477589991886,
-      "2023-04-05 00:00:00": 0.001389738678063246,
-      "2023-04-06 00:00:00": 0.001613132841684628,
-      "2023-04-07 00:00:00": 0.0018027837043428363,
-      "2023-04-10 00:00:00": 0.001952108439963407,
-      "2023-04-11 00:00:00": 0.0020561856439313964,
-      "2023-04-12 00:00:00": 0.0021119970713010527,
-      "2023-04-13 00:00:00": 0.002118593571964311,
-      "2023-04-14 00:00:00": 0.0020771674905655235,
-      "2023-04-17 00:00:00": 0.001991018366392261,
-      "2023-04-18 00:00:00": 0.0018654055681672777,
-      "2023-04-19 00:00:00": 0.0017072899408936415,
-      "2023-04-20 00:00:00": 0.00152497573450594,
-      "2023-04-21 00:00:00": 0.0013276729462929904,
-      "2023-04-24 00:00:00": 0.0011250076244326834,
-      "2023-04-25 00:00:00": 0.0009265126652835409,
-      "2023-04-26 00:00:00": 0.0007411334983948858,
-      "2023-04-27 00:00:00": 0.0005767815024275702,
-      "2023-04-28 00:00:00": 0.0004399632047737967,
-      "2023-05-01 00:00:00": 0.00038334385291394213,
-      "2023-05-02 00:00:00": 0.00031789988996089313,
-      "2023-05-03 00:00:00": 0.0002873260414557599,
-      "2023-05-04 00:00:00": 0.00029081228432215056,
-      "2023-05-05 00:00:00": 0.0003258766184708328
-    },
-    "weights_history": {
-      "columns": [
-        "AAA",
-        "BBB",
-        "CCC"
-      ],
-      "records": [
-        {
-          "AAA": 0.3333333333333333,
-          "BBB": 0.3333333333333333,
-          "CCC": 0.3333333333333333
-        },
-        {
-          "AAA": 0.3333333333333333,
-          "BBB": 0.3333333333333333,
-          "CCC": 0.3333333333333333
-        },
-        {
-          "AAA": 0.3333333333333333,
-          "BBB": 0.3333333333333333,
-          "CCC": 0.3333333333333333
-        },
-        {
-          "AAA": 0.3333333333333333,
-          "BBB": 0.3333333333333333,
-          "CCC": 0.3333333333333333
-        }
-      ]
-    }
+    ]
   },
   "run_stress_test": {
-    "benchmark_cumulative": {
-      "2020-02-20 00:00:00": 0.9864999999999999,
-      "2020-02-21 00:00:00": 0.9729984586612959,
-      "2020-02-24 00:00:00": 0.9594953112162375,
-      "2020-02-25 00:00:00": 0.9459904892002511,
-      "2020-02-26 00:00:00": 0.9324839201830195,
-      "2020-02-27 00:00:00": 0.9189755274757506,
-      "2020-02-28 00:00:00": 0.905465229812003,
-      "2020-03-02 00:00:00": 0.8919529409992233,
-      "2020-03-03 00:00:00": 0.8784385695378005,
-      "2020-03-04 00:00:00": 0.8649220182040267,
-      "2020-03-05 00:00:00": 0.8514031835928905,
-      "2020-03-06 00:00:00": 0.8378819556160928,
-      "2020-03-09 00:00:00": 0.8243582169500535,
-      "2020-03-10 00:00:00": 0.8108318424279661,
-      "2020-03-11 00:00:00": 0.7973026983691303,
-      "2020-03-12 00:00:00": 0.7837706418378345,
-      "2020-03-13 00:00:00": 0.7891846906437894,
-      "2020-03-16 00:00:00": 0.794598247303517,
-      "2020-03-17 00:00:00": 0.8000113218574753,
-      "2020-03-18 00:00:00": 0.8054239240731377,
-      "2020-03-19 00:00:00": 0.8108360634542632,
-      "2020-03-20 00:00:00": 0.8162477492497908,
-      "2020-03-23 00:00:00": 0.8216589904623731,
-      "2020-03-24 00:00:00": 0.8270697958565676,
-      "2020-03-25 00:00:00": 0.8324801739667016,
-      "2020-03-26 00:00:00": 0.8378901331044261,
-      "2020-03-27 00:00:00": 0.8432996813659709,
-      "2020-03-30 00:00:00": 0.8487088266391187,
-      "2020-03-31 00:00:00": 0.8541175766099063,
-      "2020-04-01 00:00:00": 0.8595259387690698,
-      "2020-04-02 00:00:00": 0.8649339204182405,
-      "2020-04-03 00:00:00": 0.8703415286759077,
-      "2020-04-06 00:00:00": 0.8757487704831545,
-      "2020-04-07 00:00:00": 0.8811556526091783,
-      "2020-04-08 00:00:00": 0.8865621816566066,
-      "2020-04-09 00:00:00": 0.8919683640666151,
-      "2020-04-10 00:00:00": 0.897374206123856,
-      "2020-04-13 00:00:00": 0.902779713961209,
-      "2020-04-14 00:00:00": 0.9081848935643565,
-      "2020-04-15 00:00:00": 0.913589750776195,
-      "2020-04-16 00:00:00": 0.918994291301088,
-      "2020-04-17 00:00:00": 0.9243985207089664,
-      "2020-04-20 00:00:00": 0.9298024444392847,
-      "2020-04-21 00:00:00": 0.9352060678048364,
-      "2020-04-22 00:00:00": 0.9406093959954356,
-      "2020-04-23 00:00:00": 0.9460124340814725,
-      "2020-04-24 00:00:00": 0.9514151870173432,
-      "2020-04-27 00:00:00": 0.956817659644762,
-      "2020-04-28 00:00:00": 0.9622198566959617,
-      "2020-04-29 00:00:00": 0.9676217827967837,
-      "2020-04-30 00:00:00": 0.973023442469664
-    },
-    "benchmark_max_drawdown": -0.20550365753894115,
-    "benchmark_returns": {
-      "2020-02-20 00:00:00": -0.01350000000000003,
-      "2020-02-21 00:00:00": -0.013686306476131855,
-      "2020-02-24 00:00:00": -0.013877871362341788,
-      "2020-02-25 00:00:00": -0.014074922366080137,
-      "2020-02-26 00:00:00": -0.01427770064437983,
-      "2020-02-27 00:00:00": -0.014486461819757174,
-      "2020-02-28 00:00:00": -0.01470147709031803,
-      "2020-03-02 00:00:00": -0.014923034444497829,
-      "2020-03-03 00:00:00": -0.015151439992207508,
-      "2020-03-04 00:00:00": -0.015387019425713225,
-      "2020-03-05 00:00:00": -0.01563011962535939,
-      "2020-03-06 00:00:00": -0.01588111042730485,
-      "2020-03-09 00:00:00": -0.01614038657282616,
-      "2020-03-10 00:00:00": -0.01640836986150514,
-      "2020-03-11 00:00:00": -0.016685511533839126,
-      "2020-03-12 00:00:00": -0.016972294912553733,
-      "2020-03-13 00:00:00": 0.006907695334517294,
-      "2020-03-16 00:00:00": 0.006859682814312373,
-      "2020-03-17 00:00:00": 0.006812341422005004,
-      "2020-03-18 00:00:00": 0.006765657019822383,
-      "2020-03-19 00:00:00": 0.0067196158685671,
-      "2020-03-20 00:00:00": 0.0066742046135356645,
-      "2020-03-23 00:00:00": 0.0066294102710306255,
-      "2020-03-24 00:00:00": 0.006585220215444387,
-      "2020-03-25 00:00:00": 0.006541622166882218,
-      "2020-03-26 00:00:00": 0.006498604179300038,
-      "2020-03-27 00:00:00": 0.006456154629130332,
-      "2020-03-30 00:00:00": 0.006414262204375612,
-      "2020-03-31 00:00:00": 0.006372915894142572,
-      "2020-04-01 00:00:00": 0.006332104978602407,
-      "2020-04-02 00:00:00": 0.006291819019348684,
-      "2020-04-03 00:00:00": 0.006252047850143697,
-      "2020-04-06 00:00:00": 0.006212781568027662,
-      "2020-04-07 00:00:00": 0.006174010524777321,
-      "2020-04-08 00:00:00": 0.006135725318698436,
-      "2020-04-09 00:00:00": 0.006097916786735287,
-      "2020-04-10 00:00:00": 0.006060575996882885,
-      "2020-04-13 00:00:00": 0.006023694240891849,
-      "2020-04-14 00:00:00": 0.0059872630272458,
-      "2020-04-15 00:00:00": 0.005951274074407949,
-      "2020-04-16 00:00:00": 0.005915719304317038,
-      "2020-04-17 00:00:00": 0.005880590836127242,
-      "2020-04-20 00:00:00": 0.0058458809801790555,
-      "2020-04-21 00:00:00": 0.0058115822321915065,
-      "2020-04-22 00:00:00": 0.005777687267665144,
-      "2020-04-23 00:00:00": 0.005744188936491607,
-      "2020-04-24 00:00:00": 0.005711080257751947,
-      "2020-04-27 00:00:00": 0.005678354414706543,
-      "2020-04-28 00:00:00": 0.005646004749959799,
-      "2020-04-29 00:00:00": 0.005614024760797494,
-      "2020-04-30 00:00:00": 0.00558240809468713
-    },
-    "benchmark_total_return": -0.02697655753033601,
-    "cumulative_returns": {
-      "2020-02-20 00:00:00": 0.98605,
-      "2020-02-21 00:00:00": 0.9720985893586933,
-      "2020-02-24 00:00:00": 0.958145708802608,
-      "2020-02-25 00:00:00": 0.9441912956753247,
-      "2020-02-26 00:00:00": 0.930235283691541,
-      "2020-02-27 00:00:00": 0.9162776026692648,
-      "2020-02-28 00:00:00": 0.9023181782378269,
-      "2020-03-02 00:00:00": 0.8883569315191095,
-      "2020-03-03 00:00:00": 0.8743937787790721,
-      "2020-03-04 00:00:00": 0.8604286310462744,
-      "2020-03-05 00:00:00": 0.8464613936936748,
-      "2020-03-06 00:00:00": 0.83249196597949,
-      "2020-03-09 00:00:00": 0.8185202405423389,
-      "2020-03-10 00:00:00": 0.8045461028452396,
-      "2020-03-11 00:00:00": 0.7905694305622778,
-      "2020-03-12 00:00:00": 0.7765900929008871,
-      "2020-03-13 00:00:00": 0.7821829501205743,
-      "2020-03-16 00:00:00": 0.7877753571821581,
-      "2020-03-17 00:00:00": 0.7933673232650621,
-      "2020-03-18 00:00:00": 0.7989588572993106,
-      "2020-03-19 00:00:00": 0.8045499679739905,
-      "2020-03-20 00:00:00": 0.8101406637453691,
-      "2020-03-23 00:00:00": 0.8157309528446841,
-      "2020-03-24 00:00:00": 0.8213208432856217,
-      "2020-03-25 00:00:00": 0.8269103428714956,
-      "2020-03-26 00:00:00": 0.8324994592021437,
-      "2020-03-27 00:00:00": 0.8380881996805525,
-      "2020-03-30 00:00:00": 0.8436765715192237,
-      "2020-03-31 00:00:00": 0.8492645817462942,
-      "2020-04-01 00:00:00": 0.85485223721142,
-      "2020-04-02 00:00:00": 0.8604395445914351,
-      "2020-04-03 00:00:00": 0.866026510395796,
-      "2020-04-06 00:00:00": 0.8716131409718195,
-      "2020-04-07 00:00:00": 0.8771994425097256,
-      "2020-04-08 00:00:00": 0.882785421047491,
-      "2020-04-09 00:00:00": 0.8883710824755244,
-      "2020-04-10 00:00:00": 0.893956432541168,
-      "2020-04-13 00:00:00": 0.899541476853036,
-      "2020-04-14 00:00:00": 0.9051262208851946,
-      "2020-04-15 00:00:00": 0.9107106699811918,
-      "2020-04-16 00:00:00": 0.9162948293579414,
-      "2020-04-17 00:00:00": 0.9218787041094697,
-      "2020-04-20 00:00:00": 0.9274622992105289,
-      "2020-04-21 00:00:00": 0.9330456195200834,
-      "2020-04-22 00:00:00": 0.9386286697846729,
-      "2020-04-23 00:00:00": 0.9442114546416607,
-      "2020-04-24 00:00:00": 0.9497939786223673,
-      "2020-04-27 00:00:00": 0.9553762461550975,
-      "2020-04-28 00:00:00": 0.9609582615680639,
-      "2020-04-29 00:00:00": 0.9665400290922102,
-      "2020-04-30 00:00:00": 0.9721215528639398
-    },
-    "cvar_95": -0.0173757265245623,
+    "scenario": "COVID-19 (2020)",
     "descripcion": "Caída abrupta de los mercados por la pandemia global y posterior recuperación impulsada por estímulos monetarios.",
-    "excluded_assets": [],
-    "max_drawdown": -0.21242321089104294,
-    "period_end": "2020-04-30T00:00:00",
     "period_start": "2020-02-19T00:00:00",
+    "period_end": "2020-04-30T00:00:00",
     "returns": {
       "2020-02-20 00:00:00": -0.013950000000000028,
       "2020-02-21 00:00:00": -0.014148786208921071,
@@ -2506,14 +2519,177 @@
       "2020-04-29 00:00:00": 0.005808543146336165,
       "2020-04-30 00:00:00": 0.00577474662582973
     },
-    "scenario": "COVID-19 (2020)",
+    "cumulative_returns": {
+      "2020-02-20 00:00:00": 0.98605,
+      "2020-02-21 00:00:00": 0.9720985893586933,
+      "2020-02-24 00:00:00": 0.958145708802608,
+      "2020-02-25 00:00:00": 0.9441912956753247,
+      "2020-02-26 00:00:00": 0.930235283691541,
+      "2020-02-27 00:00:00": 0.9162776026692648,
+      "2020-02-28 00:00:00": 0.9023181782378269,
+      "2020-03-02 00:00:00": 0.8883569315191095,
+      "2020-03-03 00:00:00": 0.8743937787790721,
+      "2020-03-04 00:00:00": 0.8604286310462744,
+      "2020-03-05 00:00:00": 0.8464613936936748,
+      "2020-03-06 00:00:00": 0.83249196597949,
+      "2020-03-09 00:00:00": 0.8185202405423389,
+      "2020-03-10 00:00:00": 0.8045461028452396,
+      "2020-03-11 00:00:00": 0.7905694305622778,
+      "2020-03-12 00:00:00": 0.7765900929008871,
+      "2020-03-13 00:00:00": 0.7821829501205743,
+      "2020-03-16 00:00:00": 0.7877753571821581,
+      "2020-03-17 00:00:00": 0.7933673232650621,
+      "2020-03-18 00:00:00": 0.7989588572993106,
+      "2020-03-19 00:00:00": 0.8045499679739905,
+      "2020-03-20 00:00:00": 0.8101406637453691,
+      "2020-03-23 00:00:00": 0.8157309528446841,
+      "2020-03-24 00:00:00": 0.8213208432856217,
+      "2020-03-25 00:00:00": 0.8269103428714956,
+      "2020-03-26 00:00:00": 0.8324994592021437,
+      "2020-03-27 00:00:00": 0.8380881996805525,
+      "2020-03-30 00:00:00": 0.8436765715192237,
+      "2020-03-31 00:00:00": 0.8492645817462942,
+      "2020-04-01 00:00:00": 0.85485223721142,
+      "2020-04-02 00:00:00": 0.8604395445914351,
+      "2020-04-03 00:00:00": 0.866026510395796,
+      "2020-04-06 00:00:00": 0.8716131409718195,
+      "2020-04-07 00:00:00": 0.8771994425097256,
+      "2020-04-08 00:00:00": 0.882785421047491,
+      "2020-04-09 00:00:00": 0.8883710824755244,
+      "2020-04-10 00:00:00": 0.893956432541168,
+      "2020-04-13 00:00:00": 0.899541476853036,
+      "2020-04-14 00:00:00": 0.9051262208851946,
+      "2020-04-15 00:00:00": 0.9107106699811918,
+      "2020-04-16 00:00:00": 0.9162948293579414,
+      "2020-04-17 00:00:00": 0.9218787041094697,
+      "2020-04-20 00:00:00": 0.9274622992105289,
+      "2020-04-21 00:00:00": 0.9330456195200834,
+      "2020-04-22 00:00:00": 0.9386286697846729,
+      "2020-04-23 00:00:00": 0.9442114546416607,
+      "2020-04-24 00:00:00": 0.9497939786223673,
+      "2020-04-27 00:00:00": 0.9553762461550975,
+      "2020-04-28 00:00:00": 0.9609582615680639,
+      "2020-04-29 00:00:00": 0.9665400290922102,
+      "2020-04-30 00:00:00": 0.9721215528639398
+    },
     "total_return": -0.027878447136060247,
+    "max_drawdown": -0.21242321089104294,
+    "volatility": 0.1649313614965421,
+    "cvar_95": -0.0173757265245623,
+    "benchmark_returns": {
+      "2020-02-20 00:00:00": -0.01350000000000003,
+      "2020-02-21 00:00:00": -0.013686306476131855,
+      "2020-02-24 00:00:00": -0.013877871362341788,
+      "2020-02-25 00:00:00": -0.014074922366080137,
+      "2020-02-26 00:00:00": -0.01427770064437983,
+      "2020-02-27 00:00:00": -0.014486461819757174,
+      "2020-02-28 00:00:00": -0.01470147709031803,
+      "2020-03-02 00:00:00": -0.014923034444497829,
+      "2020-03-03 00:00:00": -0.015151439992207508,
+      "2020-03-04 00:00:00": -0.015387019425713225,
+      "2020-03-05 00:00:00": -0.01563011962535939,
+      "2020-03-06 00:00:00": -0.01588111042730485,
+      "2020-03-09 00:00:00": -0.01614038657282616,
+      "2020-03-10 00:00:00": -0.01640836986150514,
+      "2020-03-11 00:00:00": -0.016685511533839126,
+      "2020-03-12 00:00:00": -0.016972294912553733,
+      "2020-03-13 00:00:00": 0.006907695334517294,
+      "2020-03-16 00:00:00": 0.006859682814312373,
+      "2020-03-17 00:00:00": 0.006812341422005004,
+      "2020-03-18 00:00:00": 0.006765657019822383,
+      "2020-03-19 00:00:00": 0.0067196158685671,
+      "2020-03-20 00:00:00": 0.0066742046135356645,
+      "2020-03-23 00:00:00": 0.0066294102710306255,
+      "2020-03-24 00:00:00": 0.006585220215444387,
+      "2020-03-25 00:00:00": 0.006541622166882218,
+      "2020-03-26 00:00:00": 0.006498604179300038,
+      "2020-03-27 00:00:00": 0.006456154629130332,
+      "2020-03-30 00:00:00": 0.006414262204375612,
+      "2020-03-31 00:00:00": 0.006372915894142572,
+      "2020-04-01 00:00:00": 0.006332104978602407,
+      "2020-04-02 00:00:00": 0.006291819019348684,
+      "2020-04-03 00:00:00": 0.006252047850143697,
+      "2020-04-06 00:00:00": 0.006212781568027662,
+      "2020-04-07 00:00:00": 0.006174010524777321,
+      "2020-04-08 00:00:00": 0.006135725318698436,
+      "2020-04-09 00:00:00": 0.006097916786735287,
+      "2020-04-10 00:00:00": 0.006060575996882885,
+      "2020-04-13 00:00:00": 0.006023694240891849,
+      "2020-04-14 00:00:00": 0.0059872630272458,
+      "2020-04-15 00:00:00": 0.005951274074407949,
+      "2020-04-16 00:00:00": 0.005915719304317038,
+      "2020-04-17 00:00:00": 0.005880590836127242,
+      "2020-04-20 00:00:00": 0.0058458809801790555,
+      "2020-04-21 00:00:00": 0.0058115822321915065,
+      "2020-04-22 00:00:00": 0.005777687267665144,
+      "2020-04-23 00:00:00": 0.005744188936491607,
+      "2020-04-24 00:00:00": 0.005711080257751947,
+      "2020-04-27 00:00:00": 0.005678354414706543,
+      "2020-04-28 00:00:00": 0.005646004749959799,
+      "2020-04-29 00:00:00": 0.005614024760797494,
+      "2020-04-30 00:00:00": 0.00558240809468713
+    },
+    "benchmark_cumulative": {
+      "2020-02-20 00:00:00": 0.9864999999999999,
+      "2020-02-21 00:00:00": 0.9729984586612959,
+      "2020-02-24 00:00:00": 0.9594953112162375,
+      "2020-02-25 00:00:00": 0.9459904892002511,
+      "2020-02-26 00:00:00": 0.9324839201830195,
+      "2020-02-27 00:00:00": 0.9189755274757506,
+      "2020-02-28 00:00:00": 0.905465229812003,
+      "2020-03-02 00:00:00": 0.8919529409992233,
+      "2020-03-03 00:00:00": 0.8784385695378005,
+      "2020-03-04 00:00:00": 0.8649220182040267,
+      "2020-03-05 00:00:00": 0.8514031835928905,
+      "2020-03-06 00:00:00": 0.8378819556160928,
+      "2020-03-09 00:00:00": 0.8243582169500535,
+      "2020-03-10 00:00:00": 0.8108318424279661,
+      "2020-03-11 00:00:00": 0.7973026983691303,
+      "2020-03-12 00:00:00": 0.7837706418378345,
+      "2020-03-13 00:00:00": 0.7891846906437894,
+      "2020-03-16 00:00:00": 0.794598247303517,
+      "2020-03-17 00:00:00": 0.8000113218574753,
+      "2020-03-18 00:00:00": 0.8054239240731377,
+      "2020-03-19 00:00:00": 0.8108360634542632,
+      "2020-03-20 00:00:00": 0.8162477492497908,
+      "2020-03-23 00:00:00": 0.8216589904623731,
+      "2020-03-24 00:00:00": 0.8270697958565676,
+      "2020-03-25 00:00:00": 0.8324801739667016,
+      "2020-03-26 00:00:00": 0.8378901331044261,
+      "2020-03-27 00:00:00": 0.8432996813659709,
+      "2020-03-30 00:00:00": 0.8487088266391187,
+      "2020-03-31 00:00:00": 0.8541175766099063,
+      "2020-04-01 00:00:00": 0.8595259387690698,
+      "2020-04-02 00:00:00": 0.8649339204182405,
+      "2020-04-03 00:00:00": 0.8703415286759077,
+      "2020-04-06 00:00:00": 0.8757487704831545,
+      "2020-04-07 00:00:00": 0.8811556526091783,
+      "2020-04-08 00:00:00": 0.8865621816566066,
+      "2020-04-09 00:00:00": 0.8919683640666151,
+      "2020-04-10 00:00:00": 0.897374206123856,
+      "2020-04-13 00:00:00": 0.902779713961209,
+      "2020-04-14 00:00:00": 0.9081848935643565,
+      "2020-04-15 00:00:00": 0.913589750776195,
+      "2020-04-16 00:00:00": 0.918994291301088,
+      "2020-04-17 00:00:00": 0.9243985207089664,
+      "2020-04-20 00:00:00": 0.9298024444392847,
+      "2020-04-21 00:00:00": 0.9352060678048364,
+      "2020-04-22 00:00:00": 0.9406093959954356,
+      "2020-04-23 00:00:00": 0.9460124340814725,
+      "2020-04-24 00:00:00": 0.9514151870173432,
+      "2020-04-27 00:00:00": 0.956817659644762,
+      "2020-04-28 00:00:00": 0.9622198566959617,
+      "2020-04-29 00:00:00": 0.9676217827967837,
+      "2020-04-30 00:00:00": 0.973023442469664
+    },
+    "benchmark_total_return": -0.02697655753033601,
+    "benchmark_max_drawdown": -0.20550365753894115,
     "valid_assets": [
       "AAA",
       "BBB",
       "CCC"
     ],
-    "volatility": 0.1649313614965421,
+    "excluded_assets": [],
     "weights_used": {
       "AAA": 0.5,
       "BBB": 0.3,
@@ -2546,21 +2722,36 @@
   },
   "scale_var_cvar": {
     "0.95": {
-      "CVaR_10d": 10.272555668222262,
-      "CVaR_1d": 3.2484673302455316,
-      "CVaR_1y": 51.56782018768564,
-      "Capital": 24.57470141374802,
       "EV": 1000,
-      "VaR_10d": 8.191567137916007,
-      "VaR_1d": 2.5904009762001214,
-      "VaR_1y": 41.121340673786804,
-      "q": null,
       "sigma": 25,
+      "VaR_1y": 41.121340673786804,
+      "CVaR_1y": 51.56782018768564,
+      "VaR_1d": 2.5904009762001214,
+      "CVaR_1d": 3.2484673302455316,
+      "VaR_10d": 8.191567137916007,
+      "CVaR_10d": 10.272555668222262,
+      "Capital": 24.57470141374802,
+      "q": null,
       "sum_probs": null
     }
   },
+  "second_order_greeks": {
+    "vanna": -0.18879647164532512,
+    "vomma": 0.05663894149359752,
+    "charm": -0.00013841454927533892,
+    "speed": -0.000471991179113313,
+    "color_val": -2.870740870223438e-05
+  },
   "sharpe_ratio": 55.25287852100718,
+  "simple_chooser_option": 13.573986591680471,
+  "simple_forward_price": 105.12710963760242,
   "simulate_gbm_paths": {
+    "times": [
+      0.0,
+      0.3333333333333333,
+      0.6666666666666666,
+      1.0
+    ],
     "paths": [
       [
         100.0,
@@ -2578,15 +2769,15 @@
     "terminal_prices": [
       138.0405050893142,
       87.43899618030056
-    ],
+    ]
+  },
+  "simulate_merton_paths": {
     "times": [
       0.0,
       0.3333333333333333,
       0.6666666666666666,
       1.0
-    ]
-  },
-  "simulate_merton_paths": {
+    ],
     "paths": [
       [
         100.0,
@@ -2604,15 +2795,23 @@
     "terminal_prices": [
       109.74811792544352,
       146.26972781417462
-    ],
-    "times": [
-      0.0,
-      0.3333333333333333,
-      0.6666666666666666,
-      1.0
     ]
   },
   "simulate_vg_nig_returns": {
+    "vg_returns": [
+      0.25767540126392924,
+      -0.10259477377932605,
+      0.08197897413904166,
+      -0.09002990369052208,
+      -0.15100159582487283
+    ],
+    "nig_returns": [
+      -0.8651857743976406,
+      -0.5827741747248105,
+      -0.9514060391851807,
+      -0.9910941549360865,
+      -0.44595758385905765
+    ],
     "gbm_returns": [
       0.17944985134554953,
       -0.04662641559209137,
@@ -2621,241 +2820,61 @@
       0.14344716143887679
     ],
     "moments": {
-      "GBM": {
-        "kurt": -1.3550693082607,
-        "mean": 0.04091003060802952,
-        "skew": -0.4064053944198677,
-        "std": 0.12217317086582427
+      "VG": {
+        "mean": -0.0007943795783500074,
+        "std": 0.15135822576249902,
+        "skew": 0.7313618356780988,
+        "kurt": -1.0222689411520964
       },
       "NIG": {
-        "kurt": -1.5394510688849203,
         "mean": -0.7672835454205551,
+        "std": 0.21488192549791646,
         "skew": 0.42465463305870993,
-        "std": 0.21488192549791646
+        "kurt": -1.5394510688849203
       },
-      "VG": {
-        "kurt": -1.0222689411520964,
-        "mean": -0.0007943795783500074,
-        "skew": 0.7313618356780988,
-        "std": 0.15135822576249902
+      "GBM": {
+        "mean": 0.04091003060802952,
+        "std": 0.12217317086582427,
+        "skew": -0.4064053944198677,
+        "kurt": -1.3550693082607
       }
-    },
-    "nig_returns": [
-      -0.8651857743976406,
-      -0.5827741747248105,
-      -0.9514060391851807,
-      -0.9910941549360865,
-      -0.44595758385905765
-    ],
-    "vg_returns": [
-      0.25767540126392924,
-      -0.10259477377932605,
-      0.08197897413904166,
-      -0.09002990369052208,
-      -0.15100159582487283
-    ]
+    }
   },
   "sortino_ratio": 101.19421190472865,
-  "tabla_amortizacion": {
+  "strategy_profile": {
     "columns": [
-      "Periodo",
-      "Saldo Inicial",
-      "Interés",
-      "Amortización",
-      "Saldo Insoluto"
+      "S_T",
+      "Long Call K=100",
+      "Net Payoff"
     ],
     "records": [
       {
-        "Amortización": 330.022111481469,
-        "Interés": 10.0,
-        "Periodo": 1,
-        "Saldo Inicial": 1000.0,
-        "Saldo Insoluto": 669.977888518531
+        "S_T": 50.0,
+        "Long Call K=100": -2.0,
+        "Net Payoff": -2.0
       },
       {
-        "Amortización": 333.3223325962837,
-        "Interés": 6.69977888518531,
-        "Periodo": 2,
-        "Saldo Inicial": 669.977888518531,
-        "Saldo Insoluto": 336.65555592224734
+        "S_T": 75.0,
+        "Long Call K=100": -2.0,
+        "Net Payoff": -2.0
       },
       {
-        "Amortización": 336.65555592224734,
-        "Interés": 3.3665555592224736,
-        "Periodo": 3,
-        "Saldo Inicial": 336.65555592224734,
-        "Saldo Insoluto": 0.0
+        "S_T": 100.0,
+        "Long Call K=100": -2.0,
+        "Net Payoff": -2.0
+      },
+      {
+        "S_T": 125.0,
+        "Long Call K=100": 23.0,
+        "Net Payoff": 23.0
+      },
+      {
+        "S_T": 150.0,
+        "Long Call K=100": 48.0,
+        "Net Payoff": 48.0
       }
     ]
   },
-  "tabla_probabilidades_cds": {
-    "columns": [
-      "t (años)",
-      "S(t) Sobrevivencia",
-      "F(t) Incump. Acumulada",
-      "q(t) Incump. Marginal"
-    ],
-    "records": [
-      {
-        "F(t) Incump. Acumulada": 0.019801326693244747,
-        "S(t) Sobrevivencia": 0.9801986733067553,
-        "q(t) Incump. Marginal": 0.019801326693244747,
-        "t (años)": 1
-      },
-      {
-        "F(t) Incump. Acumulada": 0.03921056084767682,
-        "S(t) Sobrevivencia": 0.9607894391523232,
-        "q(t) Incump. Marginal": 0.019409234154432076,
-        "t (años)": 2
-      },
-      {
-        "F(t) Incump. Acumulada": 0.05823546641575128,
-        "S(t) Sobrevivencia": 0.9417645335842487,
-        "q(t) Incump. Marginal": 0.019024905568074457,
-        "t (años)": 3
-      }
-    ]
-  },
-  "tabla_vpc_cds": {
-    "columns": [
-      "Tiempo (años)",
-      "Prob. Sobrevivencia S(t)",
-      "Pago Esperado (×s)",
-      "Factor VP  e^{-rt}",
-      "VP Pago Esperado (×s)"
-    ],
-    "records": [
-      {
-        "Factor VP  e^{-rt}": 0.951229424500714,
-        "Pago Esperado (×s)": 0.9801986733067553,
-        "Prob. Sobrevivencia S(t)": 0.9801986733067553,
-        "Tiempo (años)": 1.0,
-        "VP Pago Esperado (×s)": 0.9323938199059482
-      },
-      {
-        "Factor VP  e^{-rt}": 0.9048374180359595,
-        "Pago Esperado (×s)": 0.9607894391523232,
-        "Prob. Sobrevivencia S(t)": 0.9607894391523232,
-        "Tiempo (años)": 2.0,
-        "VP Pago Esperado (×s)": 0.8693582353988057
-      },
-      {
-        "Factor VP  e^{-rt}": 0.8607079764250578,
-        "Pago Esperado (×s)": 0.9417645335842487,
-        "Prob. Sobrevivencia S(t)": 0.9417645335842487,
-        "Tiempo (años)": 3.0,
-        "VP Pago Esperado (×s)": 0.8105842459701871
-      },
-      {
-        "Factor VP  e^{-rt}": "NaN",
-        "Pago Esperado (×s)": "NaN",
-        "Prob. Sobrevivencia S(t)": "NaN",
-        "Tiempo (años)": "NaN",
-        "VP Pago Esperado (×s)": 2.612336301274941
-      }
-    ]
-  },
-  "tabla_vppp_cds": {
-    "columns": [
-      "Tiempo (años)",
-      "Prob. Incumplimiento Marginal q(t)",
-      "Pago Prorrateado (×s)",
-      "Pago Prorrateado Esperado (×s)",
-      "Factor VP  e^{-rt_mid}",
-      "VP Pago Prorrateado Esperado (×s)"
-    ],
-    "records": [
-      {
-        "Factor VP  e^{-rt_mid}": 0.9753099120283326,
-        "Pago Prorrateado (×s)": 0.5,
-        "Pago Prorrateado Esperado (×s)": 0.009900663346622374,
-        "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
-        "Tiempo (años)": 0.5,
-        "VP Pago Prorrateado Esperado (×s)": 0.009656215097616404
-      },
-      {
-        "Factor VP  e^{-rt_mid}": 0.9277434863285529,
-        "Pago Prorrateado (×s)": 0.5,
-        "Pago Prorrateado Esperado (×s)": 0.009704617077216038,
-        "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
-        "Tiempo (años)": 1.5,
-        "VP Pago Prorrateado Esperado (×s)": 0.009003395280700018
-      },
-      {
-        "Factor VP  e^{-rt_mid}": 0.8824969025845955,
-        "Pago Prorrateado (×s)": 0.5,
-        "Pago Prorrateado Esperado (×s)": 0.009512452784037229,
-        "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
-        "Tiempo (años)": 2.5,
-        "VP Pago Prorrateado Esperado (×s)": 0.008394710117895067
-      },
-      {
-        "Factor VP  e^{-rt_mid}": "NaN",
-        "Pago Prorrateado (×s)": "NaN",
-        "Pago Prorrateado Esperado (×s)": "NaN",
-        "Prob. Incumplimiento Marginal q(t)": "NaN",
-        "Tiempo (años)": "NaN",
-        "VP Pago Prorrateado Esperado (×s)": 0.02705432049621149
-      }
-    ]
-  },
-  "tabla_vpv_cds": {
-    "columns": [
-      "Tiempo (años)",
-      "Prob. Incumplimiento Marginal q(t)",
-      "Tasa Recuperación (RR)",
-      "LGD (1-RR)",
-      "Pago Parcial Esperado",
-      "Factor VP  e^{-rt_mid}",
-      "VP Pago Parcial Esperado"
-    ],
-    "records": [
-      {
-        "Factor VP  e^{-rt_mid}": 0.9753099120283326,
-        "LGD (1-RR)": 0.6,
-        "Pago Parcial Esperado": 0.011880796015946849,
-        "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
-        "Tasa Recuperación (RR)": 0.4,
-        "Tiempo (años)": 0.5,
-        "VP Pago Parcial Esperado": 0.011587458117139685
-      },
-      {
-        "Factor VP  e^{-rt_mid}": 0.9277434863285529,
-        "LGD (1-RR)": 0.6,
-        "Pago Parcial Esperado": 0.011645540492659244,
-        "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
-        "Tasa Recuperación (RR)": 0.4,
-        "Tiempo (años)": 1.5,
-        "VP Pago Parcial Esperado": 0.01080407433684002
-      },
-      {
-        "Factor VP  e^{-rt_mid}": 0.8824969025845955,
-        "LGD (1-RR)": 0.6,
-        "Pago Parcial Esperado": 0.011414943340844674,
-        "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
-        "Tasa Recuperación (RR)": 0.4,
-        "Tiempo (años)": 2.5,
-        "VP Pago Parcial Esperado": 0.01007365214147408
-      },
-      {
-        "Factor VP  e^{-rt_mid}": "NaN",
-        "LGD (1-RR)": "NaN",
-        "Pago Parcial Esperado": "NaN",
-        "Prob. Incumplimiento Marginal q(t)": "NaN",
-        "Tasa Recuperación (RR)": "NaN",
-        "Tiempo (años)": "NaN",
-        "VP Pago Parcial Esperado": 0.032465184595453785
-      }
-    ]
-  },
-  "tasa_efectiva_a_nominal": 0.1200000000000001,
-  "tasa_instantanea_a_efectiva": 0.12749685157937574,
-  "tasa_instantanea_a_nominal": 0.12060200501001539,
-  "tasa_nominal_a_efectiva": 0.12682503013196977,
-  "tasa_nominal_a_instantanea": 0.1194039702380171,
-  "tasa_nominal_m_a_nominal_p": 0.12120400000000053,
-  "tasa_rendimiento": 0.08000000000000007,
-  "tasa_rendimiento_bono": -0.020968248246502095,
   "theoretical_mc_error": [
     0.06324555320336758,
     0.03162277660168379
@@ -2885,15 +2904,7 @@
     "MSFT",
     "BTC-USD"
   ],
-  "valor_forward_calculo": -0.47662765197311785,
-  "valor_forward_en_vida": -0.47662765197311785,
-  "valor_futuro": 1469.3280768000006,
-  "valor_futuro_continuo": 1491.8246976412704,
-  "valor_presente": 999.9999999999995,
-  "valor_presente_continuo": 1005.480069053459,
-  "valuacion_gordon_shapiro": 55.55555555555556,
-  "valuacion_multiplos": 96,
-  "valuar_cds": {
+  "value_cds": {
     "probabilidades": {
       "columns": [
         "t (años)",
@@ -2903,26 +2914,25 @@
       ],
       "records": [
         {
-          "F(t) Incump. Acumulada": 0.019801326693244747,
+          "t (años)": 1,
           "S(t) Sobrevivencia": 0.9801986733067553,
-          "q(t) Incump. Marginal": 0.019801326693244747,
-          "t (años)": 1
+          "F(t) Incump. Acumulada": 0.019801326693244747,
+          "q(t) Incump. Marginal": 0.019801326693244747
         },
         {
-          "F(t) Incump. Acumulada": 0.03921056084767682,
+          "t (años)": 2,
           "S(t) Sobrevivencia": 0.9607894391523232,
-          "q(t) Incump. Marginal": 0.019409234154432076,
-          "t (años)": 2
+          "F(t) Incump. Acumulada": 0.03921056084767682,
+          "q(t) Incump. Marginal": 0.019409234154432076
         },
         {
-          "F(t) Incump. Acumulada": 0.05823546641575128,
+          "t (años)": 3,
           "S(t) Sobrevivencia": 0.9417645335842487,
-          "q(t) Incump. Marginal": 0.019024905568074457,
-          "t (años)": 3
+          "F(t) Incump. Acumulada": 0.05823546641575128,
+          "q(t) Incump. Marginal": 0.019024905568074457
         }
       ]
     },
-    "spread": 0.012300257615399176,
     "vpc": {
       "columns": [
         "Tiempo (años)",
@@ -2933,81 +2943,35 @@
       ],
       "records": [
         {
-          "Factor VP  e^{-rt}": 0.951229424500714,
-          "Pago Esperado (×s)": 0.9801986733067553,
-          "Prob. Sobrevivencia S(t)": 0.9801986733067553,
           "Tiempo (años)": 1.0,
+          "Prob. Sobrevivencia S(t)": 0.9801986733067553,
+          "Pago Esperado (×s)": 0.9801986733067553,
+          "Factor VP  e^{-rt}": 0.951229424500714,
           "VP Pago Esperado (×s)": 0.9323938199059482
         },
         {
-          "Factor VP  e^{-rt}": 0.9048374180359595,
-          "Pago Esperado (×s)": 0.9607894391523232,
-          "Prob. Sobrevivencia S(t)": 0.9607894391523232,
           "Tiempo (años)": 2.0,
+          "Prob. Sobrevivencia S(t)": 0.9607894391523232,
+          "Pago Esperado (×s)": 0.9607894391523232,
+          "Factor VP  e^{-rt}": 0.9048374180359595,
           "VP Pago Esperado (×s)": 0.8693582353988057
         },
         {
-          "Factor VP  e^{-rt}": 0.8607079764250578,
-          "Pago Esperado (×s)": 0.9417645335842487,
-          "Prob. Sobrevivencia S(t)": 0.9417645335842487,
           "Tiempo (años)": 3.0,
+          "Prob. Sobrevivencia S(t)": 0.9417645335842487,
+          "Pago Esperado (×s)": 0.9417645335842487,
+          "Factor VP  e^{-rt}": 0.8607079764250578,
           "VP Pago Esperado (×s)": 0.8105842459701871
         },
         {
-          "Factor VP  e^{-rt}": "NaN",
-          "Pago Esperado (×s)": "NaN",
-          "Prob. Sobrevivencia S(t)": "NaN",
           "Tiempo (años)": "NaN",
+          "Prob. Sobrevivencia S(t)": "NaN",
+          "Pago Esperado (×s)": "NaN",
+          "Factor VP  e^{-rt}": "NaN",
           "VP Pago Esperado (×s)": 2.612336301274941
         }
       ]
     },
-    "vpc_total": 2.612336301274941,
-    "vppp": {
-      "columns": [
-        "Tiempo (años)",
-        "Prob. Incumplimiento Marginal q(t)",
-        "Pago Prorrateado (×s)",
-        "Pago Prorrateado Esperado (×s)",
-        "Factor VP  e^{-rt_mid}",
-        "VP Pago Prorrateado Esperado (×s)"
-      ],
-      "records": [
-        {
-          "Factor VP  e^{-rt_mid}": 0.9753099120283326,
-          "Pago Prorrateado (×s)": 0.5,
-          "Pago Prorrateado Esperado (×s)": 0.009900663346622374,
-          "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
-          "Tiempo (años)": 0.5,
-          "VP Pago Prorrateado Esperado (×s)": 0.009656215097616404
-        },
-        {
-          "Factor VP  e^{-rt_mid}": 0.9277434863285529,
-          "Pago Prorrateado (×s)": 0.5,
-          "Pago Prorrateado Esperado (×s)": 0.009704617077216038,
-          "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
-          "Tiempo (años)": 1.5,
-          "VP Pago Prorrateado Esperado (×s)": 0.009003395280700018
-        },
-        {
-          "Factor VP  e^{-rt_mid}": 0.8824969025845955,
-          "Pago Prorrateado (×s)": 0.5,
-          "Pago Prorrateado Esperado (×s)": 0.009512452784037229,
-          "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
-          "Tiempo (años)": 2.5,
-          "VP Pago Prorrateado Esperado (×s)": 0.008394710117895067
-        },
-        {
-          "Factor VP  e^{-rt_mid}": "NaN",
-          "Pago Prorrateado (×s)": "NaN",
-          "Pago Prorrateado Esperado (×s)": "NaN",
-          "Prob. Incumplimiento Marginal q(t)": "NaN",
-          "Tiempo (años)": "NaN",
-          "VP Pago Prorrateado Esperado (×s)": 0.02705432049621149
-        }
-      ]
-    },
-    "vppp_total": 0.02705432049621149,
     "vpv": {
       "columns": [
         "Tiempo (años)",
@@ -3020,49 +2984,98 @@
       ],
       "records": [
         {
-          "Factor VP  e^{-rt_mid}": 0.9753099120283326,
-          "LGD (1-RR)": 0.6,
-          "Pago Parcial Esperado": 0.011880796015946849,
+          "Tiempo (años)": 0.5,
           "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
           "Tasa Recuperación (RR)": 0.4,
-          "Tiempo (años)": 0.5,
+          "LGD (1-RR)": 0.6,
+          "Pago Parcial Esperado": 0.011880796015946849,
+          "Factor VP  e^{-rt_mid}": 0.9753099120283326,
           "VP Pago Parcial Esperado": 0.011587458117139685
         },
         {
-          "Factor VP  e^{-rt_mid}": 0.9277434863285529,
-          "LGD (1-RR)": 0.6,
-          "Pago Parcial Esperado": 0.011645540492659244,
+          "Tiempo (años)": 1.5,
           "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
           "Tasa Recuperación (RR)": 0.4,
-          "Tiempo (años)": 1.5,
+          "LGD (1-RR)": 0.6,
+          "Pago Parcial Esperado": 0.011645540492659244,
+          "Factor VP  e^{-rt_mid}": 0.9277434863285529,
           "VP Pago Parcial Esperado": 0.01080407433684002
         },
         {
-          "Factor VP  e^{-rt_mid}": 0.8824969025845955,
-          "LGD (1-RR)": 0.6,
-          "Pago Parcial Esperado": 0.011414943340844674,
+          "Tiempo (años)": 2.5,
           "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
           "Tasa Recuperación (RR)": 0.4,
-          "Tiempo (años)": 2.5,
+          "LGD (1-RR)": 0.6,
+          "Pago Parcial Esperado": 0.011414943340844674,
+          "Factor VP  e^{-rt_mid}": 0.8824969025845955,
           "VP Pago Parcial Esperado": 0.01007365214147408
         },
         {
-          "Factor VP  e^{-rt_mid}": "NaN",
-          "LGD (1-RR)": "NaN",
-          "Pago Parcial Esperado": "NaN",
+          "Tiempo (años)": "NaN",
           "Prob. Incumplimiento Marginal q(t)": "NaN",
           "Tasa Recuperación (RR)": "NaN",
-          "Tiempo (años)": "NaN",
+          "LGD (1-RR)": "NaN",
+          "Pago Parcial Esperado": "NaN",
+          "Factor VP  e^{-rt_mid}": "NaN",
           "VP Pago Parcial Esperado": 0.032465184595453785
         }
       ]
     },
-    "vpv_total": 0.032465184595453785
+    "vppp": {
+      "columns": [
+        "Tiempo (años)",
+        "Prob. Incumplimiento Marginal q(t)",
+        "Pago Prorrateado (×s)",
+        "Pago Prorrateado Esperado (×s)",
+        "Factor VP  e^{-rt_mid}",
+        "VP Pago Prorrateado Esperado (×s)"
+      ],
+      "records": [
+        {
+          "Tiempo (años)": 0.5,
+          "Prob. Incumplimiento Marginal q(t)": 0.019801326693244747,
+          "Pago Prorrateado (×s)": 0.5,
+          "Pago Prorrateado Esperado (×s)": 0.009900663346622374,
+          "Factor VP  e^{-rt_mid}": 0.9753099120283326,
+          "VP Pago Prorrateado Esperado (×s)": 0.009656215097616404
+        },
+        {
+          "Tiempo (años)": 1.5,
+          "Prob. Incumplimiento Marginal q(t)": 0.019409234154432076,
+          "Pago Prorrateado (×s)": 0.5,
+          "Pago Prorrateado Esperado (×s)": 0.009704617077216038,
+          "Factor VP  e^{-rt_mid}": 0.9277434863285529,
+          "VP Pago Prorrateado Esperado (×s)": 0.009003395280700018
+        },
+        {
+          "Tiempo (años)": 2.5,
+          "Prob. Incumplimiento Marginal q(t)": 0.019024905568074457,
+          "Pago Prorrateado (×s)": 0.5,
+          "Pago Prorrateado Esperado (×s)": 0.009512452784037229,
+          "Factor VP  e^{-rt_mid}": 0.8824969025845955,
+          "VP Pago Prorrateado Esperado (×s)": 0.008394710117895067
+        },
+        {
+          "Tiempo (años)": "NaN",
+          "Prob. Incumplimiento Marginal q(t)": "NaN",
+          "Pago Prorrateado (×s)": "NaN",
+          "Pago Prorrateado Esperado (×s)": "NaN",
+          "Factor VP  e^{-rt_mid}": "NaN",
+          "VP Pago Prorrateado Esperado (×s)": 0.02705432049621149
+        }
+      ]
+    },
+    "vpc_total": 2.612336301274941,
+    "vpv_total": 0.032465184595453785,
+    "vppp_total": 0.02705432049621149,
+    "spread": 0.012300257615399176
   },
-  "valuar_tranche": {
+  "value_tranche": {
     "A": 1.484196910698112,
     "B": 0.12221374357259848,
     "C": 0.24442748714519696,
+    "spread": 0.15215753611654415,
+    "spread_bps": 1521.5753611654416,
     "E_T": 0.7440987577307302,
     "E_all": [
       [
@@ -3086,48 +3099,35 @@
         0.9861822268127853,
         0.9996464325477044
       ]
-    ],
-    "spread": 0.15215753611654415,
-    "spread_bps": 1521.5753611654416
+    ]
   },
   "var_cvar_from_distribution": {
     "0.95": {
-      "CVaR": 4.12965850701832,
       "EV": 170.84858770960594,
-      "VaR": 2.0285877096059437,
-      "q": 168.82,
       "sigma": 2.1676656849977274,
+      "VaR": 2.0285877096059437,
+      "CVaR": 4.12965850701832,
+      "q": 168.82,
       "sum_probs": 0.9999999999999998
     }
   },
   "var_cvar_from_simulations": {
     "0.95": {
-      "CVaR": 0.2,
       "EV": 0.2,
+      "sigma": 0.4000000000000001,
       "VaR": 0.2,
-      "q": 0.0,
-      "sigma": 0.4000000000000001
+      "CVaR": 0.2,
+      "q": 0.0
     }
   },
   "var_cvar_parametric": {
     "0.95": {
-      "CVaR": 51.56782018768564,
       "EV": 1000,
+      "sigma": 25,
       "VaR": 41.121340673786804,
-      "sigma": 25
+      "CVaR": 51.56782018768564
     }
   },
   "var_historical": -0.0001691944240610273,
-  "vf_anualidad_continua": 4068.737254821071,
-  "vf_anualidad_efectiva": 1268.2503013196977,
-  "vf_anualidad_nominal": 2413.313327122482,
-  "vf_gradiente_aritmetico": 691.2090360600081,
-  "vf_gradiente_geo": 646.4226866299994,
-  "vp_anualidad_continua": 3200.582084001698,
-  "vp_anualidad_efectiva": 1125.5077473484641,
-  "vp_anualidad_nominal": 619.4374225455086,
-  "vp_gradiente_aritmetico": 651.1501789849781,
-  "vp_gradiente_geo": 574.0048465233505,
-  "vp_perpetuidad": 2000.0,
   "weighted_average_cost_of_capital": 0.08879999999999999
 }

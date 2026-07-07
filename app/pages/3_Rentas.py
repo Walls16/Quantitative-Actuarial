@@ -169,22 +169,22 @@ with tab_vf:
 
             if escenario == "Vencidas a tasa efectiva im":
                 im_vf, nm_vf, _ = _inputs_tasa_efectiva("vf_vec_e")
-                vf_res = quact.vf_anualidad_efectiva(R_vf, im_vf, nm_vf, anticipada=False)
+                vf_res = quact.effective_annuity_future_value(R_vf, im_vf, nm_vf, anticipada=False)
                 formula = r"VF = R \left[ \frac{(1+i_m)^{nm} - 1}{i_m} \right]"
 
             elif escenario == "Anticipadas a tasa efectiva im":
                 im_vf, nm_vf, _ = _inputs_tasa_efectiva("vf_ant_e")
-                vf_res = quact.vf_anualidad_efectiva(R_vf, im_vf, nm_vf, anticipada=True)
+                vf_res = quact.effective_annuity_future_value(R_vf, im_vf, nm_vf, anticipada=True)
                 formula = r"VF = R \left[ \frac{(1+i_m)^{nm} - 1}{i_m} \right](1+i_m)"
 
             elif escenario == "Vencidas a tasa nominal i(m)":
                 im_vf, nm_vf, m_cap, i_nom_vf = _inputs_tasa_nominal("vf_vec_n")
-                vf_res = quact.vf_anualidad_efectiva(R_vf, im_vf, nm_vf, anticipada=False)
+                vf_res = quact.effective_annuity_future_value(R_vf, im_vf, nm_vf, anticipada=False)
                 formula = r"VF = R \left[ \frac{\left(1+\frac{i^{(m)}}{m}\right)^{nm} - 1}{\frac{i^{(m)}}{m}} \right]"
 
             elif escenario == "Anticipadas a tasa nominal i(m)":
                 im_vf, nm_vf, m_cap, i_nom_vf = _inputs_tasa_nominal("vf_ant_n")
-                vf_res = quact.vf_anualidad_efectiva(R_vf, im_vf, nm_vf, anticipada=True)
+                vf_res = quact.effective_annuity_future_value(R_vf, im_vf, nm_vf, anticipada=True)
                 formula = r"VF = R \left[ \frac{\left(1+\frac{i^{(m)}}{m}\right)^{nm} - 1}{\frac{i^{(m)}}{m}} \right]\left(1+\frac{i^{(m)}}{m}\right)"
 
             elif escenario == "Vencidas pagaderas p veces al año a tasa nominal i(m)":
@@ -207,9 +207,9 @@ with tab_vf:
                 n_anios = st.number_input(
                     "Años ($n$)", min_value=0.0, value=5.0, step=1.0, key="n_vf_p"
                 )
-                vf_res = quact.vf_anualidad_nominal(R_vf, i_nom_vf, m_cap, p_pag, n_anios)
+                vf_res = quact.nominal_annuity_future_value(R_vf, i_nom_vf, m_cap, p_pag, n_anios)
                 formula = r"VF = R \left[ \frac{(1+i_p)^{np} - 1}{i_p} \right]"
-                i_p = quact.tasa_nominal_m_a_nominal_p(i_nom_vf, m_cap, p_pag) / p_pag
+                i_p = quact.convert_nominal_frequency(i_nom_vf, m_cap, p_pag) / p_pag
                 im_vf, nm_vf = i_p, n_anios * p_pag
 
             else:  # Continuas
@@ -232,12 +232,12 @@ with tab_vf:
 
                 if tipo_t == "Tasa instantánea (δ)":
                     delta_vf = st.number_input("δ %", value=10.0, step=0.1, key="delta_vf") / 100
-                    vf_res = quact.vf_anualidad_continua(R_anual, delta_vf, n_cont)
+                    vf_res = quact.continuous_annuity_future_value(R_anual, delta_vf, n_cont)
                     formula = r"VF = \bar{R} \left[ \frac{e^{\delta n} - 1}{\delta} \right]"
                 else:
                     i_eff_vf = st.number_input("i %", value=10.51, step=0.1, key="ieff_vf") / 100
                     delta_vf = np.log(1 + i_eff_vf)
-                    vf_res = quact.vf_anualidad_continua(R_anual, delta_vf, n_cont)
+                    vf_res = quact.continuous_annuity_future_value(R_anual, delta_vf, n_cont)
                     formula = r"VF = \bar{R} \left[ \frac{(1+i)^n - 1}{\ln(1+i)} \right]"
                 R_vf, im_vf, nm_vf = R_anual, delta_vf, n_cont
 
@@ -364,7 +364,7 @@ with tab_vf:
                 str_i, str_q = r"\frac{i^{(m)}}{m}", r"\frac{q^{(m)}}{m}"
                 val_i, val_q = f"{im_geo:.6f}", f"{qm_geo:.6f}"
 
-        vf_geo = quact.vf_gradiente_geo(R1_vf, im_geo, qm_geo, nm_geo)
+        vf_geo = quact.geometric_gradient_future_value(R1_vf, im_geo, qm_geo, nm_geo)
 
         with c2:
             themed_success(
@@ -434,7 +434,7 @@ with tab_vf:
                 str_i_a = r"\frac{i^{(m)}}{m}"
                 val_i_a = f"{im_arit:.6f}"
 
-        vf_arit = quact.vf_gradiente_aritmetico(R1_arit, G_vf, im_arit, nm_arit)
+        vf_arit = quact.arithmetic_gradient_future_value(R1_arit, G_vf, im_arit, nm_arit)
 
         with c2:
             themed_success(
@@ -517,22 +517,22 @@ with tab_vp:
 
             if escenario_vp == "Vencidas a tasa efectiva im":
                 im_vp, nm_vp, _ = _inputs_tasa_efectiva("vp_vec_e")
-                vp_res = quact.vp_anualidad_efectiva(R_vp, im_vp, nm_vp, anticipada=False)
+                vp_res = quact.effective_annuity_present_value(R_vp, im_vp, nm_vp, anticipada=False)
                 formula_vp = r"VP = R \left[ \frac{1 - (1+i_m)^{-nm}}{i_m} \right]"
 
             elif escenario_vp == "Anticipadas a tasa efectiva im":
                 im_vp, nm_vp, _ = _inputs_tasa_efectiva("vp_ant_e")
-                vp_res = quact.vp_anualidad_efectiva(R_vp, im_vp, nm_vp, anticipada=True)
+                vp_res = quact.effective_annuity_present_value(R_vp, im_vp, nm_vp, anticipada=True)
                 formula_vp = r"VP = R \left[ \frac{1 - (1+i_m)^{-nm}}{i_m} \right](1+i_m)"
 
             elif escenario_vp == "Vencidas a tasa nominal i(m)":
                 im_vp, nm_vp, m_cap, i_nom_vp = _inputs_tasa_nominal("vp_vec_n")
-                vp_res = quact.vp_anualidad_efectiva(R_vp, im_vp, nm_vp, anticipada=False)
+                vp_res = quact.effective_annuity_present_value(R_vp, im_vp, nm_vp, anticipada=False)
                 formula_vp = r"VP = R \left[ \frac{1 - \left(1+\frac{i^{(m)}}{m}\right)^{-nm}}{\frac{i^{(m)}}{m}} \right]"
 
             elif escenario_vp == "Anticipadas a tasa nominal i(m)":
                 im_vp, nm_vp, m_cap, i_nom_vp = _inputs_tasa_nominal("vp_ant_n")
-                vp_res = quact.vp_anualidad_efectiva(R_vp, im_vp, nm_vp, anticipada=True)
+                vp_res = quact.effective_annuity_present_value(R_vp, im_vp, nm_vp, anticipada=True)
                 formula_vp = r"VP = R \left[ \frac{1 - \left(1+\frac{i^{(m)}}{m}\right)^{-nm}}{\frac{i^{(m)}}{m}} \right]\left(1+\frac{i^{(m)}}{m}\right)"
 
             elif escenario_vp == "Perpetuas a tasa efectiva im":
@@ -543,7 +543,7 @@ with tab_vp:
                     / 100
                 )
                 nm_vp = 0
-                vp_res = quact.vp_perpetuidad(R_vp, im_vp)
+                vp_res = quact.perpetuity_present_value(R_vp, im_vp)
                 formula_vp = r"VP = \frac{R}{i_m}"
 
             elif escenario_vp == "Perpetuas a tasa nominal i(m)":
@@ -557,7 +557,7 @@ with tab_vp:
                     "Periodos por año ($m$)", min_value=1.0, value=12.0, step=1.0, key="m_perp_n"
                 )
                 im_vp, nm_vp = i_nom_pp / m_pp, 0
-                vp_res = quact.vp_perpetuidad(R_vp, im_vp)
+                vp_res = quact.perpetuity_present_value(R_vp, im_vp)
                 formula_vp = r"VP = \frac{R}{\frac{i^{(m)}}{m}}"
 
             elif escenario_vp == "Vencidas pagaderas p veces al año a tasa nominal i(m)":
@@ -580,9 +580,11 @@ with tab_vp:
                 n_anios_vp = st.number_input(
                     "Años ($n$)", min_value=0.0, value=5.0, step=1.0, key="n_vp_p"
                 )
-                vp_res = quact.vp_anualidad_nominal(R_vp, i_nom_vp2, m_cap_vp, p_pag_vp, n_anios_vp)
+                vp_res = quact.nominal_annuity_present_value(
+                    R_vp, i_nom_vp2, m_cap_vp, p_pag_vp, n_anios_vp
+                )
                 formula_vp = r"VP = R \left[ \frac{1 - (1+i_p)^{-np}}{i_p} \right]"
-                i_p_vp = quact.tasa_nominal_m_a_nominal_p(i_nom_vp2, m_cap_vp, p_pag_vp) / p_pag_vp
+                i_p_vp = quact.convert_nominal_frequency(i_nom_vp2, m_cap_vp, p_pag_vp) / p_pag_vp
                 im_vp, nm_vp = i_p_vp, n_anios_vp * p_pag_vp
 
             else:  # Continuas
@@ -605,12 +607,12 @@ with tab_vp:
 
                 if tipo_t_vp == "Tasa instantánea (δ)":
                     delta_vp = st.number_input("δ %", value=10.0, step=0.1, key="delta_vp") / 100
-                    vp_res = quact.vp_anualidad_continua(R_anual_vp, delta_vp, n_cont_vp)
+                    vp_res = quact.continuous_annuity_present_value(R_anual_vp, delta_vp, n_cont_vp)
                     formula_vp = r"VP = \bar{R} \left[ \frac{1 - e^{-\delta n}}{\delta} \right]"
                 else:
                     i_eff_vp = st.number_input("i %", value=10.51, step=0.1, key="ieff_vp") / 100
                     delta_vp = np.log(1 + i_eff_vp)
-                    vp_res = quact.vp_anualidad_continua(R_anual_vp, delta_vp, n_cont_vp)
+                    vp_res = quact.continuous_annuity_present_value(R_anual_vp, delta_vp, n_cont_vp)
                     formula_vp = r"VP = \bar{R} \left[ \frac{1 - (1+i)^{-n}}{\ln(1+i)} \right]"
                 R_vp, im_vp, nm_vp = R_anual_vp, delta_vp, n_cont_vp
 
@@ -749,7 +751,7 @@ with tab_vp:
                 str_i_gvp, str_q_gvp = r"\frac{i^{(m)}}{m}", r"\frac{q^{(m)}}{m}"
                 val_i_gvp, val_q_gvp = f"{im_geo_vp:.6f}", f"{qm_geo_vp:.6f}"
 
-        vp_geo = quact.vp_gradiente_geo(R1_vp, im_geo_vp, qm_geo_vp, nm_geo_vp)
+        vp_geo = quact.geometric_gradient_present_value(R1_vp, im_geo_vp, qm_geo_vp, nm_geo_vp)
 
         with c2:
             themed_info(
@@ -821,7 +823,7 @@ with tab_vp:
                 str_i_av = r"\frac{i^{(m)}}{m}"
                 val_i_av = f"{im_arit_vp:.6f}"
 
-        vp_arit = quact.vp_gradiente_aritmetico(R1_arit_vp, G_vp, im_arit_vp, nm_arit_vp)
+        vp_arit = quact.arithmetic_gradient_present_value(R1_arit_vp, G_vp, im_arit_vp, nm_arit_vp)
 
         with c2:
             themed_info(
@@ -956,28 +958,36 @@ with tab_n:
 
         if tipo_renta_n == "Constante Periódica":
             if es_vf:
-                n_res_total = quact.nper_anualidad_vf(Meta, R_n, im_n)
+                n_res_total = quact.periods_for_annuity_future_value(Meta, R_n, im_n)
                 formula_n = rf"nm = \frac{{\ln\left(\frac{{VF \cdot {str_i_n}}}{{R}} + 1\right)}}{{\ln(1+{str_i_n})}}"
             else:
-                n_res_total = quact.nper_anualidad_vp(Meta, R_n, im_n)
+                n_res_total = quact.periods_for_annuity_present_value(Meta, R_n, im_n)
                 formula_n = rf"nm = \frac{{-\ln\left(1 - \frac{{VP \cdot {str_i_n}}}{{R}}\right)}}{{\ln(1+{str_i_n})}}"
 
         elif tipo_renta_n == "Creciente Geométrica":
             usa_metodo_numerico = True
             if es_vf:
-                n_res_total = quact.nper_gradiente_geo_vf(Meta, R_n, im_n, qm_n)
+                n_res_total = quact.periods_for_geometric_gradient_future_value(
+                    Meta, R_n, im_n, qm_n
+                )
                 formula_n = rf"VF = R_1 \left[\frac{{(1+{str_i_n})^{{nm}}-(1+{str_q_n})^{{nm}}}}{{{str_i_n}-{str_q_n}}}\right]"
             else:
-                n_res_total = quact.nper_gradiente_geo_vp(Meta, R_n, im_n, qm_n)
+                n_res_total = quact.periods_for_geometric_gradient_present_value(
+                    Meta, R_n, im_n, qm_n
+                )
                 formula_n = rf"VP = R_1 \left[\frac{{1-\left(\frac{{1+{str_q_n}}}{{1+{str_i_n}}}\right)^{{nm}}}}{{{str_i_n}-{str_q_n}}}\right]"
 
         else:
             usa_metodo_numerico = True
             if es_vf:
-                n_res_total = quact.nper_gradiente_arit_vf(Meta, R_n, G_n, im_n)
+                n_res_total = quact.periods_for_arithmetic_gradient_future_value(
+                    Meta, R_n, G_n, im_n
+                )
                 formula_n = r"f(nm)=VF(nm)-VF_{objetivo}=0"
             else:
-                n_res_total = quact.nper_gradiente_arit_vp(Meta, R_n, G_n, im_n)
+                n_res_total = quact.periods_for_arithmetic_gradient_present_value(
+                    Meta, R_n, G_n, im_n
+                )
                 formula_n = r"f(nm)=VP(nm)-VP_{objetivo}=0"
 
         if np.isnan(n_res_total):
@@ -1034,7 +1044,7 @@ with tab_n:
 
             # Desglose del tiempo (meses, días)
             st.markdown("**Desglose exacto temporal:**")
-            df_n = quact.desglosar_periodos(anios_decimal)
+            df_n = quact.decompose_periods(anios_decimal)
             st.dataframe(
                 df_n.style.set_properties(
                     **{

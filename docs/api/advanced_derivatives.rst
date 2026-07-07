@@ -1,21 +1,21 @@
 Advanced Derivatives
 ====================
 
-The ``quantitativeactuarial.derivados_avanzados`` subpackage contains pure
+The ``quantitativeactuarial.advanced_derivatives`` subpackage contains pure
 derivatives valuation engines migrated from the VQD Streamlit app.  The module
 does not import Streamlit, Yahoo Finance, or Plotly.
 
 Public API
 ----------
 
-.. automodule:: quantitativeactuarial.derivados_avanzados
+.. automodule:: quantitativeactuarial.advanced_derivatives
    :members:
    :undoc-members:
 
 Models
 ------
 
-.. automodule:: quantitativeactuarial.derivados_avanzados.models
+.. automodule:: quantitativeactuarial.advanced_derivatives.models
    :members:
    :undoc-members:
    :no-index:
@@ -23,7 +23,7 @@ Models
 Numerics
 --------
 
-.. automodule:: quantitativeactuarial.derivados_avanzados.numerics
+.. automodule:: quantitativeactuarial.advanced_derivatives.numerics
    :members:
    :undoc-members:
    :no-index:
@@ -31,7 +31,7 @@ Numerics
 Calibration
 -----------
 
-.. automodule:: quantitativeactuarial.derivados_avanzados.calibration
+.. automodule:: quantitativeactuarial.advanced_derivatives.calibration
    :members:
    :undoc-members:
    :no-index:
@@ -39,7 +39,7 @@ Calibration
 Simulation
 ----------
 
-.. automodule:: quantitativeactuarial.derivados_avanzados.simulation
+.. automodule:: quantitativeactuarial.advanced_derivatives.simulation
    :members:
    :undoc-members:
    :no-index:
@@ -47,7 +47,7 @@ Simulation
 Analytics
 ---------
 
-.. automodule:: quantitativeactuarial.derivados_avanzados.analytics
+.. automodule:: quantitativeactuarial.advanced_derivatives.analytics
    :members:
    :undoc-members:
    :no-index:

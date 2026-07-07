@@ -6,89 +6,103 @@ import numpy as np
 import pandas as pd
 
 
-def tasa_nominal_a_efectiva(i_nom: float, m: int | float) -> float:
-    if m <= 0:
-        raise ValueError(f"`m` must be positive; received {m}.")
-    return (1 + i_nom / m) ** m - 1
+def nominal_to_effective_rate(nominal_rate: float, compounds_per_year: int | float) -> float:
+    """Convert a nominal annual rate compounded ``m`` times into an effective annual rate."""
+    if compounds_per_year <= 0:
+        raise ValueError(f"`compounds_per_year` must be positive; received {compounds_per_year}.")
+    return (1 + nominal_rate / compounds_per_year) ** compounds_per_year - 1
 
 
-def tasa_efectiva_a_nominal(i_eff: float, m: int | float) -> float:
-    if m <= 0:
-        raise ValueError(f"`m` must be positive; received {m}.")
-    return m * ((1 + i_eff) ** (1 / m) - 1)
+def effective_to_nominal_rate(effective_rate: float, compounds_per_year: int | float) -> float:
+    """Convert an effective annual rate into a nominal annual rate compounded ``m`` times."""
+    if compounds_per_year <= 0:
+        raise ValueError(f"`compounds_per_year` must be positive; received {compounds_per_year}.")
+    return compounds_per_year * ((1 + effective_rate) ** (1 / compounds_per_year) - 1)
 
 
-def tasa_nominal_a_instantanea(i_nom: float, m: int | float) -> float:
-    if m <= 0:
-        raise ValueError(f"`m` must be positive; received {m}.")
-    return m * np.log(1 + i_nom / m)
+def nominal_to_continuous_rate(nominal_rate: float, compounds_per_year: int | float) -> float:
+    """Convert a nominal annual rate compounded ``m`` times into a continuous force of interest."""
+    if compounds_per_year <= 0:
+        raise ValueError(f"`compounds_per_year` must be positive; received {compounds_per_year}.")
+    return compounds_per_year * np.log(1 + nominal_rate / compounds_per_year)
 
 
-def tasa_instantanea_a_efectiva(delta: float) -> float:
+def continuous_to_effective_rate(delta: float) -> float:
+    """Convert a continuous force of interest into an effective annual rate."""
     return np.exp(delta) - 1
 
 
-def tasa_instantanea_a_nominal(delta: float, m: int | float) -> float:
-    if m <= 0:
-        raise ValueError(f"`m` must be positive; received {m}.")
-    return m * (np.exp(delta / m) - 1)
+def continuous_to_nominal_rate(delta: float, compounds_per_year: int | float) -> float:
+    """Convert a continuous force of interest into a nominal annual rate compounded ``m`` times."""
+    if compounds_per_year <= 0:
+        raise ValueError(f"`compounds_per_year` must be positive; received {compounds_per_year}.")
+    return compounds_per_year * (np.exp(delta / compounds_per_year) - 1)
 
 
-def tasa_nominal_m_a_nominal_p(i_m: float, m: int | float, p: int | float) -> float:
-    if m <= 0 or p <= 0:
-        raise ValueError(f"`m` and `p` must be positive; received m={m}, p={p}.")
-    tasa_efectiva_periodo = ((1 + i_m / m) ** (m / p)) - 1
-    return tasa_efectiva_periodo * p
+def convert_nominal_frequency(
+    nominal_rate: float, from_frequency: int | float, to_frequency: int | float
+) -> float:
+    """Convert a nominal annual rate from one compounding frequency to another."""
+    if from_frequency <= 0 or to_frequency <= 0:
+        raise ValueError(
+            "`from_frequency` and `to_frequency` must be positive; "
+            f"received from_frequency={from_frequency}, to_frequency={to_frequency}."
+        )
+    period_effective_rate = (
+        (1 + nominal_rate / from_frequency) ** (from_frequency / to_frequency)
+    ) - 1
+    return period_effective_rate * to_frequency
 
 
-def generar_tabla_reinversion(C0: float, i_nom: float, n: float) -> pd.DataFrame:
-    periodos = [
-        ("Cada 4 años", 0.25),
-        ("Cada 2 años", 0.5),
-        ("Anual", 1),
-        ("Semestral", 2),
-        ("Trimestral", 4),
-        ("Mensual", 12),
-        ("Semanal", 52),
-        ("Diaria", 365),
-        ("Cada hora", 8760),
-        ("Cada minuto", 525600),
-        ("Cada segundo", 31536000),
+def reinvestment_table(principal: float, nominal_rate: float, years: float) -> pd.DataFrame:
+    """Return accumulated value and return for common reinvestment frequencies."""
+    periods = [
+        ("Every 4 years", 0.25),
+        ("Every 2 years", 0.5),
+        ("Annual", 1),
+        ("Semiannual", 2),
+        ("Quarterly", 4),
+        ("Monthly", 12),
+        ("Weekly", 52),
+        ("Daily", 365),
+        ("Hourly", 8760),
+        ("Every minute", 525600),
+        ("Every second", 31536000),
     ]
 
-    datos = []
-    for nombre, m in periodos:
-        monto = C0 * ((1 + i_nom / m) ** (m * n))
-        rendimiento = (monto / C0) - 1
-        datos.append(
+    rows = []
+    for name, frequency in periods:
+        accumulated_amount = principal * ((1 + nominal_rate / frequency) ** (frequency * years))
+        cumulative_return = (accumulated_amount / principal) - 1
+        rows.append(
             {
-                "Periodo de reinversión": nombre,
-                "m = Veces al año": str(m),
-                "Monto acumulado": monto,
-                "Rendimiento Acumulado": rendimiento,
+                "Reinvestment period": name,
+                "m = Times per year": str(frequency),
+                "Accumulated amount": accumulated_amount,
+                "Cumulative return": cumulative_return,
             }
         )
 
-    monto_inst = C0 * np.exp(i_nom * n)
-    rendimiento_inst = (monto_inst / C0) - 1
-    datos.append(
+    continuous_amount = principal * np.exp(nominal_rate * years)
+    continuous_return = (continuous_amount / principal) - 1
+    rows.append(
         {
-            "Periodo de reinversión": "Instantánea",
-            "m = Veces al año": "∞",
-            "Monto acumulado": monto_inst,
-            "Rendimiento Acumulado": rendimiento_inst,
+            "Reinvestment period": "Continuous",
+            "m = Times per year": "infinity",
+            "Accumulated amount": continuous_amount,
+            "Cumulative return": continuous_return,
         }
     )
 
-    return pd.DataFrame(datos)
+    return pd.DataFrame(rows)
 
 
 __all__ = [
-    "tasa_nominal_a_efectiva",
-    "tasa_efectiva_a_nominal",
-    "tasa_nominal_a_instantanea",
-    "tasa_instantanea_a_efectiva",
-    "tasa_instantanea_a_nominal",
-    "tasa_nominal_m_a_nominal_p",
-    "generar_tabla_reinversion",
+    "nominal_to_effective_rate",
+    "effective_to_nominal_rate",
+    "nominal_to_continuous_rate",
+    "continuous_to_effective_rate",
+    "continuous_to_nominal_rate",
+    "convert_nominal_frequency",
+    "reinvestment_table",
 ]

@@ -288,7 +288,7 @@ separador()
 st.markdown("### Resultados Detallados")
 
 # Asumimos que tu engine devuelve un DataFrame de pandas
-df_amort = quact.tabla_amortizacion(vp_final, tasa_periodo, nm_am)
+df_amort = quact.amortization_schedule(vp_final, tasa_periodo, nm_am)
 
 tab_tabla, tab_grafica = st.tabs(["Tabla de Amortización", "Composición del Pago"])
 

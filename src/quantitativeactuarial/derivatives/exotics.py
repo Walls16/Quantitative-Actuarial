@@ -6,10 +6,10 @@ import numpy as np
 from scipy.optimize import root_scalar
 from scipy.stats import multivariate_normal, norm
 
-from .vanilla import opciones_bsm
+from .vanilla import bsm_option_prices
 
 
-def opciones_gap(
+def gap_options(
     S: float,
     K1: float,
     K2: float,
@@ -31,7 +31,7 @@ def opciones_gap(
     return precio
 
 
-def opciones_cash_or_nothing(
+def cash_or_nothing_options(
     S: float,
     K: float,
     Q: float,
@@ -53,7 +53,7 @@ def opciones_cash_or_nothing(
     return precio
 
 
-def opciones_asset_or_nothing(
+def asset_or_nothing_options(
     S: float, K: float, T: float, r: float, sigma: float, q: float = 0.0, tipo: str = "call"
 ) -> float:
     """Valuación de Opciones Binarias: Asset-or-Nothing."""
@@ -72,7 +72,7 @@ def opciones_asset_or_nothing(
     return max(0.0, precio)
 
 
-def barrera_down_and_out(
+def down_and_out_barrier_option(
     S: float,
     K: float,
     H: float,
@@ -89,7 +89,7 @@ def barrera_down_and_out(
     lam = (r - q + (sigma**2) / 2) / (sigma**2)
     y = (np.log(H**2 / (S * K)) / (sigma * np.sqrt(T))) + lam * sigma * np.sqrt(T)
 
-    vanilla_call, vanilla_put, _, _ = opciones_bsm("Yield", S, K, T, r, sigma, extra=q)
+    vanilla_call, vanilla_put, _, _ = bsm_option_prices("Yield", S, K, T, r, sigma, extra=q)
 
     if tipo == "call":
         c_di = S * np.exp(-q * T) * (H / S) ** (2 * lam) * norm.cdf(y) - K * np.exp(-r * T) * (
@@ -105,7 +105,7 @@ def barrera_down_and_out(
     return max(0.0, precio)
 
 
-def opciones_asiaticas_aritmeticas(
+def arithmetic_asian_options(
     S: float, K: float, T: float, r: float, sigma: float, q: float = 0.0, tipo: str = "call"
 ) -> float:
     b = r - q
@@ -142,7 +142,7 @@ def opciones_asiaticas_aritmeticas(
     return max(0.0, precio)
 
 
-def opciones_asiaticas_geometricas(
+def geometric_asian_options(
     S: float, K: float, T: float, r: float, sigma: float, q: float = 0.0, tipo: str = "call"
 ) -> float:
     b = r - q
@@ -162,7 +162,7 @@ def opciones_asiaticas_geometricas(
     return max(0.0, precio)
 
 
-def opciones_lookback_flotante(
+def floating_lookback_options(
     S: float, S_ref: float, T: float, r: float, sigma: float, q: float = 0.0, tipo: str = "call"
 ) -> float:
     # MEJORA: en lugar de epsilon fijo (1e-8), derivar el límite cuando r==q
@@ -226,7 +226,7 @@ def _pnbivariada(x: float, y: float, rho: float) -> float:
     return float(multivariate_normal(mean=mean, cov=cov).cdf([x, y]))
 
 
-def opciones_compuestas(
+def compound_options(
     S: float,
     K1: float,
     K2: float,
@@ -241,9 +241,9 @@ def opciones_compuestas(
     tau = T2 - T1
 
     if "on_call" in tipo:
-        objetivo = lambda x: opciones_bsm("Yield", x, K2, tau, r, sigma, extra=q)[0] - K1
+        objetivo = lambda x: bsm_option_prices("Yield", x, K2, tau, r, sigma, extra=q)[0] - K1
     else:
-        objetivo = lambda x: opciones_bsm("Yield", x, K2, tau, r, sigma, extra=q)[1] - K1
+        objetivo = lambda x: bsm_option_prices("Yield", x, K2, tau, r, sigma, extra=q)[1] - K1
 
     try:
         # MEJORA: verificar cambio de signo antes de aplicar Brent para fallar explícitamente
@@ -300,7 +300,7 @@ def opciones_compuestas(
     return precio
 
 
-def opciones_intercambio_uxv(
+def exchange_options(
     U: float, V: float, q_u: float, q_v: float, sigma_u: float, sigma_v: float, rho: float, T: float
 ) -> float:
     sigma = np.sqrt(sigma_u**2 + sigma_v**2 - 2 * rho * sigma_u * sigma_v)
@@ -310,7 +310,7 @@ def opciones_intercambio_uxv(
     return max(0.0, precio)
 
 
-def payoff_leg_exotica(
+def exotic_payoff_leg(
     tipo: str, posicion: int, S_T: np.ndarray, params: dict, prima: float
 ) -> np.ndarray:
     """Compute a single exotic payoff leg net of premium."""
@@ -338,22 +338,22 @@ def payoff_leg_exotica(
     return posicion * payoff - posicion * prima
 
 
-def opcion_chooser_simple(
+def simple_chooser_option(
     S: float, K: float, T1: float, T2: float, r: float, sigma: float, q: float = 0.0
 ) -> float:
     """Valuación de Opción Chooser Simple (As You Like It)."""
-    c = opciones_bsm("Yield", S, K, T2, r, sigma, extra=q)[0]
+    c = bsm_option_prices("Yield", S, K, T2, r, sigma, extra=q)[0]
     K_put = K * np.exp(-(r - q) * (T2 - T1))
-    p = opciones_bsm("Yield", S, K_put, T1, r, sigma, extra=q)[1]
+    p = bsm_option_prices("Yield", S, K_put, T1, r, sigma, extra=q)[1]
     return c + np.exp(-q * (T2 - T1)) * p
 
 
-def opcion_perpetua(S: float, K: float, r: float, sigma: float, es_call: bool = True) -> float:
-    """Valuación de opción perpetua (T → ∞)."""
+def perpetual_option(S: float, K: float, r: float, sigma: float, is_call: bool = True) -> float:
+    """Return a perpetual option approximation."""
     if sigma <= 0 or r <= 0:
-        return max(S - K, 0) if es_call else max(K - S, 0)
+        return max(S - K, 0) if is_call else max(K - S, 0)
     h = 0.5 + np.sqrt(0.25 + 2 * r / sigma**2)
-    if es_call:
+    if is_call:
         precio = (K / (h - 1)) * ((S * (h - 1)) / (h * K)) ** h
     else:
         h_s = 0.5 - np.sqrt(0.25 + 2 * r / sigma**2)
@@ -362,16 +362,16 @@ def opcion_perpetua(S: float, K: float, r: float, sigma: float, es_call: bool = 
 
 
 __all__ = [
-    "opciones_gap",
-    "opciones_cash_or_nothing",
-    "opciones_asset_or_nothing",
-    "barrera_down_and_out",
-    "opciones_asiaticas_aritmeticas",
-    "opciones_asiaticas_geometricas",
-    "opciones_lookback_flotante",
-    "opciones_compuestas",
-    "opciones_intercambio_uxv",
-    "payoff_leg_exotica",
-    "opcion_chooser_simple",
-    "opcion_perpetua",
+    "gap_options",
+    "cash_or_nothing_options",
+    "asset_or_nothing_options",
+    "down_and_out_barrier_option",
+    "arithmetic_asian_options",
+    "geometric_asian_options",
+    "floating_lookback_options",
+    "compound_options",
+    "exchange_options",
+    "exotic_payoff_leg",
+    "simple_chooser_option",
+    "perpetual_option",
 ]

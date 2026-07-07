@@ -10,7 +10,7 @@ import plotly.express as px
 import sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from quantitativeactuarial.derivados_avanzados import BSMEngine, parity_check, intrinsic_time_value
+from quantitativeactuarial.advanced_derivatives import BSMEngine, parity_check, intrinsic_time_value
 
 st.set_page_config(page_title="Complementos · VQD", page_icon="∂", layout="wide")
 

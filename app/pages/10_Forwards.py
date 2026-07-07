@@ -22,15 +22,15 @@ from utils import (
     themed_error,
     apply_plotly_theme,
 )
-from quantitativeactuarial.financial_math import calcular_vp_flujos_irregulares
+from quantitativeactuarial.financial_math import present_value_of_irregular_cashflows
 from quantitativeactuarial.derivatives import (
     fra,
-    precio_forward,
-    precio_forward_commodity,
-    precio_forward_dividendo_continuo,
-    precio_forward_dividendos_discretos,
-    precio_forward_divisa,
-    valor_forward_en_vida,
+    simple_forward_price,
+    commodity_forward_price,
+    forward_price_with_continuous_dividend,
+    forward_price_with_discrete_dividends,
+    fx_forward_price,
+    live_forward_value,
 )
 
 # =============================================================================
@@ -86,6 +86,7 @@ with tab_precio:
             key="fwd_cap",
         )
     es_cont = "Continua" in tipo_capitalizacion
+    compounding = "Continuous" if es_cont else "Discrete"
     separador()
 
     tipo_subyacente = st.radio(
@@ -122,7 +123,7 @@ with tab_precio:
 
     with c1:
         if tipo_subyacente.startswith("Activo sin"):
-            F0_res = precio_forward(S0_fwd, r_fwd, T_fwd, capitalizacion=tipo_capitalizacion)
+            F0_res = simple_forward_price(S0_fwd, r_fwd, T_fwd, compounding=compounding)
             formula = r"F_0 = S_0 e^{rT}" if es_cont else r"F_0 = S_0 (1+r)^T"
 
         elif tipo_subyacente.startswith("Activo con dividendo continuo"):
@@ -132,8 +133,8 @@ with tab_precio:
                 )
                 / 100
             )
-            F0_res = precio_forward_dividendo_continuo(
-                S0_fwd, r_fwd, q_fwd, T_fwd, capitalizacion=tipo_capitalizacion
+            F0_res = forward_price_with_continuous_dividend(
+                S0_fwd, r_fwd, q_fwd, T_fwd, compounding=compounding
             )
             formula = r"F_0 = S_0 e^{(r-q)T}" if es_cont else r"F_0 = S_0 \frac{(1+r)^T}{(1+q)^T}"
             extra_val["q"] = q_fwd
@@ -167,16 +168,16 @@ with tab_precio:
 
             # Valor presente de los dividendos (según capitalización)
             if es_cont:
-                I_fwd = calcular_vp_flujos_irregulares(
+                I_fwd = present_value_of_irregular_cashflows(
                     [d for d, _ in divs], [t for _, t in divs], r_fwd, "Continua"
                 )
             else:
-                I_fwd = calcular_vp_flujos_irregulares(
+                I_fwd = present_value_of_irregular_cashflows(
                     [d for d, _ in divs], [t for _, t in divs], r_fwd, "Discreta"
                 )
 
-            F0_res = precio_forward_dividendos_discretos(
-                S0_fwd, r_fwd, T_fwd, I_fwd, capitalizacion=tipo_capitalizacion
+            F0_res = forward_price_with_discrete_dividends(
+                S0_fwd, r_fwd, T_fwd, I_fwd, compounding=compounding
             )
             formula = r"F_0 = (S_0 - I) e^{rT}" if es_cont else r"F_0 = (S_0 - I)(1+r)^T"
             extra_val["I"] = I_fwd
@@ -189,9 +190,7 @@ with tab_precio:
                 )
                 / 100
             )
-            F0_res = precio_forward_commodity(
-                S0_fwd, r_fwd, u_fwd, T_fwd, capitalizacion=tipo_capitalizacion
-            )
+            F0_res = commodity_forward_price(S0_fwd, r_fwd, u_fwd, T_fwd, compounding=compounding)
             formula = r"F_0 = S_0 e^{(r+u)T}" if es_cont else r"F_0 = S_0 (1+r)^T (1+u)^T"
             extra_val["u"] = u_fwd
 
@@ -224,17 +223,17 @@ with tab_precio:
 
             # Valor presente de los costos (según capitalización)
             if es_cont:
-                VP_C = calcular_vp_flujos_irregulares(
+                VP_C = present_value_of_irregular_cashflows(
                     [c for c, _ in costos], [t for _, t in costos], r_fwd, "Continua"
                 )
             else:
-                VP_C = calcular_vp_flujos_irregulares(
+                VP_C = present_value_of_irregular_cashflows(
                     [c for c, _ in costos], [t for _, t in costos], r_fwd, "Discreta"
                 )
 
             # Enviamos al motor como dividendo negativo para que se SUME a S0
-            F0_res = precio_forward_dividendos_discretos(
-                S0_fwd, r_fwd, T_fwd, -VP_C, capitalizacion=tipo_capitalizacion
+            F0_res = forward_price_with_discrete_dividends(
+                S0_fwd, r_fwd, T_fwd, -VP_C, compounding=compounding
             )
             formula = r"F_0 = (S_0 + C) e^{rT}" if es_cont else r"F_0 = (S_0 + C)(1+r)^T"
             extra_val["C"] = VP_C
@@ -388,6 +387,7 @@ with tab_valor:
             key="val_cap",
         )
     es_cont_val = "Continua" in tipo_cap_val
+    compounding_val = "Continuous" if es_cont_val else "Discrete"
     separador()
 
     c1, c2 = st.columns(2)
@@ -420,8 +420,8 @@ with tab_valor:
         )
 
     with c2:
-        ft_res = valor_forward_en_vida(
-            St_val, F0_val, r_val, q_val, tau_val, capitalizacion=tipo_cap_val
+        ft_res = live_forward_value(
+            St_val, F0_val, r_val, q_val, tau_val, compounding=compounding_val
         )
 
         themed_info(
@@ -492,6 +492,7 @@ with tab_divisa:
             key="div_cap",
         )
     es_cont_div = "Continua" in tipo_cap_div
+    compounding_div = "Continuous" if es_cont_div else "Discrete"
     separador()
 
     c1, c2 = st.columns(2)
@@ -522,7 +523,7 @@ with tab_divisa:
         )
 
     with c2:
-        F0_fx = precio_forward_divisa(S0_fx, r_d, r_f_fx, T_fx, capitalizacion=tipo_cap_div)
+        F0_fx = fx_forward_price(S0_fx, r_d, r_f_fx, T_fx, compounding=compounding_div)
 
         prima_pct = (F0_fx / S0_fx - 1) * 100
 
@@ -601,6 +602,7 @@ with tab_fra:
             key="fra_cap",
         )
     es_cont_fra = "Continua" in tipo_cap_fra
+    compounding_fra = "Continuous" if es_cont_fra else "Discrete"
     separador()
 
     c1, c2 = st.columns(2)
@@ -642,7 +644,7 @@ with tab_fra:
         with c2:
             tau_fra = t2_fra - t1_fra
             R_F_disp, val_fra = fra(
-                r1_fra, r2_fra, t1_fra, t2_fra, Nf_fra, R_K, capitalizacion=tipo_cap_fra
+                r1_fra, r2_fra, t1_fra, t2_fra, Nf_fra, R_K, compounding=compounding_fra
             )
 
             themed_info(

@@ -164,7 +164,7 @@ if modo_bono.startswith("Precio"):
         i_periodo_bono = i_nom_mercado / m_bono
         str_val_i_mercado = f"{i_periodo_bono:.6f}"
 
-    precio_P, _, vp_cup, vp_red = quact.precio_bono(
+    precio_P, _, vp_cup, vp_red = quact.bond_price(
         F_bono, r_periodo, C_bono, i_periodo_bono, n_periodos_bono
     )
     i_final = i_periodo_bono
@@ -227,9 +227,7 @@ if modo_bono.startswith("Precio"):
 # CASO B: CALCULAR YTM
 # ─────────────────────────────────────────────────────────────────────────────
 else:
-    i_periodo_res = quact.tasa_rendimiento_bono(
-        precio_mercado, F_bono, r_periodo, C_bono, n_periodos_bono
-    )
+    i_periodo_res = quact.bond_yield(precio_mercado, F_bono, r_periodo, C_bono, n_periodos_bono)
 
     if np.isnan(i_periodo_res):
         themed_error("No se encontró una tasa válida para este precio. Verifica los parámetros.")
@@ -289,7 +287,7 @@ if i_final is not None and p_final is not None:
         "corrige ese error para darnos una estimación casi perfecta."
     )
 
-    mac_d, mod_d, conv = quact.riesgo_bono(
+    mac_d, mod_d, conv = quact.bond_risk(
         F_bono, r_periodo, C_bono, i_final, n_periodos_bono, m_bono
     )
 

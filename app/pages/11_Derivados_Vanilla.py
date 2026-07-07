@@ -34,7 +34,7 @@ from utils import (
     get_current_theme,
 )
 import app.domain as quact
-from quantitativeactuarial.derivatives import griegas_segundo_orden, implied_volatility_bsm
+from quantitativeactuarial.derivatives import second_order_greeks, implied_volatility_bsm
 
 # =============================================================================
 # CONFIGURACIÓN
@@ -135,7 +135,7 @@ with tab_crr:
     a_crr = np.exp((r_crr - q_crr) * dt_crr)
     p_crr = (a_crr - d_crr) / (u_crr - d_crr)
 
-    precio_crr, arbol_precios, arbol_opcion = quact.arbol_binomial_crr(
+    precio_crr, arbol_precios, arbol_opcion = quact.crr_binomial_tree(
         S_crr, K_crr, r_crr, sig_crr, T_crr, int(N_crr), es_call_crr, es_amer_crr, q_crr
     )
 
@@ -292,7 +292,7 @@ with tab_crr:
             pasos_conv = [1, 2, 5, 10, 20, 50, 100, 200]
             precios_conv = []
             for n_c in pasos_conv:
-                p_c, _, _ = quact.arbol_binomial_crr(
+                p_c, _, _ = quact.crr_binomial_tree(
                     S_crr, K_crr, r_crr, sig_crr, T_crr, n_c, es_call_crr, False, q_crr
                 )
                 precios_conv.append(p_c)
@@ -508,7 +508,7 @@ with tab_bsm:
             d2_v = d1_v - sig_bsm * np.sqrt(T_bsm)
 
         else:  # Perpetua
-            prima_bsm = quact.opcion_perpetua(S_bsm, K_bsm, r_bsm, sig_bsm, es_call_bsm)
+            prima_bsm = quact.perpetual_option(S_bsm, K_bsm, r_bsm, sig_bsm, es_call_bsm)
             formula_c = r"C^* = \frac{K}{h-1}\left(\frac{(h-1)S_0}{hK}\right)^h"
             formula_p = r"P^* = \frac{K}{1-h^*}\left(\frac{(1-h^*)S_0}{h^* K}\right)^{h^*}"
             formula_d = r"h = \frac{1}{2} + \sqrt{\frac{1}{4} + \frac{2r}{\sigma^2}}"
@@ -550,7 +550,7 @@ with tab_bsm:
                 ):
                     _q_gr_bsm = locals().get("q_bsm", locals().get("rf_bsm", 0.0))
                     _S_gr_bsm = locals().get("F_bsm", S_bsm)
-                    _gr = quact.calcular_griegas(
+                    _gr = quact.calculate_greeks(
                         _S_gr_bsm, K_bsm, r_bsm, sig_bsm, T_bsm, es_call_bsm, _q_gr_bsm
                     )
                     gcol1, gcol2, gcol3, gcol4, gcol5 = st.columns(5)
@@ -795,7 +795,7 @@ with tab_griegas:
         tipo_gr = st.radio("Opción:", ["Call", "Put"], horizontal=True, key="gr_tipo")
         es_call_gr = tipo_gr == "Call"
 
-        griegas = quact.calcular_griegas(S_gr, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
+        griegas = quact.calculate_greeks(S_gr, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
         st.markdown("**Valores puntuales en S₀**")
         col_m1, col_m2 = st.columns(2)
         col_m1.metric(
@@ -844,7 +844,7 @@ with tab_griegas:
     prices, payoffs = [], []
 
     for s in spots:
-        g = quact.calcular_griegas(s, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
+        g = quact.calculate_greeks(s, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
         pv = quact.black_scholes(s, K_gr, r_gr, sig_gr, T_gr, es_call_gr, q_gr)
         deltas.append(g["delta"])
         gammas.append(g["gamma"])
@@ -856,7 +856,7 @@ with tab_griegas:
 
     vannas, vommas, charms, speeds, colors_arr = [], [], [], [], []
     for s in spots:
-        g2 = griegas_segundo_orden(s, K_gr, r_gr, q_gr, sig_gr, T_gr, es_call_gr)
+        g2 = second_order_greeks(s, K_gr, r_gr, q_gr, sig_gr, T_gr, es_call_gr)
         vannas.append(g2["vanna"])
         vommas.append(g2["vomma"])
         charms.append(g2["charm"])
@@ -1084,7 +1084,7 @@ with tab_griegas:
     for i, t in enumerate(_T_surf):
         for j, s in enumerate(_S_surf):
             _Z_price[i, j] = quact.black_scholes(s, K_gr, r_gr, sig_gr, t, es_call_gr, q_gr)
-            gij = quact.calcular_griegas(s, K_gr, r_gr, sig_gr, t, es_call_gr, q_gr)
+            gij = quact.calculate_greeks(s, K_gr, r_gr, sig_gr, t, es_call_gr, q_gr)
             _Z_delta[i, j] = gij["delta"]
             _Z_gamma[i, j] = gij["gamma"]
 
@@ -1232,7 +1232,7 @@ with tab_griegas:
         fig = go.Figure()
         for (label, s_val), dash, col_line in zip(_moneyness.items(), _dash_styles, _colors_mon):
             vals = [
-                quact.calcular_griegas(s_val, K_gr, r_gr, sig_gr, t, es_call_gr, q_gr)[greek_key]
+                quact.calculate_greeks(s_val, K_gr, r_gr, sig_gr, t, es_call_gr, q_gr)[greek_key]
                 for t in _T_range
             ]
             fig.add_trace(
@@ -1567,7 +1567,7 @@ with tab_griegas:
                 _moneyness.items(), _dash_styles, _colors_mon
             ):
                 vals = [
-                    quact.calcular_griegas(s_val, K_gr, r_gr, sig_v, T_gr, es_call_gr, q_gr)[
+                    quact.calculate_greeks(s_val, K_gr, r_gr, sig_v, T_gr, es_call_gr, q_gr)[
                         greek_key
                     ]
                     for sig_v in _sig_range
@@ -1751,7 +1751,7 @@ with tab_comp:
     pasos_lista = [1, 2, 5, 10, 25, 50, 100, 200, 500]
     precios_crr_comp = []
     for n_c in pasos_lista:
-        p_c, _, _ = quact.arbol_binomial_crr(
+        p_c, _, _ = quact.crr_binomial_tree(
             S_cp, K_cp, r_cp, sig_cp, T_cp, n_c, es_call_cp, False, q_cp
         )
         precios_crr_comp.append(p_c)
@@ -2056,7 +2056,7 @@ with tab_est:
     separador()
 
     # ── Gráfica de perfil ──────────────────────────────────────────────────────
-    df_perfil = quact.perfil_estrategia(S_est, patas)
+    df_perfil = quact.strategy_profile(S_est, patas)
     fig_est = go.Figure()
     for col in df_perfil.columns:
         if col in ("S_T", "Payoff Neto"):
@@ -2121,7 +2121,7 @@ with tab_est:
         S_T_rng = np.linspace(S_est * 0.5, S_est * 1.5, 5000)
         payoff_tot = np.zeros_like(S_T_rng)
         for p in patas:
-            pp = quact.calcular_payoff_leg(p["tipo"], p["posicion"], S_T_rng, p["K"], p["prima"])
+            pp = quact.option_payoff_leg(p["tipo"], p["posicion"], S_T_rng, p["K"], p["prima"])
             payoff_tot += pp
 
         ganancia_max = payoff_tot.max()
@@ -2339,10 +2339,10 @@ with tab_real:
     prima_bsm_real = quact.black_scholes(
         S_real, K_real, r_real, sig_real, T_real, es_call_real, q_real
     )
-    prima_crr_real, _, _ = quact.arbol_binomial_crr(
+    prima_crr_real, _, _ = quact.crr_binomial_tree(
         S_real, K_real, r_real, sig_real, T_real, int(N_real), es_call_real, es_amer_real, q_real
     )
-    griegas_real = quact.calcular_griegas(
+    griegas_real = quact.calculate_greeks(
         S_real, K_real, r_real, sig_real, T_real, es_call_real, q_real
     )
 
@@ -2464,7 +2464,7 @@ with tab_real:
     for K_i in strikes_vals:
         prima_c = quact.black_scholes(S_real, K_i, r_real, sig_real, T_real, True, q_real)
         prima_p = quact.black_scholes(S_real, K_i, r_real, sig_real, T_real, False, q_real)
-        gr_i = quact.calcular_griegas(S_real, K_i, r_real, sig_real, T_real, es_call_real, q_real)
+        gr_i = quact.calculate_greeks(S_real, K_i, r_real, sig_real, T_real, es_call_real, q_real)
         mon_i = ((S_real - K_i) / K_i) * 100
         filas_tabla.append(
             {

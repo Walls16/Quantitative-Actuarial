@@ -16,7 +16,7 @@ import plotly.graph_objects as go
 import streamlit as st
 from scipy.stats import norm
 
-from quantitativeactuarial.credito import (
+from quantitativeactuarial.credit import (
     RATINGS_EMIT as RATINGS,
     RATING_IDX,
     DEFAULT_TM,
@@ -247,8 +247,8 @@ with tab_port:
         )
         separador()
 
-        var_p, _, _, _ = quact.calcular_var_parametrico(rend_p, vol_p, capital, conf, dias)
-        var_mc, cvar_mc = quact.calcular_var_cvar_montecarlo(rend_p, vol_p, capital, conf, dias)
+        var_p, _, _, _ = quact.parametric_var(rend_p, vol_p, capital, conf, dias)
+        var_mc, cvar_mc = quact.monte_carlo_var_cvar(rend_p, vol_p, capital, conf, dias)
 
         st.markdown(f"### VaR — Horizonte: **{h_str}** | Confianza: **{conf * 100:.0f}%**")
         col_res1, col_res2, col_res3 = st.columns(3)
@@ -347,7 +347,7 @@ with tab_cm:
     # ──────────────────────────────────────────────────────────────────────────
     # SUB-TABS
     # ──────────────────────────────────────────────────────────────────────────
-    from quantitativeactuarial.credito import NR_METHODS
+    from quantitativeactuarial.credit import NR_METHODS
 
     _NR_OPTS = ["raw_with_d", "redistribute"]
     col_opt1, col_opt2 = st.columns(2)
@@ -368,7 +368,7 @@ with tab_cm:
         themed_info(_mode_info[nr_mode])
 
     if st.session_state.get("cm_last_mode") != nr_mode or "cm_tm" not in st.session_state:
-        from quantitativeactuarial.credito import _TM_RAW_17x19
+        from quantitativeactuarial.credit import _TM_RAW_17x19
 
         st.session_state["cm_tm"] = build_transition_matrix(_TM_RAW_17x19.copy(), nr_mode)
         st.session_state["cm_last_mode"] = nr_mode
@@ -502,7 +502,7 @@ with tab_cm:
         )
 
         if "cm_tm_raw" not in st.session_state:
-            from quantitativeactuarial.credito import _TM_RAW_17x19, RATINGS_EMIT as _RE
+            from quantitativeactuarial.credit import _TM_RAW_17x19, RATINGS_EMIT as _RE
 
             _raw = _TM_RAW_17x19.copy()
             _d_row = np.zeros((1, 19))
@@ -514,7 +514,7 @@ with tab_cm:
         col_tm1, col_tm2 = st.columns([4, 1])
         with col_tm2:
             if st.button("Restaurar S&P Original", key="cm_rst_tm"):
-                from quantitativeactuarial.credito import _TM_RAW_17x19
+                from quantitativeactuarial.credit import _TM_RAW_17x19
 
                 _raw = _TM_RAW_17x19.copy()
                 _d = np.zeros((1, 19))
@@ -534,7 +534,7 @@ with tab_cm:
             st.dataframe(df_sums, hide_index=True, use_container_width=True, height=460)
 
         with col_tm1:
-            from quantitativeactuarial.credito import RATINGS_EMIT as _RALL
+            from quantitativeactuarial.credit import RATINGS_EMIT as _RALL
 
             _DEST_LABELS = _RALL[:17] + ["D", "NR"]
             df_tm_edit = pd.DataFrame(

@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 import sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from quantitativeactuarial.derivados_avanzados import (
+from quantitativeactuarial.advanced_derivatives import (
     BSMEngine,
     BachelierEngine,
     forward_price_continuous,

@@ -3,24 +3,25 @@
 from __future__ import annotations
 
 
-def valuacion_gordon_shapiro(D1: float, k: float, g: float) -> float:
-    if k <= g:
+def gordon_shapiro_valuation(
+    next_dividend: float, required_return: float, growth_rate: float
+) -> float:
+    """Value an equity share with the Gordon-Shapiro constant-growth dividend model."""
+    if required_return <= growth_rate:
         return None
-    return D1 / (k - g)
+    return next_dividend / (required_return - growth_rate)
 
 
-def rendimiento_requerido_accion(D1: float, P0: float, g: float) -> float:
-    if P0 <= 0:
+def required_equity_return(next_dividend: float, current_price: float, growth_rate: float) -> float:
+    """Return the implied required equity return from dividend yield plus growth."""
+    if current_price <= 0:
         return None
-    return (D1 / P0) + g
+    return (next_dividend / current_price) + growth_rate
 
 
-def valuacion_multiplos(metrica_valor: float, multiplo_objetivo: float) -> float:
-    return metrica_valor * multiplo_objetivo
+def multiples_valuation(value_metric: float, target_multiple: float) -> float:
+    """Value an asset or company by multiplying a metric by a target multiple."""
+    return value_metric * target_multiple
 
 
-__all__ = [
-    "valuacion_gordon_shapiro",
-    "rendimiento_requerido_accion",
-    "valuacion_multiplos",
-]
+__all__ = ["gordon_shapiro_valuation", "required_equity_return", "multiples_valuation"]

@@ -10,7 +10,7 @@ import plotly.express as px
 import sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from quantitativeactuarial.derivados_avanzados import (
+from quantitativeactuarial.advanced_derivatives import (
     BSMEngine,
     bsm_d1_d2_summary,
     intrinsic_time_value,

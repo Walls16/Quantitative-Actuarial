@@ -72,7 +72,7 @@ def expected_tranche_survival_given_factor(
     return expected
 
 
-def valuar_tranche(
+def value_tranche(
     hazard_rate: float,
     rho: float,
     n: int,
@@ -143,5 +143,5 @@ __all__ = [
     "conditional_default_probability",
     "binomial_probabilities_log",
     "expected_tranche_survival_given_factor",
-    "valuar_tranche",
+    "value_tranche",
 ]

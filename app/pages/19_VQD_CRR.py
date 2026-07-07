@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 import sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from quantitativeactuarial.derivados_avanzados import BSMEngine, CRREngine, crr_tree_parameters
+from quantitativeactuarial.advanced_derivatives import BSMEngine, CRREngine, crr_tree_parameters
 
 st.set_page_config(page_title="CRR · VQD", page_icon="∂", layout="wide")
 

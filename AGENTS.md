@@ -62,14 +62,11 @@ Important package areas:
 
 ```text
 src/quantitativeactuarial/
-├── tasas.py
-├── derivados.py
-├── credito.py
 ├── financial_math/
 ├── derivatives/
 ├── creditrisk/
-├── derivados_avanzados/
-└── portafolioopt/
+├── advanced_derivatives/
+└── portfolioopt/
 ```
 
 Current direction:
@@ -77,8 +74,8 @@ Current direction:
 - `financial_math/`: rates, TVM, annuities, bonds, loans, cashflows, corporate finance, equity, risk, portfolio math.
 - `derivatives/`: vanilla/exotic derivative routines, forwards, trees, strategies.
 - `creditrisk/`: CDS/CDO/copula/default-risk routines.
-- `derivados_avanzados/`: advanced derivative models split into models, numerics, calibration, simulation, analytics.
-- `portafolioopt/`: pure portfolio optimization routines. Do not rely on PyPortfolioOpt as the library source.
+- `advanced_derivatives/`: advanced derivative models split into models, numerics, calibration, simulation, analytics.
+- `portfolioopt/`: pure portfolio optimization routines. Do not rely on PyPortfolioOpt as the library source.
 
 Avoid recreating monolithic "engine" or "God object" classes. Prefer small, stateless, typed functions and narrowly scoped model classes where they represent a mathematical model.
 
@@ -227,6 +224,6 @@ Generated documentation build output may appear in Git status. Treat generated b
 - Use existing package patterns before inventing new abstractions.
 - Avoid broad `except Exception` in `src`; catch expected errors.
 - Do not hide dependencies through global mutable state.
-- Preserve compatibility imports when practical, but keep new implementations decentralized.
+- Keep public API names English-only and decentralized.
 
 Above all: keep `src` as the distributable quantitative actuarial library and `app` as a consumer of that library.

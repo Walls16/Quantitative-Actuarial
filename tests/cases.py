@@ -106,10 +106,8 @@ def optima_stress_prices() -> pd.DataFrame:
 
 
 CASES: dict[str, Callable[[], Any]] = {
-    "arbol_binomial_crr": lambda: quact.arbol_binomial_crr(
-        100, 100, 0.05, 0.2, 1, 3, True, False, 0
-    ),
-    "barrera_down_and_out": lambda: quact.barrera_down_and_out(
+    "crr_binomial_tree": lambda: quact.crr_binomial_tree(100, 100, 0.05, 0.2, 1, 3, True, False, 0),
+    "down_and_out_barrier_option": lambda: quact.down_and_out_barrier_option(
         100, 95, 80, 1, 0.05, 0.2, 0.01, "call"
     ),
     "binomial_tree": lambda: quact.binomial_tree(100, 100, 1, 0.05, 0.2, 3, 0, "call", False),
@@ -130,16 +128,18 @@ CASES: dict[str, Callable[[], Any]] = {
     "bsm_d1_d2": lambda: quact.bsm_d1_d2(100, 100, 0.05, 0.01, 0.2, 1),
     "annualized_return": lambda: quact.annualized_return(optima_return_series()),
     "annualized_volatility": lambda: quact.annualized_volatility(optima_return_series()),
-    "calcular_griegas": lambda: quact.calcular_griegas(100, 100, 0.05, 0.2, 1, True, 0),
-    "calcular_payoff_leg": lambda: quact.calcular_payoff_leg(
+    "calculate_greeks": lambda: quact.calculate_greeks(100, 100, 0.05, 0.2, 1, True, 0),
+    "option_payoff_leg": lambda: quact.option_payoff_leg(
         "call", 1, np.array([90, 100, 110]), 100, 2
     ),
-    "calcular_var_cvar_montecarlo": lambda: quact.calcular_var_cvar_montecarlo(
-        0.1, 0.2, 1000, 0.95, 10, simulaciones=1000, seed=7
+    "monte_carlo_var_cvar": lambda: quact.monte_carlo_var_cvar(
+        0.1, 0.2, 1000, 0.95, 10, simulations=1000, seed=7
     ),
-    "calcular_var_parametrico": lambda: quact.calcular_var_parametrico(0.1, 0.2, 1000, 0.95, 10),
-    "calcular_vp_dividendos": lambda: quact.calcular_vp_dividendos(10, 4, 0.08, 1, "Continua"),
-    "calcular_vp_flujos_irregulares": lambda: quact.calcular_vp_flujos_irregulares(
+    "parametric_var": lambda: quact.parametric_var(0.1, 0.2, 1000, 0.95, 10),
+    "present_value_of_dividends": lambda: quact.present_value_of_dividends(
+        10, 4, 0.08, 1, "Continua"
+    ),
+    "present_value_of_irregular_cashflows": lambda: quact.present_value_of_irregular_cashflows(
         [100, 200, 300], [0.5, 1, 2], 0.08, "Continua"
     ),
     "calmar_ratio": lambda: quact.calmar_ratio(optima_return_series()),
@@ -184,7 +184,7 @@ CASES: dict[str, Callable[[], Any]] = {
         [100, 110, 121], [0.02, 0.03], [0.08, 0.09], 50, 10
     ),
     "dcf_valuation": lambda: quact.dcf_valuation(100, 0.1, 0.03, 0.08, 3, 50, 10),
-    "desglosar_periodos": lambda: quact.desglosar_periodos(2.345),
+    "decompose_periods": lambda: quact.decompose_periods(2.345),
     "downside_deviation": lambda: quact.downside_deviation(optima_return_series()),
     "drawdown_series": lambda: quact.drawdown_series(optima_return_series()),
     "equal_weight_portfolio": lambda: quact.equal_weight_portfolio(
@@ -203,17 +203,17 @@ CASES: dict[str, Callable[[], Any]] = {
         optima_prices(),
         {"AAA": 0.5, "BBB": 0.3, "CCC": 0.2},
     ),
-    "forward_calculo": lambda: quact.forward_calculo(100, 0.05, 0.02, 1, "Continua"),
+    "forward_price_with_yield": lambda: quact.forward_price_with_yield(
+        100, 0.05, 0.02, 1, "Continua"
+    ),
     "forward_price": lambda: quact.forward_price(100, 0.05, 1, 0.02),
     "fra": lambda: quact.fra(0.04, 0.05, 1, 2, 1_000_000, 0.055),
     "gauss_hermite_normal": lambda: quact.gauss_hermite_normal(3),
     "gaussian_copula_simulation": sample_simulations,
-    "generar_tabla_reinversion": lambda: quact.generar_tabla_reinversion(1000, 0.12, 2),
+    "reinvestment_table": lambda: quact.reinvestment_table(1000, 0.12, 2),
     "get_returns": optima_returns,
-    "griegas_bsm": lambda: quact.griegas_bsm("Yield", 100, 100, 1, 0.05, 0.2, 0.01),
-    "griegas_segundo_orden": lambda: quact.griegas_segundo_orden(
-        100, 100, 0.05, 0.01, 0.2, 1, True
-    ),
+    "bsm_greeks": lambda: quact.bsm_greeks("Yield", 100, 100, 1, 0.05, 0.2, 0.01),
+    "second_order_greeks": lambda: quact.second_order_greeks(100, 100, 0.05, 0.01, 0.2, 1, True),
     "implied_volatility_bsm": lambda: quact.implied_volatility_bsm(
         quact.black_scholes(100, 100, 0.05, 0.2, 1), 100, 100, 0.05, 1
     ),
@@ -284,36 +284,46 @@ CASES: dict[str, Callable[[], Any]] = {
         sample_prices().pct_change().dropna().values,
         0.03,
     ),
-    "nper_anualidad_vf": lambda: quact.nper_anualidad_vf(1268.2503013196977, 100, 0.01),
-    "nper_anualidad_vp": lambda: quact.nper_anualidad_vp(1125.5077473484641, 100, 0.01),
-    "nper_gradiente_arit_vf": lambda: quact.nper_gradiente_arit_vf(660, 100, 5, 0.01),
-    "nper_gradiente_arit_vp": lambda: quact.nper_gradiente_arit_vp(560, 100, 5, 0.01),
-    "nper_gradiente_geo_vf": lambda: quact.nper_gradiente_geo_vf(700, 100, 0.02, 0.01),
-    "nper_gradiente_geo_vp": lambda: quact.nper_gradiente_geo_vp(560, 100, 0.02, 0.01),
-    "numero_periodos": lambda: quact.numero_periodos(1000, 1469.3280768, 0.08),
-    "opcion_chooser_simple": lambda: quact.opcion_chooser_simple(100, 100, 0.5, 1, 0.05, 0.2, 0.01),
-    "opcion_perpetua": lambda: quact.opcion_perpetua(120, 100, 0.05, 0.2, True),
-    "opciones_asiaticas_aritmeticas": lambda: quact.opciones_asiaticas_aritmeticas(
+    "periods_for_annuity_future_value": lambda: quact.periods_for_annuity_future_value(
+        1268.2503013196977, 100, 0.01
+    ),
+    "periods_for_annuity_present_value": lambda: quact.periods_for_annuity_present_value(
+        1125.5077473484641, 100, 0.01
+    ),
+    "periods_for_arithmetic_gradient_future_value": lambda: (
+        quact.periods_for_arithmetic_gradient_future_value(660, 100, 5, 0.01)
+    ),
+    "periods_for_arithmetic_gradient_present_value": lambda: (
+        quact.periods_for_arithmetic_gradient_present_value(560, 100, 5, 0.01)
+    ),
+    "periods_for_geometric_gradient_future_value": lambda: (
+        quact.periods_for_geometric_gradient_future_value(700, 100, 0.02, 0.01)
+    ),
+    "periods_for_geometric_gradient_present_value": lambda: (
+        quact.periods_for_geometric_gradient_present_value(560, 100, 0.02, 0.01)
+    ),
+    "number_of_periods": lambda: quact.number_of_periods(1000, 1469.3280768, 0.08),
+    "simple_chooser_option": lambda: quact.simple_chooser_option(100, 100, 0.5, 1, 0.05, 0.2, 0.01),
+    "perpetual_option": lambda: quact.perpetual_option(120, 100, 0.05, 0.2, True),
+    "arithmetic_asian_options": lambda: quact.arithmetic_asian_options(
         100, 100, 1, 0.05, 0.2, 0, "call"
     ),
-    "opciones_asiaticas_geometricas": lambda: quact.opciones_asiaticas_geometricas(
+    "geometric_asian_options": lambda: quact.geometric_asian_options(
         100, 100, 1, 0.05, 0.2, 0, "call"
     ),
-    "opciones_asset_or_nothing": lambda: quact.opciones_asset_or_nothing(
+    "asset_or_nothing_options": lambda: quact.asset_or_nothing_options(
         100, 100, 1, 0.05, 0.2, 0, "call"
     ),
-    "opciones_bsm": lambda: quact.opciones_bsm("Yield", 100, 100, 1, 0.05, 0.2, 0.01),
-    "opciones_cash_or_nothing": lambda: quact.opciones_cash_or_nothing(
+    "bsm_option_prices": lambda: quact.bsm_option_prices("Yield", 100, 100, 1, 0.05, 0.2, 0.01),
+    "cash_or_nothing_options": lambda: quact.cash_or_nothing_options(
         100, 100, 10, 1, 0.05, 0.2, 0, "call"
     ),
-    "opciones_compuestas": lambda: quact.opciones_compuestas(
+    "compound_options": lambda: quact.compound_options(
         100, 5, 100, 0.5, 1, 0.05, 0.2, 0.01, "call_on_call"
     ),
-    "opciones_gap": lambda: quact.opciones_gap(100, 95, 100, 1, 0.05, 0.2, 0.01, "call"),
-    "opciones_intercambio_uxv": lambda: quact.opciones_intercambio_uxv(
-        95, 100, 0.01, 0.02, 0.2, 0.25, 0.3, 1
-    ),
-    "opciones_lookback_flotante": lambda: quact.opciones_lookback_flotante(
+    "gap_options": lambda: quact.gap_options(100, 95, 100, 1, 0.05, 0.2, 0.01, "call"),
+    "exchange_options": lambda: quact.exchange_options(95, 100, 0.01, 0.02, 0.2, 0.25, 0.3, 1),
+    "floating_lookback_options": lambda: quact.floating_lookback_options(
         100, 90, 1, 0.05, 0.2, 0.01, "call"
     ),
     "optimize_portfolio_strategies": lambda: quact.optimize_portfolio_strategies(
@@ -322,24 +332,24 @@ CASES: dict[str, Callable[[], Any]] = {
         n_simulations=5,
         seed=11,
     ),
-    "payoff_leg_exotica": lambda: quact.payoff_leg_exotica(
+    "exotic_payoff_leg": lambda: quact.exotic_payoff_leg(
         "gap_call", 1, np.array([90, 100, 110]), {"K1": 100, "K2": 95}, 2
     ),
-    "perfil_estrategia": lambda: quact.perfil_estrategia(
+    "strategy_profile": lambda: quact.strategy_profile(
         100,
-        [{"tipo": "call", "posicion": 1, "K": 100, "prima": 2}],
-        puntos=5,
+        [{"option_type": "call", "position": 1, "strike": 100, "premium": 2}],
+        points=5,
     ),
-    "precio_bono": lambda: quact.precio_bono(1000, 0.08, 40, 0.09, 10),
-    "precio_forward": lambda: quact.precio_forward(100, 0.05, 1),
-    "precio_forward_commodity": lambda: quact.precio_forward_commodity(100, 0.05, 0.01, 1),
-    "precio_forward_dividendo_continuo": lambda: quact.precio_forward_dividendo_continuo(
+    "bond_price": lambda: quact.bond_price(1000, 0.08, 40, 0.09, 10),
+    "simple_forward_price": lambda: quact.simple_forward_price(100, 0.05, 1),
+    "commodity_forward_price": lambda: quact.commodity_forward_price(100, 0.05, 0.01, 1),
+    "forward_price_with_continuous_dividend": lambda: quact.forward_price_with_continuous_dividend(
         100, 0.05, 0.02, 1
     ),
-    "precio_forward_dividendos_discretos": lambda: quact.precio_forward_dividendos_discretos(
+    "forward_price_with_discrete_dividends": lambda: quact.forward_price_with_discrete_dividends(
         100, 0.05, 1, 3
     ),
-    "precio_forward_divisa": lambda: quact.precio_forward_divisa(20, 0.08, 0.04, 1),
+    "fx_forward_price": lambda: quact.fx_forward_price(20, 0.08, 0.04, 1),
     "portfolio_return": lambda: quact.portfolio_return(
         np.array([0.6, 0.4]), np.array([0.08, 0.12])
     ),
@@ -351,9 +361,9 @@ CASES: dict[str, Callable[[], Any]] = {
     "parity_check": lambda: quact.parity_check(
         10.450583572185565, 5.573526022256971, 100, 100, 1, 0.05
     ),
-    "prima_cds": lambda: quact.prima_cds(4.0, 0.2, 0.35),
-    "rendimiento_requerido_accion": lambda: quact.rendimiento_requerido_accion(5, 100, 0.03),
-    "riesgo_bono": lambda: quact.riesgo_bono(1000, 0.08, 40, 0.09, 10, 2),
+    "cds_fair_spread": lambda: quact.cds_fair_spread(4.0, 0.2, 0.35),
+    "required_equity_return": lambda: quact.required_equity_return(5, 100, 0.03),
+    "bond_risk": lambda: quact.bond_risk(1000, 0.08, 40, 0.09, 10, 2),
     "realized_vol": lambda: quact.realized_vol(
         np.array([100.0, 101.0, 100.5, 102.0, 103.0, 102.5]), window=3
     ),
@@ -395,34 +405,34 @@ CASES: dict[str, Callable[[], Any]] = {
         1.0, 0.2, -0.05, 0.2, 15.0, -5.0, 1.5, 0.2, n_sim=5, seed=11
     ),
     "sortino_ratio": lambda: quact.sortino_ratio(optima_return_series(), rf=0.03),
-    "tabla_probabilidades_cds": lambda: quact.tabla_probabilidades_cds(0.02, 3),
-    "tabla_vpc_cds": lambda: quact.tabla_vpc_cds(0.02, 0.05, 3),
-    "tabla_vppp_cds": lambda: quact.tabla_vppp_cds(0.02, 0.05, 3),
-    "tabla_vpv_cds": lambda: quact.tabla_vpv_cds(0.02, 0.05, 3, 0.4),
-    "tabla_amortizacion": lambda: quact.tabla_amortizacion(1000, 0.01, 3),
-    "tasa_efectiva_a_nominal": lambda: quact.tasa_efectiva_a_nominal(0.12682503013196977, 12),
-    "tasa_instantanea_a_efectiva": lambda: quact.tasa_instantanea_a_efectiva(0.12),
-    "tasa_instantanea_a_nominal": lambda: quact.tasa_instantanea_a_nominal(0.12, 12),
-    "tasa_nominal_a_efectiva": lambda: quact.tasa_nominal_a_efectiva(0.12, 12),
-    "tasa_nominal_a_instantanea": lambda: quact.tasa_nominal_a_instantanea(0.12, 12),
-    "tasa_nominal_m_a_nominal_p": lambda: quact.tasa_nominal_m_a_nominal_p(0.12, 12, 4),
-    "tasa_rendimiento": lambda: quact.tasa_rendimiento(1000, 1469.3280768, 5),
-    "tasa_rendimiento_bono": lambda: quact.tasa_rendimiento_bono(950, 1000, 0.08, 40, 10),
+    "cds_probability_table": lambda: quact.cds_probability_table(0.02, 3),
+    "cds_premium_leg_table": lambda: quact.cds_premium_leg_table(0.02, 0.05, 3),
+    "cds_accrued_premium_table": lambda: quact.cds_accrued_premium_table(0.02, 0.05, 3),
+    "cds_contingent_leg_table": lambda: quact.cds_contingent_leg_table(0.02, 0.05, 3, 0.4),
+    "amortization_schedule": lambda: quact.amortization_schedule(1000, 0.01, 3),
+    "effective_to_nominal_rate": lambda: quact.effective_to_nominal_rate(0.12682503013196977, 12),
+    "continuous_to_effective_rate": lambda: quact.continuous_to_effective_rate(0.12),
+    "continuous_to_nominal_rate": lambda: quact.continuous_to_nominal_rate(0.12, 12),
+    "nominal_to_effective_rate": lambda: quact.nominal_to_effective_rate(0.12, 12),
+    "nominal_to_continuous_rate": lambda: quact.nominal_to_continuous_rate(0.12, 12),
+    "convert_nominal_frequency": lambda: quact.convert_nominal_frequency(0.12, 12, 4),
+    "rate_of_return": lambda: quact.rate_of_return(1000, 1469.3280768, 5),
+    "bond_yield": lambda: quact.bond_yield(950, 1000, 0.08, 40, 10),
     "thresholds_per_bond": lambda: quact.thresholds_per_bond(0, quact.DEFAULT_TM),
     "theoretical_mc_error": lambda: quact.theoretical_mc_error(
         10.0, 0.2, 1.0, np.array([1000, 4000])
     ),
     "validate_tickers": lambda: quact.validate_tickers([" aapl ", "MSFT", "AAPL", "", "btc-usd"]),
-    "valor_forward_calculo": lambda: quact.valor_forward_calculo(
-        100, 102, 0.05, 0.02, 0.5, "Larga", "Continua"
+    "forward_contract_value": lambda: quact.forward_contract_value(
+        100, 102, 0.05, 0.02, 0.5, "Long", "Continuous"
     ),
-    "valor_forward_en_vida": lambda: quact.valor_forward_en_vida(100, 102, 0.05, 0.02, 0.5),
-    "valor_futuro": lambda: quact.valor_futuro(1000, 0.08, 5),
-    "valor_futuro_continuo": lambda: quact.valor_futuro_continuo(1000, 0.08, 5),
-    "valor_presente": lambda: quact.valor_presente(1469.3280768, 0.08, 5),
-    "valor_presente_continuo": lambda: quact.valor_presente_continuo(1500, 0.08, 5),
-    "valuacion_gordon_shapiro": lambda: quact.valuacion_gordon_shapiro(5, 0.12, 0.03),
-    "valuacion_multiplos": lambda: quact.valuacion_multiplos(12, 8),
+    "live_forward_value": lambda: quact.live_forward_value(100, 102, 0.05, 0.02, 0.5),
+    "future_value": lambda: quact.future_value(1000, 0.08, 5),
+    "continuous_future_value": lambda: quact.continuous_future_value(1000, 0.08, 5),
+    "present_value": lambda: quact.present_value(1469.3280768, 0.08, 5),
+    "continuous_present_value": lambda: quact.continuous_present_value(1500, 0.08, 5),
+    "gordon_shapiro_valuation": lambda: quact.gordon_shapiro_valuation(5, 0.12, 0.03),
+    "multiples_valuation": lambda: quact.multiples_valuation(12, 8),
     "var_cvar_from_distribution": lambda: quact.var_cvar_from_distribution(
         sample_distribution(), (0.95,)
     ),
@@ -431,22 +441,169 @@ CASES: dict[str, Callable[[], Any]] = {
     ),
     "var_cvar_parametric": lambda: quact.var_cvar_parametric(1000, 25, (0.95,)),
     "var_historical": lambda: quact.var_historical(optima_return_series()),
-    "valuar_cds": lambda: quact.valuar_cds(0.02, 0.05, 3, 0.4),
-    "valuar_tranche": lambda: quact.valuar_tranche(
+    "value_cds": lambda: quact.value_cds(0.02, 0.05, 3, 0.4),
+    "value_tranche": lambda: quact.value_tranche(
         0.02, 0.3, 10, 0.4, 0.03, 0.06, 0.05, [1, 2], *quact.gauss_hermite_normal(5)
     ),
     "weighted_average_cost_of_capital": lambda: quact.weighted_average_cost_of_capital(
         0.12, 0.6, 0.06, 0.3
     ),
-    "vf_anualidad_continua": lambda: quact.vf_anualidad_continua(1200, 0.08, 3),
-    "vf_anualidad_efectiva": lambda: quact.vf_anualidad_efectiva(100, 0.01, 12),
-    "vf_anualidad_nominal": lambda: quact.vf_anualidad_nominal(100, 0.12, 12, 12, 1),
-    "vf_gradiente_aritmetico": lambda: quact.vf_gradiente_aritmetico(100, 5, 0.01, 6),
-    "vf_gradiente_geo": lambda: quact.vf_gradiente_geo(100, 0.02, 0.01, 6),
-    "vp_anualidad_continua": lambda: quact.vp_anualidad_continua(1200, 0.08, 3),
-    "vp_anualidad_efectiva": lambda: quact.vp_anualidad_efectiva(100, 0.01, 12),
-    "vp_anualidad_nominal": lambda: quact.vp_anualidad_nominal(100, 0.12, 12, 12, 1),
-    "vp_gradiente_aritmetico": lambda: quact.vp_gradiente_aritmetico(100, 5, 0.01, 6),
-    "vp_gradiente_geo": lambda: quact.vp_gradiente_geo(100, 0.02, 0.01, 6),
-    "vp_perpetuidad": lambda: quact.vp_perpetuidad(100, 0.05),
+    "continuous_annuity_future_value": lambda: quact.continuous_annuity_future_value(1200, 0.08, 3),
+    "effective_annuity_future_value": lambda: quact.effective_annuity_future_value(100, 0.01, 12),
+    "nominal_annuity_future_value": lambda: quact.nominal_annuity_future_value(
+        100, 0.12, 12, 12, 1
+    ),
+    "arithmetic_gradient_future_value": lambda: quact.arithmetic_gradient_future_value(
+        100, 5, 0.01, 6
+    ),
+    "geometric_gradient_future_value": lambda: quact.geometric_gradient_future_value(
+        100, 0.02, 0.01, 6
+    ),
+    "continuous_annuity_present_value": lambda: quact.continuous_annuity_present_value(
+        1200, 0.08, 3
+    ),
+    "effective_annuity_present_value": lambda: quact.effective_annuity_present_value(100, 0.01, 12),
+    "nominal_annuity_present_value": lambda: quact.nominal_annuity_present_value(
+        100, 0.12, 12, 12, 1
+    ),
+    "arithmetic_gradient_present_value": lambda: quact.arithmetic_gradient_present_value(
+        100, 5, 0.01, 6
+    ),
+    "geometric_gradient_present_value": lambda: quact.geometric_gradient_present_value(
+        100, 0.02, 0.01, 6
+    ),
+    "perpetuity_present_value": lambda: quact.perpetuity_present_value(100, 0.05),
 }
+
+CASES.update(
+    {
+        "amortization_schedule": lambda: quact.amortization_schedule(1000, 0.01, 3),
+        "arithmetic_asian_options": CASES["arithmetic_asian_options"],
+        "arithmetic_gradient_future_value": lambda: quact.arithmetic_gradient_future_value(
+            100, 5, 0.01, 6
+        ),
+        "arithmetic_gradient_present_value": lambda: quact.arithmetic_gradient_present_value(
+            100, 5, 0.01, 6
+        ),
+        "asset_or_nothing_options": CASES["asset_or_nothing_options"],
+        "bond_price": lambda: quact.bond_price(1000, 0.08, 40, 0.09, 10),
+        "bond_risk": lambda: quact.bond_risk(1000, 0.08, 40, 0.09, 10, 2),
+        "bond_yield": lambda: quact.bond_yield(950, 1000, 0.08, 40, 10),
+        "bsm_greeks": CASES["bsm_greeks"],
+        "bsm_option_prices": CASES["bsm_option_prices"],
+        "calculate_greeks": lambda: quact.calculate_greeks(100, 100, 0.05, 0.2, 1, True, 0.01),
+        "cash_or_nothing_options": CASES["cash_or_nothing_options"],
+        "cds_accrued_premium_table": lambda: quact.cds_accrued_premium_table(0.02, 0.05, 3),
+        "cds_contingent_leg_table": lambda: quact.cds_contingent_leg_table(0.02, 0.05, 3, 0.4),
+        "cds_fair_spread": lambda: quact.cds_fair_spread(4.0, 0.2, 0.35),
+        "cds_premium_leg_table": lambda: quact.cds_premium_leg_table(0.02, 0.05, 3),
+        "cds_probability_table": lambda: quact.cds_probability_table(0.02, 3),
+        "commodity_forward_price": lambda: quact.commodity_forward_price(100, 0.05, 0.01, 1),
+        "compound_options": CASES["compound_options"],
+        "continuous_annuity_future_value": lambda: quact.continuous_annuity_future_value(
+            1200, 0.08, 3
+        ),
+        "continuous_annuity_present_value": lambda: quact.continuous_annuity_present_value(
+            1200, 0.08, 3
+        ),
+        "continuous_future_value": lambda: quact.continuous_future_value(1000, 0.08, 5),
+        "continuous_present_value": lambda: quact.continuous_present_value(1500, 0.08, 5),
+        "continuous_to_effective_rate": lambda: quact.continuous_to_effective_rate(0.12),
+        "continuous_to_nominal_rate": lambda: quact.continuous_to_nominal_rate(0.12, 12),
+        "convert_nominal_frequency": lambda: quact.convert_nominal_frequency(0.12, 12, 4),
+        "crr_binomial_tree": lambda: quact.crr_binomial_tree(100, 100, 0.05, 0.2, 1, 3),
+        "decompose_periods": lambda: quact.decompose_periods(2.345),
+        "down_and_out_barrier_option": CASES["down_and_out_barrier_option"],
+        "effective_annuity_future_value": lambda: quact.effective_annuity_future_value(
+            100, 0.01, 12
+        ),
+        "effective_annuity_present_value": lambda: quact.effective_annuity_present_value(
+            100, 0.01, 12
+        ),
+        "effective_to_nominal_rate": lambda: quact.effective_to_nominal_rate(
+            0.12682503013196977, 12
+        ),
+        "exchange_options": CASES["exchange_options"],
+        "exotic_payoff_leg": CASES["exotic_payoff_leg"],
+        "floating_lookback_options": CASES["floating_lookback_options"],
+        "forward_contract_value": lambda: quact.forward_contract_value(100, 102, 0.05, 0.02, 0.5),
+        "forward_price_with_continuous_dividend": lambda: (
+            quact.forward_price_with_continuous_dividend(100, 0.05, 0.02, 1)
+        ),
+        "forward_price_with_discrete_dividends": lambda: (
+            quact.forward_price_with_discrete_dividends(100, 0.05, 1, 3)
+        ),
+        "forward_price_with_yield": lambda: quact.forward_price_with_yield(100, 0.05, 0.02, 1),
+        "future_value": lambda: quact.future_value(1000, 0.08, 5),
+        "fx_forward_price": lambda: quact.fx_forward_price(20, 0.08, 0.04, 1),
+        "gap_options": CASES["gap_options"],
+        "geometric_asian_options": CASES["geometric_asian_options"],
+        "geometric_gradient_future_value": lambda: quact.geometric_gradient_future_value(
+            100, 0.02, 0.01, 6
+        ),
+        "geometric_gradient_present_value": lambda: quact.geometric_gradient_present_value(
+            100, 0.02, 0.01, 6
+        ),
+        "gordon_shapiro_valuation": lambda: quact.gordon_shapiro_valuation(5, 0.12, 0.03),
+        "live_forward_value": lambda: quact.live_forward_value(100, 102, 0.05, 0.02, 0.5),
+        "monte_carlo_var_cvar": lambda: quact.monte_carlo_var_cvar(
+            0.1, 0.2, 1000, 0.95, 10, simulations=1000, seed=7
+        ),
+        "multiples_valuation": lambda: quact.multiples_valuation(12, 8),
+        "nominal_annuity_future_value": lambda: quact.nominal_annuity_future_value(
+            100, 0.12, 12, 12, 1
+        ),
+        "nominal_annuity_present_value": lambda: quact.nominal_annuity_present_value(
+            100, 0.12, 12, 12, 1
+        ),
+        "nominal_to_continuous_rate": lambda: quact.nominal_to_continuous_rate(0.12, 12),
+        "nominal_to_effective_rate": lambda: quact.nominal_to_effective_rate(0.12, 12),
+        "number_of_periods": lambda: quact.number_of_periods(1000, 1469.3280768, 0.08),
+        "option_payoff_leg": lambda: quact.option_payoff_leg(
+            "call", 1, np.array([90, 100, 110]), 100, 2
+        ),
+        "parametric_var": lambda: quact.parametric_var(0.1, 0.2, 1000, 0.95, 10),
+        "periods_for_annuity_future_value": lambda: quact.periods_for_annuity_future_value(
+            1268.2503013196977, 100, 0.01
+        ),
+        "periods_for_annuity_present_value": lambda: quact.periods_for_annuity_present_value(
+            1125.5077473484641, 100, 0.01
+        ),
+        "periods_for_arithmetic_gradient_future_value": lambda: (
+            quact.periods_for_arithmetic_gradient_future_value(660, 100, 5, 0.01)
+        ),
+        "periods_for_arithmetic_gradient_present_value": lambda: (
+            quact.periods_for_arithmetic_gradient_present_value(560, 100, 5, 0.01)
+        ),
+        "periods_for_geometric_gradient_future_value": lambda: (
+            quact.periods_for_geometric_gradient_future_value(700, 100, 0.02, 0.01)
+        ),
+        "periods_for_geometric_gradient_present_value": lambda: (
+            quact.periods_for_geometric_gradient_present_value(560, 100, 0.02, 0.01)
+        ),
+        "perpetual_option": CASES["perpetual_option"],
+        "perpetuity_present_value": lambda: quact.perpetuity_present_value(100, 0.05),
+        "present_value": lambda: quact.present_value(1469.3280768, 0.08, 5),
+        "present_value_of_dividends": lambda: quact.present_value_of_dividends(10, 4, 0.08, 1),
+        "present_value_of_irregular_cashflows": lambda: quact.present_value_of_irregular_cashflows(
+            [100, 200, 300], [0.5, 1, 2], 0.08
+        ),
+        "rate_of_return": lambda: quact.rate_of_return(1000, 1469.3280768, 5),
+        "reinvestment_table": lambda: quact.reinvestment_table(1000, 0.12, 2),
+        "required_equity_return": lambda: quact.required_equity_return(5, 100, 0.03),
+        "second_order_greeks": lambda: quact.second_order_greeks(
+            100, 100, 0.05, 0.01, 0.2, 1, True
+        ),
+        "simple_chooser_option": CASES["simple_chooser_option"],
+        "simple_forward_price": lambda: quact.simple_forward_price(100, 0.05, 1),
+        "strategy_profile": lambda: quact.strategy_profile(
+            100,
+            [{"option_type": "call", "position": 1, "strike": 100, "premium": 2}],
+            points=5,
+        ),
+        "value_cds": lambda: quact.value_cds(0.02, 0.05, 3, 0.4),
+        "value_tranche": lambda: quact.value_tranche(
+            0.02, 0.3, 10, 0.4, 0.03, 0.06, 0.05, [1, 2], *quact.gauss_hermite_normal(5)
+        ),
+    }
+)

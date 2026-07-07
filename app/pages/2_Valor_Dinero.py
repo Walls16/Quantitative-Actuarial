@@ -88,7 +88,7 @@ with t1:
             )
             n_vf = st.number_input("Años ($n$)", min_value=0.0, value=6.0, step=1.0, key="vf_n")
 
-        vf_res = quact.valor_futuro(C0_vf, i_vf, n_vf)
+        vf_res = quact.future_value(C0_vf, i_vf, n_vf)
         formula_vf = r"VF = C_0 (1+i)^n"
 
         with c2:
@@ -129,7 +129,7 @@ with t1:
 
         im_vf = i_nom_vf / m_vf
         nm_vf = n_vf2 * m_vf
-        vf_res = quact.valor_futuro(C0_vf, im_vf, nm_vf)
+        vf_res = quact.future_value(C0_vf, im_vf, nm_vf)
         formula_vf = r"VF = C_0 \left(1+\frac{i^{(m)}}{m}\right)^{nm}"
 
         with c2:
@@ -166,7 +166,7 @@ with t1:
             )
             n_vf3 = st.number_input("Años ($n$)", min_value=0.0, value=10.0, step=1.0, key="vf_n3")
 
-        vf_res = quact.valor_futuro_continuo(C0_vf, d_vf, n_vf3)
+        vf_res = quact.continuous_future_value(C0_vf, d_vf, n_vf3)
         formula_vf = r"VF = C_0 e^{\delta n}"
 
         with c2:
@@ -219,7 +219,7 @@ with t2:
             )
             n_vp = st.number_input("Años ($n$)", min_value=0.0, value=9.0, step=1.0, key="vp_n")
 
-        vp_res = quact.valor_presente(Cn_vp, i_vp, n_vp)
+        vp_res = quact.present_value(Cn_vp, i_vp, n_vp)
         formula_vp = r"VP = C_n (1+i)^{-n}"
 
         with c2:
@@ -256,7 +256,7 @@ with t2:
 
         im_vp = i_nom_vp / m_vp
         nm_vp = n_vp2 * m_vp
-        vp_res = quact.valor_presente(Cn_vp, im_vp, nm_vp)
+        vp_res = quact.present_value(Cn_vp, im_vp, nm_vp)
         formula_vp = r"VP = C_n \left(1+\frac{i^{(m)}}{m}\right)^{-nm}"
 
         with c2:
@@ -289,7 +289,7 @@ with t2:
             )
             n_vp3 = st.number_input("Años ($n$)", min_value=0.0, value=10.0, step=1.0, key="vp_n3")
 
-        vp_res = quact.valor_presente_continuo(Cn_vp, d_vp, n_vp3)
+        vp_res = quact.continuous_present_value(Cn_vp, d_vp, n_vp3)
         formula_vp = r"VP = C_n e^{-\delta n}"
 
         with c2:
@@ -336,7 +336,7 @@ with t3:
         )
 
     with c2:
-        n_res = quact.numero_periodos(va_nper, vf_nper, i_nper)
+        n_res = quact.number_of_periods(va_nper, vf_nper, i_nper)
         themed_info(
             f"<div style='{css_contenedor}'>"
             f"<span style='{css_titulo}'>Número de Periodos (<span style='{math_style}'>n</span>)</span>"
@@ -366,7 +366,7 @@ with t3:
     # Desglose del tiempo exacto
     separador()
     st.markdown("#### Desglose temporal exacto")
-    df_desglose = quact.desglosar_periodos(n_res)
+    df_desglose = quact.decompose_periods(n_res)
     st.dataframe(
         df_desglose.style.set_properties(
             **{
@@ -405,7 +405,7 @@ with t4:
         )
 
     with c2:
-        i_res = quact.tasa_rendimiento(va_rate, vf_rate, n_rate)
+        i_res = quact.rate_of_return(va_rate, vf_rate, n_rate)
         themed_success(
             f"<div style='{css_contenedor}'>"
             f"<span style='{css_titulo}'>Tasa de Rendimiento (<span style='{math_style}'>i</span>)</span>"

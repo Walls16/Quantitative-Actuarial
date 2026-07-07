@@ -1,20 +1,20 @@
 """Flat credit-risk API."""
 
-from .cds import (
-    prima_cds,
-    tabla_probabilidades_cds,
-    tabla_vpc_cds,
-    tabla_vppp_cds,
-    tabla_vpv_cds,
-    valuar_cds,
-)
 from .cdo import (
     binomial_probabilities_log,
     conditional_default_probability,
     expected_tranche_survival_given_factor,
     gauss_hermite_normal,
     log_binomial_coefficient,
-    valuar_tranche,
+    value_tranche,
+)
+from .cds import (
+    cds_accrued_premium_table,
+    cds_contingent_leg_table,
+    cds_fair_spread,
+    cds_premium_leg_table,
+    cds_probability_table,
+    value_cds,
 )
 from .copula import gaussian_copula_simulation, thresholds_per_bond
 from .data import (
@@ -57,18 +57,18 @@ __all__ = [
     "_TM_SIZE_BY_MODE",
     "RATINGS_NO_D",
     "build_transition_matrix",
-    "tabla_probabilidades_cds",
-    "tabla_vpc_cds",
-    "tabla_vpv_cds",
-    "tabla_vppp_cds",
-    "prima_cds",
-    "valuar_cds",
+    "cds_probability_table",
+    "cds_premium_leg_table",
+    "cds_contingent_leg_table",
+    "cds_accrued_premium_table",
+    "cds_fair_spread",
+    "value_cds",
     "gauss_hermite_normal",
     "log_binomial_coefficient",
     "conditional_default_probability",
     "binomial_probabilities_log",
     "expected_tranche_survival_given_factor",
-    "valuar_tranche",
+    "value_tranche",
     "bond_values_per_rating",
     "independent_distribution",
     "expected_value_and_sigma",

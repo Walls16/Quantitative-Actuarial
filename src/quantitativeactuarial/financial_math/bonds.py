@@ -6,9 +6,19 @@ import numpy as np
 from scipy.optimize import root_scalar
 
 
-def precio_bono(
-    F: float, r_m: float, C: float, i_m: float, n: int
+def bond_price(
+    face_value: float,
+    coupon_rate_per_period: float,
+    redemption_value: float,
+    yield_per_period: float,
+    periods: int,
 ) -> tuple[float, float, float, float]:
+    """Return total bond price, coupon, coupon present value, and redemption present value."""
+    F = face_value
+    r_m = coupon_rate_per_period
+    C = redemption_value
+    i_m = yield_per_period
+    n = periods
     cupon_Fr = F * r_m
 
     if i_m == 0:
@@ -21,12 +31,25 @@ def precio_bono(
     return precio_total, cupon_Fr, vp_cupones, vp_redencion
 
 
-def tasa_rendimiento_bono(P: float, F: float, r_m: float, C: float, n: int) -> float:
+def bond_yield(
+    price: float,
+    face_value: float,
+    coupon_rate_per_period: float,
+    redemption_value: float,
+    periods: int,
+) -> float:
+    """Solve the yield per period implied by a bond price."""
+    P = price
+    F = face_value
+    r_m = coupon_rate_per_period
+    C = redemption_value
+    n = periods
+
     def f(i):
         if i == 0:
             precio_calc = (F * r_m * n) + C
         else:
-            precio_calc = precio_bono(F, r_m, C, i, n)[0]
+            precio_calc = bond_price(F, r_m, C, i, n)[0]
         return precio_calc - P
 
     try:
@@ -36,9 +59,21 @@ def tasa_rendimiento_bono(P: float, F: float, r_m: float, C: float, n: int) -> f
         return np.nan
 
 
-def riesgo_bono(
-    F: float, r_periodo: float, C: float, i_periodo: float, n_periodos: int, m: int | float
+def bond_risk(
+    face_value: float,
+    coupon_rate_per_period: float,
+    redemption_value: float,
+    yield_per_period: float,
+    periods: int,
+    payments_per_year: int | float,
 ) -> tuple[float, float, float]:
+    """Return Macaulay duration, modified duration, and convexity in years."""
+    F = face_value
+    r_periodo = coupon_rate_per_period
+    C = redemption_value
+    i_periodo = yield_per_period
+    n_periodos = periods
+    m = payments_per_year
     cupon = F * r_periodo
     precio = 0.0
     sum_mac = 0.0
@@ -59,4 +94,4 @@ def riesgo_bono(
     return mac_duration_anios, mod_duration_anios, convexity_anios
 
 
-__all__ = ["precio_bono", "tasa_rendimiento_bono", "riesgo_bono"]
+__all__ = ["bond_price", "bond_yield", "bond_risk"]

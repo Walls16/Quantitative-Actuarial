@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 
 
-def tabla_probabilidades_cds(hazard_rate: float, maturity: int) -> pd.DataFrame:
+def cds_probability_table(hazard_rate: float, maturity: int) -> pd.DataFrame:
     """
     Build annual survival and default probabilities for a CDS.
 
@@ -32,7 +32,7 @@ def tabla_probabilidades_cds(hazard_rate: float, maturity: int) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def tabla_vpc_cds(hazard_rate: float, discount_rate: float, maturity: int) -> pd.DataFrame:
+def cds_premium_leg_table(hazard_rate: float, discount_rate: float, maturity: int) -> pd.DataFrame:
     """
     Present value table for the CDS premium leg before multiplying by spread.
 
@@ -57,7 +57,7 @@ def tabla_vpc_cds(hazard_rate: float, discount_rate: float, maturity: int) -> pd
     return df
 
 
-def tabla_vpv_cds(
+def cds_contingent_leg_table(
     hazard_rate: float, discount_rate: float, maturity: int, recovery_rate: float
 ) -> pd.DataFrame:
     """
@@ -91,7 +91,9 @@ def tabla_vpv_cds(
     return df
 
 
-def tabla_vppp_cds(hazard_rate: float, discount_rate: float, maturity: int) -> pd.DataFrame:
+def cds_accrued_premium_table(
+    hazard_rate: float, discount_rate: float, maturity: int
+) -> pd.DataFrame:
     """
     Present value table for accrued premium paid on default.
 
@@ -121,7 +123,7 @@ def tabla_vppp_cds(hazard_rate: float, discount_rate: float, maturity: int) -> p
     return df
 
 
-def prima_cds(vpc_total: float, vppp_total: float, vpv_total: float) -> float:
+def cds_fair_spread(vpc_total: float, vppp_total: float, vpv_total: float) -> float:
     """
     Compute the fair CDS spread.
 
@@ -135,19 +137,19 @@ def prima_cds(vpc_total: float, vppp_total: float, vpv_total: float) -> float:
     return float(vpv_total / denominator)
 
 
-def valuar_cds(
+def value_cds(
     hazard_rate: float, discount_rate: float, maturity: int, recovery_rate: float
 ) -> dict[str, float | pd.DataFrame]:
     """Return the CDS legs, fair spread, and supporting tables."""
-    probabilities = tabla_probabilidades_cds(hazard_rate, maturity)
-    fixed_leg = tabla_vpc_cds(hazard_rate, discount_rate, maturity)
-    contingent_leg = tabla_vpv_cds(hazard_rate, discount_rate, maturity, recovery_rate)
-    accrued_premium = tabla_vppp_cds(hazard_rate, discount_rate, maturity)
+    probabilities = cds_probability_table(hazard_rate, maturity)
+    fixed_leg = cds_premium_leg_table(hazard_rate, discount_rate, maturity)
+    contingent_leg = cds_contingent_leg_table(hazard_rate, discount_rate, maturity, recovery_rate)
+    accrued_premium = cds_accrued_premium_table(hazard_rate, discount_rate, maturity)
 
     vpc_total = float(fixed_leg.loc["Total", "VP Pago Esperado (×s)"])
     vpv_total = float(contingent_leg.loc["Total", "VP Pago Parcial Esperado"])
     vppp_total = float(accrued_premium.loc["Total", "VP Pago Prorrateado Esperado (×s)"])
-    spread = prima_cds(vpc_total, vppp_total, vpv_total)
+    spread = cds_fair_spread(vpc_total, vppp_total, vpv_total)
 
     return {
         "probabilidades": probabilities,
@@ -162,10 +164,10 @@ def valuar_cds(
 
 
 __all__ = [
-    "tabla_probabilidades_cds",
-    "tabla_vpc_cds",
-    "tabla_vpv_cds",
-    "tabla_vppp_cds",
-    "prima_cds",
-    "valuar_cds",
+    "cds_probability_table",
+    "cds_premium_leg_table",
+    "cds_contingent_leg_table",
+    "cds_accrued_premium_table",
+    "cds_fair_spread",
+    "value_cds",
 ]

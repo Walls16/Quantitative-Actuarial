@@ -11,7 +11,7 @@ from datetime import datetime, date
 import sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from quantitativeactuarial.derivados_avanzados import (
+from quantitativeactuarial.advanced_derivatives import (
     BSMEngine,
     HestonEngine,
     MertonEngine,
@@ -753,7 +753,7 @@ with tab3:
     )
 
 with tab4:
-    from quantitativeactuarial.derivados_avanzados import realized_vol, iv_rv_spread
+    from quantitativeactuarial.advanced_derivatives import realized_vol, iv_rv_spread
 
     st.markdown(
         f"<div style='font-size:0.85rem;color:{text_sub};margin-bottom:0.8rem'>Comparacion entre la volatilidad implicita (IV) de mercado — lo que el mercado espera — y la volatilidad realizada historica. El spread IV-RV es una proxy de la prima de riesgo de varianza.</div>",

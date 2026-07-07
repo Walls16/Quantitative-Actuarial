@@ -1,7 +1,7 @@
 """Compatibility facade for the former monolithic advanced-derivatives engine.
 
 Implementation now lives in model, numerics, calibration, simulation, and
-analytics modules.  Import from ``quantitativeactuarial.derivados_avanzados``
+analytics modules.  Import from ``quantitativeactuarial.advanced_derivatives``
 for the stable public API.
 """
 

@@ -15,7 +15,7 @@ import streamlit as st
 warnings.filterwarnings("ignore")
 
 from app.optima_services import download_prices, get_live_quotes
-from quantitativeactuarial.portafolioopt import (
+from quantitativeactuarial.portfolioopt import (
     PortfolioOptimizer,
     SCENARIOS,
     STRATEGY_NAMES,

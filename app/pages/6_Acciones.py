@@ -91,7 +91,7 @@ with tab_gordon:
                 "La tasa de rendimiento debe superar obligatoriamente a la de crecimiento."
             )
         else:
-            precio_gs = quact.valuacion_gordon_shapiro(d1_gs, k_gs, g_gs)
+            precio_gs = quact.gordon_shapiro_valuation(d1_gs, k_gs, g_gs)
 
             themed_success(
                 f"<div style='{css_contenedor}'>"
@@ -148,7 +148,7 @@ with tab_rendimiento:
         g_rr = st.number_input("Tasa de crecimiento ($g$) %", value=5.0, step=0.1, key="rr_g") / 100
 
     with c2:
-        k_calc = quact.rendimiento_requerido_accion(d1_rr, p0_rr, g_rr)
+        k_calc = quact.required_equity_return(d1_rr, p0_rr, g_rr)
 
         themed_info(
             f"<div style='{css_contenedor}'>"
@@ -270,7 +270,7 @@ with tab_multiplos:
         )
 
     with c2:
-        resultado_mul = quact.valuacion_multiplos(val_metrica, val_multiplo)
+        resultado_mul = quact.multiples_valuation(val_metrica, val_multiplo)
 
         titulo_res = (
             f"Valor de la Empresa (<span style='{math_style}'>EV</span>)"

@@ -9,7 +9,7 @@ import plotly.graph_objects as go
 import sys, os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from quantitativeactuarial.derivados_avanzados import HestonEngine, BSMEngine
+from quantitativeactuarial.advanced_derivatives import HestonEngine, BSMEngine
 
 st.set_page_config(page_title="Heston · VQD", page_icon="∂", layout="wide")
 
@@ -431,7 +431,7 @@ with tab3:
         st.plotly_chart(fig_x, use_container_width=True)
 
 with tab4:
-    from quantitativeactuarial.derivados_avanzados import calibrate_heston
+    from quantitativeactuarial.advanced_derivatives import calibrate_heston
 
     st.markdown(
         f"<div style='font-size:0.85rem;color:{text_sub};margin-bottom:1rem'>Calibracion de los 5 parametros de Heston (kappa, theta, xi, rho, v0) a una sonrisa de mercado observada. Minimiza el RMSE sobre la IV implicita.</div>",

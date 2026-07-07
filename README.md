@@ -89,8 +89,8 @@ app, or documentation dependencies.
 ```python
 import quantitativeactuarial as quact
 
-effective = quact.tasa_nominal_a_efectiva(0.12, 12)
-instantaneous = quact.tasa_nominal_a_instantanea(0.12, 12)
+effective = quact.nominal_to_effective_rate(0.12, 12)
+instantaneous = quact.nominal_to_continuous_rate(0.12, 12)
 
 print(effective)
 print(instantaneous)
@@ -108,7 +108,7 @@ call_price = quact.black_scholes(
     sigma=0.20,
     T=1.0,
     q=0.0,
-    es_call=True,
+    is_call=True,
 )
 
 print(call_price)
@@ -117,7 +117,7 @@ print(call_price)
 ### Advanced Derivatives
 
 ```python
-from quantitativeactuarial.derivados_avanzados import BSMEngine, SABREngine
+from quantitativeactuarial.advanced_derivatives import BSMEngine, SABREngine
 
 bsm = BSMEngine(S=100, K=100, T=1, r=0.05, sigma=0.20)
 sabr = SABREngine(F=100, K=105, T=1, alpha=0.20, beta=0.5, rho=-0.25, nu=0.40)
@@ -130,7 +130,7 @@ print(sabr.implied_vol())
 
 ```python
 import pandas as pd
-from quantitativeactuarial.portafolioopt import PortfolioOptimizer, compute_all_metrics
+from quantitativeactuarial.portfolioopt import PortfolioOptimizer, compute_all_metrics
 
 returns = pd.DataFrame(
     {
@@ -141,7 +141,7 @@ returns = pd.DataFrame(
 )
 
 optimizer = PortfolioOptimizer(returns)
-weights = optimizer.optimize("Maximo Sharpe")
+weights = optimizer.optimize("Maximum Sharpe")
 metrics = compute_all_metrics(returns @ weights)
 
 print(weights)

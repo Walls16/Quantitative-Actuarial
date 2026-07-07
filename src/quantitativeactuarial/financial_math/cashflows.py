@@ -5,35 +5,41 @@ from __future__ import annotations
 import numpy as np
 
 
-def calcular_vp_dividendos(
-    monto_div: float, m_pagos: int, r: float, T_total: float, capitalizacion: str = "Continua"
+def present_value_of_dividends(
+    dividend_amount: float,
+    payments_per_year: int,
+    rate: float,
+    total_years: float,
+    compounding: str = "Continuous",
 ) -> float:
+    """Discount a level dividend stream paid at a fixed frequency."""
     vp_total = 0
-    dt = 1 / m_pagos
-    num_pagos = int(T_total * m_pagos)
+    dt = 1 / payments_per_year
+    num_pagos = int(total_years * payments_per_year)
 
     for k in range(1, num_pagos + 1):
         t_pago = k * dt
-        if capitalizacion == "Continua":
-            vp_total += monto_div * np.exp(-r * t_pago)
+        if compounding in {"Continuous", "Continua"}:
+            vp_total += dividend_amount * np.exp(-rate * t_pago)
         else:
-            vp_total += monto_div / ((1 + r) ** t_pago)
+            vp_total += dividend_amount / ((1 + rate) ** t_pago)
     return vp_total
 
 
-def calcular_vp_flujos_irregulares(
-    montos: list[float] | np.ndarray,
-    tiempos_anios: list[float] | np.ndarray,
-    r: float,
-    capitalizacion: str = "Continua",
+def present_value_of_irregular_cashflows(
+    amounts: list[float] | np.ndarray,
+    times_years: list[float] | np.ndarray,
+    rate: float,
+    compounding: str = "Continuous",
 ) -> float:
+    """Discount irregular cash flows at specified times in years."""
     vp_total = 0.0
-    for monto, t in zip(montos, tiempos_anios):
-        if capitalizacion == "Continua":
-            vp_total += monto * np.exp(-r * t)
+    for amount, t in zip(amounts, times_years):
+        if compounding in {"Continuous", "Continua"}:
+            vp_total += amount * np.exp(-rate * t)
         else:
-            vp_total += monto / ((1 + r) ** t)
+            vp_total += amount / ((1 + rate) ** t)
     return vp_total
 
 
-__all__ = ["calcular_vp_dividendos", "calcular_vp_flujos_irregulares"]
+__all__ = ["present_value_of_dividends", "present_value_of_irregular_cashflows"]

@@ -1,48 +1,48 @@
 Portfolio Optimization
 ======================
 
-The ``quantitativeactuarial.portafolioopt`` subpackage contains pure portfolio
+The ``quantitativeactuarial.portfolioopt`` subpackage contains pure portfolio
 optimization routines migrated from the Optima Streamlit application.  It does
 not import Streamlit, Yahoo Finance, or PyPortfolioOpt.
 
 Optimization
 ------------
 
-.. automodule:: quantitativeactuarial.portafolioopt.optimization
+.. automodule:: quantitativeactuarial.portfolioopt.optimization
    :members:
    :undoc-members:
 
 Risk Metrics
 ------------
 
-.. automodule:: quantitativeactuarial.portafolioopt.risk_metrics
+.. automodule:: quantitativeactuarial.portfolioopt.risk_metrics
    :members:
    :undoc-members:
 
 Efficient Frontier
 ------------------
 
-.. automodule:: quantitativeactuarial.portafolioopt.efficient_frontier
+.. automodule:: quantitativeactuarial.portfolioopt.efficient_frontier
    :members:
    :undoc-members:
 
 Backtesting
 -----------
 
-.. automodule:: quantitativeactuarial.portafolioopt.backtesting
+.. automodule:: quantitativeactuarial.portfolioopt.backtesting
    :members:
    :undoc-members:
 
 Stress Testing
 --------------
 
-.. automodule:: quantitativeactuarial.portafolioopt.stress_testing
+.. automodule:: quantitativeactuarial.portfolioopt.stress_testing
    :members:
    :undoc-members:
 
 Data Utilities
 --------------
 
-.. automodule:: quantitativeactuarial.portafolioopt.data
+.. automodule:: quantitativeactuarial.portfolioopt.data
    :members:
    :undoc-members:

@@ -5,46 +5,44 @@ from __future__ import annotations
 import pandas as pd
 
 
-def tabla_amortizacion(VP: float, i_m: float, n_m: int) -> pd.DataFrame:
-    """Genera una tabla de amortización de pagos fijos sin el periodo 0."""
-    # MEJORA: validar inputs y redondear n_m para evitar pérdida silenciosa del último periodo
-    if i_m < 0:
-        raise ValueError("i_m debe ser >= 0")
-    n_m = round(n_m)  # evita que n_m=11.9 trunce a 11 y deje saldo residual
+def amortization_schedule(principal: float, period_rate: float, periods: int) -> pd.DataFrame:
+    """Return a fixed-payment amortization schedule without a period-zero row."""
+    if period_rate < 0:
+        raise ValueError("period_rate must be >= 0")
+    period_count = round(periods)
 
-    if i_m == 0:
-        pago = VP / n_m
+    if period_rate == 0:
+        payment = principal / period_count
     else:
-        pago = VP * (i_m / (1 - (1 + i_m) ** (-n_m)))
+        payment = principal * (period_rate / (1 - (1 + period_rate) ** (-period_count)))
 
-    saldo = VP
-    datos = []
+    balance = principal
+    rows = []
 
-    for t in range(1, n_m + 1):
-        saldo_inicial = saldo
-        interes = saldo_inicial * i_m
-        amort = pago - interes
+    for period in range(1, period_count + 1):
+        opening_balance = balance
+        interest = opening_balance * period_rate
+        amortization = payment - interest
 
-        # MEJORA: en el último periodo, liquidar exactamente para eliminar residuos de redondeo
-        if t == n_m:
-            amort = saldo_inicial
-            saldo = 0.0
+        if period == period_count:
+            amortization = opening_balance
+            balance = 0.0
         else:
-            saldo -= amort
-            if abs(saldo) < 0.01:
-                saldo = 0.0
+            balance -= amortization
+            if abs(balance) < 0.01:
+                balance = 0.0
 
-        datos.append(
+        rows.append(
             {
-                "Periodo": t,
-                "Saldo Inicial": saldo_inicial,
-                "Interés": interes,
-                "Amortización": amort,
-                "Saldo Insoluto": saldo,
+                "Period": period,
+                "Opening balance": opening_balance,
+                "Interest": interest,
+                "Amortization": amortization,
+                "Outstanding balance": balance,
             }
         )
 
-    return pd.DataFrame(datos)
+    return pd.DataFrame(rows)
 
 
-__all__ = ["tabla_amortizacion"]
+__all__ = ["amortization_schedule"]

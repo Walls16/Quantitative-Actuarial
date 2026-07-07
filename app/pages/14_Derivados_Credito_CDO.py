@@ -44,7 +44,7 @@ from quantitativeactuarial.creditrisk import (
     expected_tranche_survival_given_factor as _E_tranche_dado_F,
     gauss_hermite_normal as _gauss_hermite_normal,
     log_binomial_coefficient as _log_binom_coef,
-    valuar_tranche,
+    value_tranche,
 )
 
 # =============================================================================
@@ -415,17 +415,17 @@ _periodos = [round(p, 6) for p in _periodos if p <= _T + 1e-9]
 
 F_NODES, W_NODES = _gauss_hermite_normal(_M)
 
-_res = valuar_tranche(
-    h=_h,
+_res = value_tranche(
+    hazard_rate=_h,
     rho=_rho,
     n=_n,
-    R=_RR,
-    alpha_L=_aL,
-    alpha_H=_aH,
-    tasa_rf=_rf,
-    periodos=_periodos,
-    F_nodes=F_NODES,
-    w_nodes=W_NODES,
+    recovery_rate=_RR,
+    attachment=_aL,
+    detachment=_aH,
+    risk_free_rate=_rf,
+    periods=_periodos,
+    factor_nodes=F_NODES,
+    weights=W_NODES,
 )
 
 _tranche_nombre = st.session_state.get("cdo_tranche", "3–6%")
@@ -723,7 +723,7 @@ with tab_sens:
         rhos = np.linspace(0.01, 0.99, 60)
         spreads_rho = []
         for r_i in rhos:
-            ri = valuar_tranche(_h, r_i, _n, _RR, _aL, _aH, _rf, _periodos, F_NODES, W_NODES)
+            ri = value_tranche(_h, r_i, _n, _RR, _aL, _aH, _rf, _periodos, F_NODES, W_NODES)
             spreads_rho.append(ri["spread_bps"])
 
         fig_rho = go.Figure()
@@ -757,7 +757,7 @@ with tab_sens:
         hs = np.linspace(0.0001, 0.05, 60)
         spreads_h = []
         for h_i in hs:
-            ri = valuar_tranche(h_i, _rho, _n, _RR, _aL, _aH, _rf, _periodos, F_NODES, W_NODES)
+            ri = value_tranche(h_i, _rho, _n, _RR, _aL, _aH, _rf, _periodos, F_NODES, W_NODES)
             spreads_h.append(ri["spread_bps"])
 
         fig_h = go.Figure()
@@ -796,7 +796,7 @@ with tab_sens:
         spreads_RR = []
         for rr_i in RRs:
             try:
-                ri = valuar_tranche(_h, _rho, _n, rr_i, _aL, _aH, _rf, _periodos, F_NODES, W_NODES)
+                ri = value_tranche(_h, _rho, _n, rr_i, _aL, _aH, _rf, _periodos, F_NODES, W_NODES)
                 spreads_RR.append(ri["spread_bps"])
             except Exception:
                 spreads_RR.append(np.nan)
@@ -835,7 +835,7 @@ with tab_sens:
         for i, r_i in enumerate(rho_grid):
             for j, h_i in enumerate(h_grid):
                 try:
-                    ri = valuar_tranche(
+                    ri = value_tranche(
                         h_i, r_i, _n, _RR, _aL, _aH, _rf, _periodos, F_NODES, W_NODES
                     )
                     Z_heat[i, j] = ri["spread_bps"] if not np.isnan(ri["spread_bps"]) else 0
@@ -879,7 +879,7 @@ with tab_todos:
     resultados_todos = {}
     for nombre, aL_i, aH_i in TRANCHES_DEFAULT:
         try:
-            ri = valuar_tranche(_h, _rho, _n, _RR, aL_i, aH_i, _rf, _periodos, F_NODES, W_NODES)
+            ri = value_tranche(_h, _rho, _n, _RR, aL_i, aH_i, _rf, _periodos, F_NODES, W_NODES)
             resultados_todos[nombre] = ri
         except Exception as e:
             resultados_todos[nombre] = {
@@ -1377,7 +1377,7 @@ with tab_export:
             _resultados_xls = {}
             for nom_t, aL_t, aH_t in TRANCHES_DEFAULT:
                 try:
-                    ri_t = valuar_tranche(
+                    ri_t = value_tranche(
                         _h, _rho, _n, _RR, aL_t, aH_t, _rf, _periodos, F_NODES, W_NODES
                     )
                     _resultados_xls[nom_t] = ri_t

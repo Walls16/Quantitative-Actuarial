@@ -6,56 +6,37 @@ import numpy as np
 import pandas as pd
 
 
-def calcular_payoff_leg(
-    tipo: str, posicion: int, S_T: np.ndarray, K: float, prima: float
+def option_payoff_leg(
+    option_type: str, position: int, terminal_prices: np.ndarray, strike: float, premium: float
 ) -> np.ndarray:
-    """Payoff de una pata individual para estrategias."""
-    if tipo == "call":
-        payoff = np.maximum(S_T - K, 0)
-    elif tipo == "put":
-        payoff = np.maximum(K - S_T, 0)
+    """Return the payoff of one option leg net of premium."""
+    if option_type == "call":
+        payoff = np.maximum(terminal_prices - strike, 0)
+    elif option_type == "put":
+        payoff = np.maximum(strike - terminal_prices, 0)
     else:
-        payoff = np.zeros_like(S_T)
-    return posicion * payoff - (posicion * prima)
+        payoff = np.zeros_like(terminal_prices)
+    return position * payoff - (position * premium)
 
 
-def perfil_estrategia(S_spot: float, patas: list[dict], puntos: int = 500) -> pd.DataFrame:
-    """Calcula el perfil de payoff de una estrategia de opciones.
+def strategy_profile(spot: float, legs: list[dict], points: int = 500) -> pd.DataFrame:
+    """Return the net payoff profile for an option strategy over terminal prices."""
+    terminal_prices = np.linspace(spot * 0.5, spot * 1.5, points)
+    net_payoff = np.zeros_like(terminal_prices)
+    data = {"S_T": terminal_prices}
 
-    Para una malla de precios terminales ``S_T``, suma los payoffs de cada
-    pata:
+    for leg in legs:
+        option_type = leg["option_type"]
+        position = leg["position"]
+        strike = leg["strike"]
+        premium = leg["premium"]
+        payoff = option_payoff_leg(option_type, position, terminal_prices, strike, premium)
+        net_payoff += payoff
+        label = f"{'Long' if position == 1 else 'Short'} {option_type.capitalize()} K={strike}"
+        data[label] = payoff
 
-    ``payoff_call = max(S_T - K, 0)``
-    ``payoff_put = max(K - S_T, 0)``
-
-    La prima se resta para posiciones largas y se suma para posiciones
-    cortas mediante ``posicion * payoff - posicion * prima``.
-
-    Parameters
-    ----------
-    S_spot : float
-        Precio spot usado como centro de la malla.
-    patas : list[dict]
-        Patas con claves ``tipo`` ("call" o "put"), ``posicion`` (+1/-1),
-        ``K`` y ``prima``.
-    puntos : int
-        Número de observaciones en la malla.
-
-    Returns
-    -------
-    pandas.DataFrame
-        Columnas ``S_T``, una columna por pata y ``Payoff Neto``.
-    """
-    S_T = np.linspace(S_spot * 0.5, S_spot * 1.5, puntos)
-    payoff_total = np.zeros_like(S_T)
-    data = {"S_T": S_T}
-    for pata in patas:
-        pp = calcular_payoff_leg(pata["tipo"], pata["posicion"], S_T, pata["K"], pata["prima"])
-        payoff_total += pp
-        lbl = f"{'Long' if pata['posicion'] == 1 else 'Short'} {pata['tipo'].capitalize()} K={pata['K']}"
-        data[lbl] = pp
-    data["Payoff Neto"] = payoff_total
+    data["Net Payoff"] = net_payoff
     return pd.DataFrame(data)
 
 
-__all__ = ["calcular_payoff_leg", "perfil_estrategia"]
+__all__ = ["option_payoff_leg", "strategy_profile"]

@@ -33,11 +33,11 @@ from utils import (
     get_current_theme,
 )
 from quantitativeactuarial.creditrisk import (
-    prima_cds,
-    tabla_probabilidades_cds as tabla_probabilidades,
-    tabla_vpc_cds,
-    tabla_vppp_cds,
-    tabla_vpv_cds,
+    cds_fair_spread,
+    cds_probability_table,
+    cds_premium_leg_table,
+    cds_accrued_premium_table,
+    cds_contingent_leg_table,
 )
 
 # =============================================================================
@@ -237,7 +237,7 @@ with tab_prima:
         "**q(t) = S(t−1) − S(t)** — probabilidad <i>marginal</i>: incumplir exactamente en el año t."
     )
 
-    df_probs = tabla_probabilidades(lam, int(T_input))
+    df_probs = cds_probability_table(lam, int(T_input))
     df_probs_show = df_probs.set_index("t (años)")
 
     st.dataframe(
@@ -300,7 +300,7 @@ with tab_prima:
         "</div>"
     )
 
-    df_vpc = tabla_vpc_cds(lam, r_input, int(T_input))
+    df_vpc = cds_premium_leg_table(lam, r_input, int(T_input))
     vpc_total = df_vpc.loc["Total", "VP Pago Esperado (×s)"]
 
     st.dataframe(
@@ -350,7 +350,7 @@ with tab_prima:
         "</div>"
     )
 
-    df_vpv = tabla_vpv_cds(lam, r_input, int(T_input), rr_input)
+    df_vpv = cds_contingent_leg_table(lam, r_input, int(T_input), rr_input)
     vpv_total = df_vpv.loc["Total", "VP Pago Parcial Esperado"]
 
     st.dataframe(
@@ -406,7 +406,7 @@ with tab_prima:
         "</div>"
     )
 
-    df_vppp = tabla_vppp_cds(lam, r_input, int(T_input))
+    df_vppp = cds_accrued_premium_table(lam, r_input, int(T_input))
     vppp_total = df_vppp.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
 
     st.dataframe(
@@ -465,7 +465,7 @@ with tab_prima:
         "</div>"
     )
 
-    s_prima = prima_cds(vpc_total, vppp_total, vpv_total)
+    s_prima = cds_fair_spread(vpc_total, vppp_total, vpv_total)
     s_pb = s_prima * 10_000  # en puntos base
 
     col_p1, col_p2, col_p3, col_p4 = st.columns(4)
@@ -690,13 +690,13 @@ with tab_sens:
         rr_vals = np.linspace(0, 0.999, 200)
         spreads_rr = []
         for rr_v in rr_vals:
-            df_vpv_s = tabla_vpv_cds(lam, r_input, int(T_input), rr_v)
-            df_vppp_s = tabla_vppp_cds(lam, r_input, int(T_input))
-            df_vpc_s = tabla_vpc_cds(lam, r_input, int(T_input))
+            df_vpv_s = cds_contingent_leg_table(lam, r_input, int(T_input), rr_v)
+            df_vppp_s = cds_accrued_premium_table(lam, r_input, int(T_input))
+            df_vpc_s = cds_premium_leg_table(lam, r_input, int(T_input))
             vpv_s = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
             vppp_s = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
             vpc_s_v = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
-            s_v = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
+            s_v = cds_fair_spread(vpc_s_v, vppp_s, vpv_s) * 10_000
             spreads_rr.append(s_v)
 
         c_tema2 = get_current_theme()
@@ -738,13 +738,13 @@ with tab_sens:
         for rr_v in rr_tbl:
             if rr_v >= 1.0:
                 rr_v = 0.999
-            df_vpv_s = tabla_vpv_cds(lam, r_input, int(T_input), rr_v)
-            df_vppp_s = tabla_vppp_cds(lam, r_input, int(T_input))
-            df_vpc_s = tabla_vpc_cds(lam, r_input, int(T_input))
+            df_vpv_s = cds_contingent_leg_table(lam, r_input, int(T_input), rr_v)
+            df_vppp_s = cds_accrued_premium_table(lam, r_input, int(T_input))
+            df_vpc_s = cds_premium_leg_table(lam, r_input, int(T_input))
             vpv_s = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
             vppp_s = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
             vpc_s_v = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
-            s_v_pb = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
+            s_v_pb = cds_fair_spread(vpc_s_v, vppp_s, vpv_s) * 10_000
             rows_tbl.append({"RR": f"{rr_v * 100:.0f}%", "Spread CDS (pb)": round(s_v_pb)})
 
         df_tbl_rr = pd.DataFrame(rows_tbl)
@@ -774,13 +774,13 @@ with tab_sens:
         lam_vals = np.linspace(0.0001, 0.20, 200)
         spreads_lam = []
         for lam_v in lam_vals:
-            df_vpv_s = tabla_vpv_cds(lam_v, r_input, int(T_input), rr_input)
-            df_vppp_s = tabla_vppp_cds(lam_v, r_input, int(T_input))
-            df_vpc_s = tabla_vpc_cds(lam_v, r_input, int(T_input))
+            df_vpv_s = cds_contingent_leg_table(lam_v, r_input, int(T_input), rr_input)
+            df_vppp_s = cds_accrued_premium_table(lam_v, r_input, int(T_input))
+            df_vpc_s = cds_premium_leg_table(lam_v, r_input, int(T_input))
             vpv_s = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
             vppp_s = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
             vpc_s_v = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
-            s_v_pb = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
+            s_v_pb = cds_fair_spread(vpc_s_v, vppp_s, vpv_s) * 10_000
             spreads_lam.append(s_v_pb)
 
         fig_lam = go.Figure()
@@ -828,13 +828,13 @@ with tab_sens:
         for lam_v in lam_hm:
             row_hm = []
             for rr_v in rr_hm:
-                df_vpv_s = tabla_vpv_cds(lam_v, r_input, int(T_input), rr_v)
-                df_vppp_s = tabla_vppp_cds(lam_v, r_input, int(T_input))
-                df_vpc_s = tabla_vpc_cds(lam_v, r_input, int(T_input))
+                df_vpv_s = cds_contingent_leg_table(lam_v, r_input, int(T_input), rr_v)
+                df_vppp_s = cds_accrued_premium_table(lam_v, r_input, int(T_input))
+                df_vpc_s = cds_premium_leg_table(lam_v, r_input, int(T_input))
                 vpv_s = df_vpv_s.loc["Total", "VP Pago Parcial Esperado"]
                 vppp_s = df_vppp_s.loc["Total", "VP Pago Prorrateado Esperado (×s)"]
                 vpc_s_v = df_vpc_s.loc["Total", "VP Pago Esperado (×s)"]
-                s_pb_hm = prima_cds(vpc_s_v, vppp_s, vpv_s) * 10_000
+                s_pb_hm = cds_fair_spread(vpc_s_v, vppp_s, vpv_s) * 10_000
                 row_hm.append(round(s_pb_hm, 1))
             z_hm.append(row_hm)
 

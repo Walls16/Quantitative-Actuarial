@@ -6,47 +6,47 @@ import numpy as np
 from scipy.stats import norm
 
 
-def calcular_var_parametrico(
-    rend_anual: float,
-    vol_anual: float,
-    valor_portafolio: float,
-    nivel_confianza: float,
-    dias_horizonte: int | float,
+def parametric_var(
+    annual_return: float,
+    annual_volatility: float,
+    portfolio_value: float,
+    confidence_level: float,
+    horizon_days: int | float,
 ) -> tuple[float, float, float, float]:
-    t = dias_horizonte / 252.0
-    rend_periodo = rend_anual * t
-    vol_periodo = vol_anual * np.sqrt(t)
-    z_score = norm.ppf(nivel_confianza)
-    var_monto = valor_portafolio * (z_score * vol_periodo - rend_periodo)
-    return max(var_monto, 0), z_score, rend_periodo, vol_periodo
+    """Return normal parametric VaR plus z-score, horizon return, and horizon volatility."""
+    t = horizon_days / 252.0
+    period_return = annual_return * t
+    period_volatility = annual_volatility * np.sqrt(t)
+    z_score = norm.ppf(confidence_level)
+    var_amount = portfolio_value * (z_score * period_volatility - period_return)
+    return max(var_amount, 0), z_score, period_return, period_volatility
 
 
-def calcular_var_cvar_montecarlo(
-    rend_anual: float,
-    vol_anual: float,
-    valor_portafolio: float,
-    nivel_confianza: float,
-    dias_horizonte: int | float,
-    simulaciones: int = 10000,
+def monte_carlo_var_cvar(
+    annual_return: float,
+    annual_volatility: float,
+    portfolio_value: float,
+    confidence_level: float,
+    horizon_days: int | float,
+    simulations: int = 10000,
     seed: int = 42,
 ) -> tuple[float, float]:
-    t = dias_horizonte / 252.0
-    rend_periodo = rend_anual * t
-    vol_periodo = vol_anual * np.sqrt(t)
+    """Estimate VaR and CVaR by simulating normally distributed horizon returns."""
+    t = horizon_days / 252.0
+    period_return = annual_return * t
+    period_volatility = annual_volatility * np.sqrt(t)
 
     rng = np.random.default_rng(seed)
-    e = rng.standard_normal(simulaciones)
-    simulacion_retornos = rend_periodo + vol_periodo * e
+    shocks = rng.standard_normal(simulations)
+    simulated_returns = period_return + period_volatility * shocks
 
-    # MEJORA: np.percentile es más limpio y evita errores de índice manual
-    alpha = 1.0 - nivel_confianza
-    q_alpha = np.percentile(simulacion_retornos, alpha * 100)
+    alpha = 1.0 - confidence_level
+    q_alpha = np.percentile(simulated_returns, alpha * 100)
 
-    # CVaR: promedio de retornos en la cola de pérdidas
-    cola = simulacion_retornos[simulacion_retornos <= q_alpha]
-    cvar_alpha = cola.mean() if len(cola) > 0 else q_alpha
+    tail = simulated_returns[simulated_returns <= q_alpha]
+    cvar_alpha = tail.mean() if len(tail) > 0 else q_alpha
 
-    return max(-q_alpha * valor_portafolio, 0), max(-cvar_alpha * valor_portafolio, 0)
+    return max(-q_alpha * portfolio_value, 0), max(-cvar_alpha * portfolio_value, 0)
 
 
-__all__ = ["calcular_var_parametrico", "calcular_var_cvar_montecarlo"]
+__all__ = ["parametric_var", "monte_carlo_var_cvar"]

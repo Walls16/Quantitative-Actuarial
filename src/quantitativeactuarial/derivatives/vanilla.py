@@ -7,8 +7,8 @@ from scipy.optimize import brentq
 from scipy.stats import norm
 
 
-def opciones_bsm(
-    tipo_modelo: str, S: float, K: float, T: float, r: float, sigma: float, extra: float = 0.0
+def bsm_option_prices(
+    model_type: str, S: float, K: float, T: float, r: float, sigma: float, extra: float = 0.0
 ) -> tuple[float, float, float, float]:
     if T <= 0 or sigma <= 0:
         return 0.0, 0.0, 0.0, 0.0
@@ -18,13 +18,13 @@ def opciones_bsm(
     call = 0.0
     put = 0.0
 
-    if tipo_modelo == "Simple":
+    if model_type == "Simple":
         d1 = (np.log(S / K) + (r + (sigma**2) / 2) * T) / (sigma * np.sqrt(T))
         d2 = d1 - sigma * np.sqrt(T)
         call = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
         put = K * np.exp(-r * T) * norm.cdf(-d2) - S * norm.cdf(-d1)
 
-    elif tipo_modelo == "Ingresos":
+    elif model_type == "Income":
         S_adj = S - extra
         if S_adj <= 0:
             S_adj = 0.0001
@@ -33,19 +33,19 @@ def opciones_bsm(
         call = S_adj * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
         put = K * np.exp(-r * T) * norm.cdf(-d2) - S_adj * norm.cdf(-d1)
 
-    elif tipo_modelo in ("Yield", "Monedas"):
+    elif model_type in ("Yield", "Currency"):
         d1 = (np.log(S / K) + (r - extra + (sigma**2) / 2) * T) / (sigma * np.sqrt(T))
         d2 = d1 - sigma * np.sqrt(T)
         call = S * np.exp(-extra * T) * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
         put = K * np.exp(-r * T) * norm.cdf(-d2) - S * np.exp(-extra * T) * norm.cdf(-d1)
 
-    elif tipo_modelo == "Futuros":
+    elif model_type == "Futures":
         d1 = (np.log(S / K) + ((sigma**2) / 2) * T) / (sigma * np.sqrt(T))
         d2 = d1 - sigma * np.sqrt(T)
         call = np.exp(-r * T) * (S * norm.cdf(d1) - K * norm.cdf(d2))
         put = np.exp(-r * T) * (K * norm.cdf(-d2) - S * norm.cdf(-d1))
 
-    elif tipo_modelo == "Costos":
+    elif model_type == "Costs":
         S_adj = S + extra
         d1 = (np.log(S_adj / K) + (r + (sigma**2) / 2) * T) / (sigma * np.sqrt(T))
         d2 = d1 - sigma * np.sqrt(T)
@@ -55,8 +55,8 @@ def opciones_bsm(
     return call, put, d1, d2
 
 
-def griegas_bsm(
-    tipo_modelo: str, S: float, K: float, T: float, r: float, sigma: float, extra: float = 0.0
+def bsm_greeks(
+    model_type: str, S: float, K: float, T: float, r: float, sigma: float, extra: float = 0.0
 ) -> tuple[float, float, float, float, float, float, float, float]:
     if T <= 0 or sigma <= 0:
         return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
@@ -64,15 +64,15 @@ def griegas_bsm(
     q_yield = 0.0
     S_adj = S
 
-    if tipo_modelo == "Ingresos":
+    if model_type == "Income":
         S_adj = S - extra
         if S_adj <= 0:
             S_adj = 0.0001
-    elif tipo_modelo == "Costos":
+    elif model_type == "Costs":
         S_adj = S + extra
-    elif tipo_modelo in ("Yield", "Monedas"):
+    elif model_type in ("Yield", "Currency"):
         q_yield = extra
-    elif tipo_modelo == "Futuros":
+    elif model_type == "Futures":
         q_yield = r
 
     d1 = (np.log(S_adj / K) + (r - q_yield + (sigma**2) / 2) * T) / (sigma * np.sqrt(T))
@@ -106,17 +106,17 @@ def griegas_bsm(
 
 
 def black_scholes(
-    S: float, K: float, r: float, sigma: float, T: float, es_call: bool = True, q: float = 0.0
+    S: float, K: float, r: float, sigma: float, T: float, is_call: bool = True, q: float = 0.0
 ) -> float:
-    """BSM estándar / Merton (dividendo continuo q). Devuelve prima escalar."""
-    call, put, _, _ = opciones_bsm("Yield", S, K, T, r, sigma, extra=q)
-    return call if es_call else put
+    """Return a scalar Black-Scholes-Merton option premium with continuous yield."""
+    call, put, _, _ = bsm_option_prices("Yield", S, K, T, r, sigma, extra=q)
+    return call if is_call else put
 
 
-def black_76(F0: float, K: float, r: float, sigma: float, T: float, es_call: bool = True) -> float:
-    """Modelo de Black (1976) para futuros."""
-    call, put, _, _ = opciones_bsm("Futuros", F0, K, T, r, sigma)
-    return call if es_call else put
+def black_76(F0: float, K: float, r: float, sigma: float, T: float, is_call: bool = True) -> float:
+    """Return a Black-76 option premium on a futures or forward price."""
+    call, put, _, _ = bsm_option_prices("Futures", F0, K, T, r, sigma)
+    return call if is_call else put
 
 
 def bsm_d1_d2(
@@ -127,19 +127,19 @@ def bsm_d1_d2(
     return float(d1), float(d1 - sigma * np.sqrt(T))
 
 
-def calcular_griegas(
-    S: float, K: float, r: float, sigma: float, T: float, es_call: bool = True, q: float = 0.0
+def calculate_greeks(
+    S: float, K: float, r: float, sigma: float, T: float, is_call: bool = True, q: float = 0.0
 ) -> dict[str, float]:
-    """Devuelve dict de griegas BSM con dividendo q."""
-    dc, dp, gamma, vega, tc, tp, rc, rp = griegas_bsm("Yield", S, K, T, r, sigma, extra=q)
-    delta = dc if es_call else dp
-    theta = tc if es_call else tp
-    rho = rc if es_call else rp
+    """Return Black-Scholes-Merton Greeks with continuous yield."""
+    dc, dp, gamma, vega, tc, tp, rc, rp = bsm_greeks("Yield", S, K, T, r, sigma, extra=q)
+    delta = dc if is_call else dp
+    theta = tc if is_call else tp
+    rho = rc if is_call else rp
     return {"delta": delta, "gamma": gamma, "theta": theta, "vega": vega, "rho": rho}
 
 
-def griegas_segundo_orden(
-    S: float, K: float, r: float, q: float, sigma: float, T: float, es_call: bool = True
+def second_order_greeks(
+    S: float, K: float, r: float, q: float, sigma: float, T: float, is_call: bool = True
 ) -> dict[str, float]:
     """Compute selected second-order BSM Greeks: vanna, charm, color, and raw vega."""
     if T <= 1e-6 or sigma <= 1e-6:
@@ -151,7 +151,7 @@ def griegas_segundo_orden(
     vanna = -discount_yield * pdf_d1 * d2 / sigma
     vega_raw = S * discount_yield * pdf_d1 * sqrt_t
     vomma = vega_raw * d1 * d2 / sigma * 0.01
-    if es_call:
+    if is_call:
         charm = q * discount_yield * norm.cdf(d1) - discount_yield * pdf_d1 * (
             2 * (r - q) * T - d2 * sigma * sqrt_t
         ) / (2 * T * sigma * sqrt_t)
@@ -184,7 +184,7 @@ def implied_volatility_bsm(
     K: float,
     r: float,
     T: float,
-    es_call: bool = True,
+    is_call: bool = True,
     q: float = 0.0,
     lower: float = 1e-6,
     upper: float = 10.0,
@@ -192,18 +192,18 @@ def implied_volatility_bsm(
     """Solve BSM implied volatility with Brent's method."""
 
     def objective(sigma: float) -> float:
-        return black_scholes(S, K, r, sigma, T, es_call, q) - market_price
+        return black_scholes(S, K, r, sigma, T, is_call, q) - market_price
 
     return float(brentq(objective, lower, upper, xtol=1e-8, maxiter=200))
 
 
 __all__ = [
-    "opciones_bsm",
-    "griegas_bsm",
+    "bsm_option_prices",
+    "bsm_greeks",
     "black_scholes",
     "black_76",
     "bsm_d1_d2",
-    "calcular_griegas",
-    "griegas_segundo_orden",
+    "calculate_greeks",
+    "second_order_greeks",
     "implied_volatility_bsm",
 ]

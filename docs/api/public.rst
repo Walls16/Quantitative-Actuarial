@@ -3,7 +3,7 @@ Public Namespace
 
 The top-level ``quantitativeactuarial`` namespace reexports the library's public
 functions from ``financial_math``, ``derivatives``, ``creditrisk``, and
-``portafolioopt``.
+``portfolioopt``.
 
 Public Functions
 ----------------
@@ -13,13 +13,13 @@ Public Functions
 .. autosummary::
    :nosignatures:
 
-   tasa_nominal_a_efectiva
-   valor_presente
-   vp_anualidad_efectiva
-   precio_bono
+   nominal_to_effective_rate
+   present_value
+   effective_annuity_present_value
+   bond_price
    forward_price
    black_scholes
-   arbol_binomial_crr
+   crr_binomial_tree
    bond_values_per_rating
    gaussian_copula_simulation
    PortfolioOptimizer

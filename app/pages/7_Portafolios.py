@@ -417,8 +417,8 @@ if "datos_portafolio" in st.session_state:
         def _tabla_var(rend, vol, capital, conf):
             filas = []
             for h, nom in zip(horizontes, nombres_hor):
-                var_p, _, _, _ = quact.calcular_var_parametrico(rend, vol, capital, conf, h)
-                var_mc, cvar_mc = quact.calcular_var_cvar_montecarlo(rend, vol, capital, conf, h)
+                var_p, _, _, _ = quact.parametric_var(rend, vol, capital, conf, h)
+                var_mc, cvar_mc = quact.monte_carlo_var_cvar(rend, vol, capital, conf, h)
                 filas.append(
                     {
                         "Horizonte": nom,
