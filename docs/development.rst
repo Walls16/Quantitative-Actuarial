@@ -1,10 +1,13 @@
 Development
 ===========
 
+.. image:: https://img.shields.io/badge/env-conda%20%22quact%22-blue
+   :alt: conda environment
+
 Environment
 -----------
 
-The project is currently developed and verified in the ``quact`` conda
+The project is currently developed and verified in the ``AQ`` conda
 environment:
 
 .. code-block:: powershell
@@ -38,7 +41,7 @@ GitHub Pages
 ------------
 
 The repository includes a GitHub Actions workflow at
-``.github/workflows/docs.yml``.  On pushes to ``main``, it builds the Sphinx
+``.github/workflows/docs.yml``. On pushes to ``main``, it builds the Sphinx
 site and deploys the HTML artifact to GitHub Pages.
 
 In the GitHub repository settings, set Pages to deploy from GitHub Actions.

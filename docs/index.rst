@@ -1,44 +1,85 @@
-Quantitative Actuarial
-======================
+AbaQuant
+=======================
 
-Pure actuarial and quantitative-finance routines packaged as
-``quantitativeactuarial`` and commonly imported as ``quact``.
+.. rst-class:: lead
 
-The library is organized as small, stateless function modules:
+   A pure Python library for actuarial mathematics, quantitative finance,
+   derivatives pricing, credit risk, and portfolio optimization —
+   commonly imported as ````.
 
-* ``financial_math`` for rates, time value of money, annuities, loans, bonds,
-  equity, cash-flow discounting, and market-risk helpers.
-* ``derivatives`` for forwards, vanilla option pricing, trees, exotics, and
-  payoff strategy utilities.
-* ``advanced_derivatives`` for BSM, CRR, Heston, Merton jump-diffusion, SABR,
-  Variance Gamma, NIG, Bachelier, calibration, and Monte Carlo pricing engines.
-* ``creditrisk`` for transition matrices, bond migration valuation, portfolio
-  distributions, Gaussian copula simulation, and credit VaR/CVaR.
-* ``portfolioopt`` for portfolio optimization, risk metrics, efficient
-  frontiers, walk-forward backtesting, and historical stress testing.
+.. note::
+
+   Function names are currently in Spanish (the library's original
+   language) and are being progressively translated to English.
+   Behavior and signatures stay stable during the transition; see each
+   module page for the current names.
+
+.. grid:: 3
+   :gutter: 3
+
+   .. grid-item-card:: Financial Math
+      :link: api/financial_math
+      :link-type: doc
+
+      Rates, time value of money, annuities, bonds, equity, DCF, CAPM, VaR/CVaR.
+
+   .. grid-item-card:: Derivatives
+      :link: api/derivatives
+      :link-type: doc
+
+      Forwards, Black-Scholes-Merton, binomial trees, Greeks, exotics, strategies.
+
+   .. grid-item-card:: Advanced Derivatives
+      :link: api/derivados_avanzados
+      :link-type: doc
+
+      Heston, Merton jump-diffusion, SABR, Variance Gamma, NIG, Bachelier, Monte Carlo.
+
+   .. grid-item-card:: Credit Risk
+      :link: api/creditrisk
+      :link-type: doc
+
+      Rating transition matrices, CDS, CDO tranches, Gaussian copulas, credit VaR.
+
+   .. grid-item-card:: Portfolio Optimization
+      :link: api/portafolioopt
+      :link-type: doc
+
+      21 allocation strategies, efficient frontier, backtesting, stress testing.
+
+   .. grid-item-card:: Streamlit App
+      :link: https://github.com/Walls16/Quantitative-Actuarial
+
+      Interactive interface built on top of the pure library.
 
 Installation
 ------------
 
-For local development from this repository:
-
 .. code-block:: powershell
 
-   conda activate quact
+   conda activate AQ
    python -m pip install -e ".[docs,dev]"
 
-Quick Example
+Quick example
 -------------
 
 .. code-block:: python
 
-   import quantitativeactuarial as quact
+   import AbaQuant as aq
 
-   effective = quact.nominal_to_effective_rate(0.12, 12)
-   call = quact.black_scholes(100, 100, 0.05, 0.2, 1.0)
-   transition = quact.DEFAULT_TM
+   # Rates
+   effective_rate = aq.tasa_nominal_a_efectiva(0.12, 12)
 
-Build The Docs
+   # Derivatives
+   call_price = aq.black_scholes(100, 100, 0.05, 0.20, 1.0)
+
+   # Credit risk
+   transition_matrix = aq.DEFAULT_TM
+
+   # Portfolio optimization
+   from AbaQuant.portafolioopt import PortfolioOptimizer
+
+Build the docs
 --------------
 
 .. code-block:: powershell
@@ -48,6 +89,7 @@ Build The Docs
 .. toctree::
    :maxdepth: 2
    :caption: Contents
+   :hidden:
 
    usage
    api/index
