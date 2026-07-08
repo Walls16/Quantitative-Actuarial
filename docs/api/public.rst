@@ -1,27 +1,43 @@
 Public Namespace
-================
+==================
 
-The top-level ``quantitativeactuarial`` namespace reexports the library's public
-functions from ``financial_math``, ``derivatives``, ``creditrisk``, and
-``portfolioopt``.
+The top-level ``AbaQuant`` namespace re-exports every public
+function from ``financial_math``, ``derivatives``, ``derivados_avanzados``,
+``creditrisk``, and ``portafolioopt`` — so most users only ever need:
 
-Public Functions
-----------------
+.. code-block:: python
 
-.. currentmodule:: quantitativeactuarial
+   import AbaQuant as aq
+
+Selected Public Functions
+---------------------------
+
+.. currentmodule:: AbaQuant
 
 .. autosummary::
    :nosignatures:
 
-   nominal_to_effective_rate
-   present_value
-   effective_annuity_present_value
-   bond_price
+   tasa_nominal_a_efectiva
+   valor_presente
+   vp_anualidad_efectiva
+   precio_bono
+   riesgo_bono
+   dcf_valuation
+   capm_cost_of_equity
+   calcular_var_parametrico
    forward_price
    black_scholes
-   crr_binomial_tree
+   calcular_griegas
+   arbol_binomial_crr
+   barrera_down_and_out
+   opciones_asiaticas_aritmeticas
+   opciones_lookback_flotante
+   build_transition_matrix
    bond_values_per_rating
+   valuar_cds
+   valuar_tranche
    gaussian_copula_simulation
    PortfolioOptimizer
    markowitz_frontier
    run_backtest
+   run_all_scenarios
